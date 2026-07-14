@@ -1,0 +1,41 @@
+@model List<EventManagement.ViewModels.VoucherListItemViewModel>
+@{
+    ViewData["Title"] = "My Vouchers";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>My Vouchers</h2>
+<p>
+    <a asp-action="Create" class="btn btn-success">Create Voucher</a>
+</p>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>VoucherCode</th>
+            <th>DiscountPercentage</th>
+            <th>ValidFrom</th>
+            <th>ValidTo</th>
+            <th>UsageLimit</th>
+            <th>UsedCount</th>
+            <th>IsActive</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr><td colspan="7" class="text-center">No vouchers</td></tr>
+        }
+        @foreach (var v in Model)
+        {
+            <tr>
+                <td>@v.VoucherCode</td>
+                <td>@v.DiscountPercentage</td>
+                <td>@fmt(v.ValidFrom)</td>
+                <td>@fmt(v.ValidTo)</td>
+                <td>@v.UsageLimit</td>
+                <td>@v.UsedCount</td>
+                <td>@(v.IsActive ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>

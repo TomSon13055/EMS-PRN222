@@ -1,0 +1,89 @@
+﻿@using EventManagement.Helpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Event Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <style>
+        body { background:#f7f8fa; }
+        .navbar-brand { font-weight:700; }
+        .qr-box { border:2px dashed #333; padding:24px; font-family:monospace; background:#fff; display:inline-block; }
+        table th { white-space:nowrap; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+        <div class="container">
+            <a class="navbar-brand" href="/Event/List">EMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Event/List">Events</a></li>
+                    @if (Context.IsInRole("Customer"))
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Wishlist/List">Wishlist</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Ticket/MyTickets">My Tickets</a></li>
+                    }
+                    @if (Context.IsInRole("Host"))
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Host/MyEvents">My Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Host/CreateEvent">Create Event</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Voucher/List">Vouchers</a></li>
+                    }
+                    @if (Context.IsInRole("Admin"))
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Admin/Dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Admin/Accounts">Accounts</a></li>
+                    }
+                    @if (Context.IsLoggedIn())
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Notification/List">Notifications</a></li>
+                    }
+                </ul>
+                <ul class="navbar-nav">
+                    @if (Context.IsLoggedIn())
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link">@Context.GetFullName() (@Context.GetRole())</span>
+                        </li>
+                        @if (Context.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold text-warning" href="/Wallet/Index">Wallet</a>
+                            </li>
+                        }
+                        <li class="nav-item"><a class="nav-link" href="/Account/Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Account/Login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Account/Register">Register</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+        @RenderBody()
+    </div>
+
+    <footer class="text-center text-muted py-4 mt-5">
+        <small>Event Management System &copy; @DateTime.Now.Year</small>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

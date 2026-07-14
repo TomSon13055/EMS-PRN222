@@ -1,0 +1,82 @@
+@model EventManagement.ViewModels.WalletPageViewModel
+@{
+    ViewData["Title"] = "My Wallet";
+    Layout = "_Layout";
+}
+<h2>My Wallet</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h3>Balance: <span class="text-success">@Model.Balance.ToString("N0") đ</span></h3>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Top Up</h5>
+        <form asp-action="TopUp" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label class="form-label">Amount (VND)</label>
+                    <input name="amount" id="txt_topup_amount" class="form-control" type="number" min="10000" step="10000" placeholder="10000" required />
+                </div>
+                <div class="col-auto">
+                    <button id="btn_topup" type="submit" class="btn btn-success">Top Up</button>
+                </div>
+            </div>
+            <small class="text-muted">Quick amounts: </small>
+            @foreach (var amt in new[] { 100000, 500000, 1000000, 5000000 })
+            {
+                <button type="button" class="btn btn-outline-success btn-sm ms-1" onclick="document.getElementById('txt_topup_amount').value = @amt">@amt.ToString("N0") đ</button>
+            }
+        </form>
+    </div>
+</div>
+
+<h5>Transaction History</h5>
+@if (!Model.Transactions.Any())
+{
+    <p class="text-muted">No transactions yet.</p>
+}
+else
+{
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Balance After</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.Transactions)
+            {
+                <tr>
+                    <td>@t.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @if (t.TransactionType == "TopUp")
+                        {
+                            <span class="badge bg-success">TopUp</span>
+                        }
+                        else if (t.TransactionType == "Payment")
+                        {
+                            <span class="badge bg-danger">Payment</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">@t.TransactionType</span>
+                        }
+                    </td>
+                    <td class="@(t.TransactionType == "TopUp" ? "text-success" : "text-danger")">
+                        @(t.TransactionType == "TopUp" ? "+" : "-")@t.Amount.ToString("N0") đ
+                    </td>
+                    <td>@t.Description</td>
+                    <td>@t.BalanceAfter.ToString("N0") đ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

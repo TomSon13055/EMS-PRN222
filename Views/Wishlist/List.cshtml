@@ -1,0 +1,45 @@
+@model EventManagement.ViewModels.WishlistPageViewModel
+@{
+    ViewData["Title"] = "My Wishlist";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>My Wishlist</h2>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>EventId</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>StartTime</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Items.Any())
+        {
+            <tr><td colspan="6" class="text-center">Wishlist is empty</td></tr>
+        }
+        @foreach (var w in Model.Items)
+        {
+            <tr>
+                <td id="@("td_eventId_" + w.EventId)">@w.EventId</td>
+                <td id="@("td_title_" + w.EventId)">@w.Title</td>
+                <td id="@("td_categoryName_" + w.EventId)">@w.CategoryName</td>
+                <td id="@("td_locationName_" + w.EventId)">@w.LocationName</td>
+                <td id="@("td_startTime_" + w.EventId)">@fmt(w.StartTime)</td>
+                <td>
+                    <form asp-action="Remove" asp-route-eventId="@w.EventId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button id="@("btn_removeWishlist_" + w.EventId)" type="submit" class="btn btn-link p-0">Remove</button>
+                    </form>
+                    |
+                    <a id="@("lnk_viewEvent_" + w.EventId)" href="/Event/List?selectedEventId=@w.EventId">View</a>
+                    |
+                    <a id="@("lnk_buy_" + w.EventId)" href="/Ticket/Buy?eventId=@w.EventId">Buy</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

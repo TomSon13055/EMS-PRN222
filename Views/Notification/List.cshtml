@@ -1,0 +1,45 @@
+@model EventManagement.ViewModels.NotificationPageViewModel
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>Notifications</h2>
+@if (!Model.Items.Any())
+{
+    <p>You have no notifications</p>
+}
+else
+{
+    <table class="table table-bordered bg-white">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>IsRead</th>
+                <th>CreatedAt</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var n in Model.Items)
+            {
+                <tr>
+                    <td id="@("td_title_" + n.UserNotificationId)">@n.Title</td>
+                    <td id="@("td_message_" + n.UserNotificationId)">@n.Message</td>
+                    <td id="@("td_isRead_" + n.UserNotificationId)">@(n.IsRead ? "Yes" : "No")</td>
+                    <td>@fmt(n.CreatedAt)</td>
+                    <td>
+                        @if (!n.IsRead)
+                        {
+                            <form asp-action="MarkRead" asp-route-id="@n.UserNotificationId" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button id="@("btn_markRead_" + n.UserNotificationId)" type="submit" class="btn btn-link p-0">Mark as read</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

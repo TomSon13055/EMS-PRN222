@@ -1,0 +1,15 @@
+@model EventManagement.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout";
+}
+<h2>Admin Dashboard</h2>
+<div class="row g-3 mt-3">
+    <div class="col-md-3"><div class="card p-3"><div>Total Users</div><h3 id="span_totalUsers">@Model.TotalUsers</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Customers</div><h3 id="span_totalCustomers">@Model.TotalCustomers</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Hosts</div><h3 id="span_totalHosts">@Model.TotalHosts</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Events</div><h3 id="span_totalEvents">@Model.TotalEvents</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Published</div><h3 id="span_totalPublishedEvents">@Model.TotalPublishedEvents</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Tickets Sold</div><h3 id="span_totalTicketsSold">@Model.TotalTicketsSold</h3></div></div>
+    <div class="col-md-3"><div class="card p-3"><div>Total Revenue</div><h3 id="span_totalRevenue">@Model.TotalRevenue.ToString("N0") đ</h3></div></div>
+</div>

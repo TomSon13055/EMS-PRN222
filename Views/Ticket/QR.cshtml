@@ -1,0 +1,19 @@
+@model EventManagement.ViewModels.TicketQrViewModel
+@{
+    ViewData["Title"] = "Ticket QR";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>Ticket QR</h2>
+<p><strong>TicketId:</strong> <span id="span_ticketId">@Model.TicketId</span></p>
+<p><strong>SerialNumber:</strong> <span id="span_serialNumber">@Model.SerialNumber</span></p>
+<p><strong>EventTitle:</strong> <span id="span_eventTitle">@Model.EventTitle</span></p>
+<p><strong>EventTime:</strong> <span id="span_eventTime">@fmt(Model.EventTime)</span></p>
+<p><strong>Location:</strong> <span id="span_location">@Model.Location</span></p>
+<p><strong>Status:</strong> <span id="span_status">@Model.Status</span></p>
+
+<h4>QR Code for check-in</h4>
+<div id="div_qrCode" class="qr-box">@Model.QrCodeText</div>
+<p>
+    <a asp-action="MyTickets" class="btn btn-link">Back to My Tickets</a>
+</p>

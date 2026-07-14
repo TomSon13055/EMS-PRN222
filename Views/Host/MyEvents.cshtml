@@ -1,0 +1,68 @@
+@model EventManagement.ViewModels.HostMyEventsPageViewModel
+@{
+    ViewData["Title"] = "My Events";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>My Events</h2>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <label class="form-label">Status</label>
+        <select id="sl_status" name="status" class="form-select">
+            @foreach (var s in Model.Statuses)
+            {
+                <option value="@s.Value" selected="@(s.Value == (Model.Status ?? ""))">@s.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-7">
+        <label class="form-label">Search</label>
+        <input id="txt_search" name="search" value="@Model.Search" class="form-control" />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button id="btn_filter" type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>EventId</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>StartTime</th>
+            <th>Status</th>
+            <th>TicketSold</th>
+            <th>Revenue</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Events.Any())
+        {
+            <tr><td colspan="9" class="text-center">No events</td></tr>
+        }
+        @foreach (var e in Model.Events)
+        {
+            <tr>
+                <td>@e.EventId</td>
+                <td>@e.Title</td>
+                <td>@e.Category</td>
+                <td>@e.Location</td>
+                <td>@fmt(e.StartTime)</td>
+                <td>@e.Status</td>
+                <td>@e.TicketSold</td>
+                <td>@e.Revenue.ToString("N0") đ</td>
+                <td>
+                    <a id="@("lnk_edit_" + e.EventId)" href="/Event/Edit/@e.EventId">Edit</a> |
+                    <a id="@("lnk_createTicketType_" + e.EventId)" href="/TicketType/Create/@e.EventId">Create Ticket Type</a> |
+                    <a id="@("lnk_createVoucher_" + e.EventId)" href="/Voucher/Create?eventId=@e.EventId">Create Voucher</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-action="CreateEvent" class="btn btn-success">Create New Event</a>
+</p>

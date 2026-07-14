@@ -1,0 +1,39 @@
+@model EventManagement.ViewModels.AdminAccountsPageViewModel
+@{
+    ViewData["Title"] = "Accounts";
+    Layout = "_Layout";
+    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+}
+<h2>Accounts</h2>
+<table class="table table-bordered bg-white">
+    <thead>
+        <tr>
+            <th>UserId</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>IsActive</th>
+            <th>CreatedAt</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model.Accounts)
+        {
+            <tr>
+                <td id="@("td_userId_" + u.UserId)">@u.UserId</td>
+                <td id="@("td_fullName_" + u.UserId)">@u.FullName</td>
+                <td id="@("td_email_" + u.UserId)">@u.Email</td>
+                <td id="@("td_role_" + u.UserId)">@u.Role</td>
+                <td id="@("td_isActive_" + u.UserId)">@(u.IsActive ? "Active" : "Locked")</td>
+                <td id="@("td_createdAt_" + u.UserId)">@fmt(u.CreatedAt)</td>
+                <td>
+                    <form asp-action="ToggleAccount" asp-route-userId="@u.UserId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button id="@("btn_toggle_" + u.UserId)" type="submit" class="btn btn-sm btn-warning">@(u.IsActive ? "Lock" : "Unlock")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,428 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\PRN222\\EventManagement\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\views\\ticket\\buy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:views\\ticket\\buy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\eventcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\viewmodels\\eventviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:viewmodels\\eventviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\eventrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\eventrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\voucherrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\voucherrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\ieventrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\ieventrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\tickettyperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\tickettyperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\services\\implementations\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:services\\implementations\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\services\\implementations\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:services\\implementations\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\ticketrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\ticketrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\implementations\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\implementations\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\repositories\\iadminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:repositories\\iadminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\vouchercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\vouchercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\notificationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\notificationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\hostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\hostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\setup.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:setup.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|d:\\prn222\\eventmanagement\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A8282EFA-EEA5-EEB0-79AE-0FA27E3763B9}|EventManagement.csproj|solutionrelative:wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Buy.cshtml",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Views\\Ticket\\Buy.cshtml",
+              "RelativeDocumentMoniker": "Views\\Ticket\\Buy.cshtml",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Views\\Ticket\\Buy.cshtml",
+              "RelativeToolTip": "Views\\Ticket\\Buy.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-25T03:44:56.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EventViewModels.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\ViewModels\\EventViewModels.cs",
+              "RelativeDocumentMoniker": "ViewModels\\EventViewModels.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\ViewModels\\EventViewModels.cs",
+              "RelativeToolTip": "ViewModels\\EventViewModels.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAA8wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T02:40:24.732Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "OrderService.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Services\\Implementations\\OrderService.cs",
+              "RelativeDocumentMoniker": "Services\\Implementations\\OrderService.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Services\\Implementations\\OrderService.cs",
+              "RelativeToolTip": "Services\\Implementations\\OrderService.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:12:44.058Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TicketTypeRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\TicketTypeRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\TicketTypeRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\TicketTypeRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\TicketTypeRepository.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:11:50.394Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "ApplicationDbContext.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\ApplicationDbContext.cs",
+              "RelativeToolTip": "ApplicationDbContext.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAiwAcAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T03:03:43.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EventController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\EventController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EventController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\EventController.cs",
+              "RelativeToolTip": "Controllers\\EventController.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:30.534Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IEventRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\IEventRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IEventRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\IEventRepository.cs",
+              "RelativeToolTip": "Repositories\\IEventRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:16:56.705Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EventRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\EventRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\EventRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\EventRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\EventRepository.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAgwAgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:09:43.414Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "VoucherRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\VoucherRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\VoucherRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\VoucherRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\VoucherRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:17:00.012Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Services\\Implementations\\AdminService.cs",
+              "RelativeDocumentMoniker": "Services\\Implementations\\AdminService.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Services\\Implementations\\AdminService.cs",
+              "RelativeToolTip": "Services\\Implementations\\AdminService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:12:04.809Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TicketRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\TicketRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\TicketRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\TicketRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\TicketRepository.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAA5wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:11:15.97Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "NotificationRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\NotificationRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\NotificationRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\NotificationRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\NotificationRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:11:15.122Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AdminRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\AdminRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Implementations\\AdminRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\Implementations\\AdminRepository.cs",
+              "RelativeToolTip": "Repositories\\Implementations\\AdminRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:09:44.019Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IAdminRepository.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Repositories\\IAdminRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IAdminRepository.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Repositories\\IAdminRepository.cs",
+              "RelativeToolTip": "Repositories\\IAdminRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:09:39.312Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:12:25.501Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "VoucherController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\VoucherController.cs",
+              "RelativeDocumentMoniker": "Controllers\\VoucherController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\VoucherController.cs",
+              "RelativeToolTip": "Controllers\\VoucherController.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:51.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "NotificationController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\NotificationController.cs",
+              "RelativeDocumentMoniker": "Controllers\\NotificationController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\NotificationController.cs",
+              "RelativeToolTip": "Controllers\\NotificationController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:47.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "TicketController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\TicketController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TicketController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\TicketController.cs",
+              "RelativeToolTip": "Controllers\\TicketController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:45.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "HostController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\HostController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HostController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\HostController.cs",
+              "RelativeToolTip": "Controllers\\HostController.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:37.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:35.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "D:\\PRN222\\EventManagement\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T01:17:20.38Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "setup.sql",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\setup.sql",
+              "RelativeDocumentMoniker": "setup.sql",
+              "ToolTip": "D:\\PRN222\\EventManagement\\setup.sql",
+              "RelativeToolTip": "setup.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-17T14:03:29.153Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "D:\\PRN222\\EventManagement\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-17T13:05:34.393Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "site.css",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "D:\\PRN222\\EventManagement\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-06-17T13:05:22.907Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "site.js",
+              "DocumentMoniker": "D:\\PRN222\\EventManagement\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\site.js",
+              "ToolTip": "D:\\PRN222\\EventManagement\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "wwwroot\\js\\site.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-06-17T13:05:18.753Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+@model EventManagement.ViewModels.EmptyStateViewModel
+
+<div class="empty-state" role="status">
+    @if (!string.IsNullOrWhiteSpace(Model?.Icon))
+    {
+        <span class="empty-state__icon @(!string.IsNullOrWhiteSpace(Model.IconVariant) ? $"empty-state__icon--{Model.IconVariant}" : null)"
+              aria-hidden="true">
+            <i class="bi @Model.Icon"></i>
+        </span>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model?.Title))
+    {
+        <h3 class="empty-state__title">@Model.Title</h3>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model?.Description))
+    {
+        <p class="empty-state__description">@Model.Description</p>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model?.ActionLabel) && !string.IsNullOrWhiteSpace(Model?.ActionUrl))
+    {
+        <div class="empty-state__actions">
+            <a class="btn btn--primary" href="@Model.ActionUrl">
+                @if (!string.IsNullOrWhiteSpace(Model.ActionIcon))
+                {
+                    <i class="bi @Model.ActionIcon" aria-hidden="true"></i>
+                }
+                <span>@Model.ActionLabel</span>
+            </a>
+            @if (!string.IsNullOrWhiteSpace(Model.SecondaryActionLabel) && !string.IsNullOrWhiteSpace(Model.SecondaryActionUrl))
+            {
+                <a class="btn btn--outline-secondary" href="@Model.SecondaryActionUrl">@Model.SecondaryActionLabel</a>
+            }
+        </div>
+    }
+</div>

@@ -2,44 +2,97 @@
 @{
     ViewData["Title"] = "Notifications";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Notifications",
+        Subtitle = "Updates about your events, tickets and account activity.",
+        Eyebrow = "EMS • Inbox"
+    };
+
+    var unread = Model.Items.Count(n => !n.IsRead);
+    var read = Model.Items.Count(n => n.IsRead);
 }
-<h2>Notifications</h2>
-@if (!Model.Items.Any())
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<div class="notification-toolbar">
+    <div class="notification-tabs" role="tablist" aria-label="Notification filter">
+        <button type="button"
+                class="notification-tab is-active"
+                data-notification-filter
+                data-notification-filter-target=".js-notification-item"
+                data-notification-filter-value="all">
+            All <span class="count-pill" style="background: var(--color-neutral-300); color: var(--text-primary);">@Model.Items.Count</span>
+        </button>
+        <button type="button"
+                class="notification-tab"
+                data-notification-filter
+                data-notification-filter-target=".js-notification-item"
+                data-notification-filter-value="unread">
+            Unread <span class="count-pill">@unread</span>
+        </button>
+        <button type="button"
+                class="notification-tab"
+                data-notification-filter
+                data-notification-filter-target=".js-notification-item"
+                data-notification-filter-value="read">
+            Read <span class="count-pill" style="background: var(--color-neutral-300); color: var(--text-primary);">@read</span>
+        </button>
+    </div>
+</div>
+
+@if (Model.Items.Any())
 {
-    <p>You have no notifications</p>
+    <div class="notification-list">
+        @foreach (var n in Model.Items)
+        {
+            var status = n.IsRead ? "read" : "unread";
+            <article class="notification-item js-notification-item notification-item--@status"
+                     data-notification-status="@status">
+                <span class="notification-item__icon" aria-hidden="true">
+                    <i class="bi bi-bell-fill"></i>
+                </span>
+                <div class="notification-item__body">
+                    <header class="notification-item__header">
+                        <h3 class="notification-item__title">@n.Title</h3>
+                        @if (!n.IsRead)
+                        {
+                            <span class="notification-item__dot" aria-label="Unread"></span>
+                        }
+                    </header>
+                    <p class="notification-item__message">@n.Message</p>
+                    <span class="notification-item__time">@n.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                </div>
+                <div class="notification-item__actions">
+                    @if (!n.IsRead)
+                    {
+                        <form method="post" asp-action="MarkRead" asp-route-id="@n.UserNotificationId" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn--ghost btn--sm" data-mark-read-button>
+                                <i class="bi bi-check2" aria-hidden="true"></i>
+                                <span>Mark as read</span>
+                            </button>
+                        </form>
+                    }
+                </div>
+            </article>
+        }
+    </div>
 }
 else
 {
-    <table class="table table-bordered bg-white">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Message</th>
-                <th>IsRead</th>
-                <th>CreatedAt</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var n in Model.Items)
-            {
-                <tr>
-                    <td id="@("td_title_" + n.UserNotificationId)">@n.Title</td>
-                    <td id="@("td_message_" + n.UserNotificationId)">@n.Message</td>
-                    <td id="@("td_isRead_" + n.UserNotificationId)">@(n.IsRead ? "Yes" : "No")</td>
-                    <td>@fmt(n.CreatedAt)</td>
-                    <td>
-                        @if (!n.IsRead)
-                        {
-                            <form asp-action="MarkRead" asp-route-id="@n.UserNotificationId" method="post" class="d-inline">
-                                @Html.AntiForgeryToken()
-                                <button id="@("btn_markRead_" + n.UserNotificationId)" type="submit" class="btn btn-link p-0">Mark as read</button>
-                            </form>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "You're all caught up",
+        Description = "You don't have any notifications right now. We'll let you know when something happens.",
+        Icon = "bi-bell-slash",
+        ActionLabel = "Browse events",
+        ActionUrl = Url.Action("List", "Event"),
+        ActionIcon = "bi-arrow-right"
+    })
+}
+
+@section Scripts {
+    <script type="module" src="~/js/pages/notifications.js" asp-append-version="true"></script>
 }

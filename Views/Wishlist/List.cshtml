@@ -1,45 +1,78 @@
 @model EventManagement.ViewModels.WishlistPageViewModel
 @{
-    ViewData["Title"] = "My Wishlist";
+    ViewData["Title"] = "My wishlist";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My wishlist",
+        Subtitle = "Events you've saved for later. Buy tickets or remove them anytime.",
+        Eyebrow = "EMS • Customer"
+    };
 }
-<h2>My Wishlist</h2>
-<table class="table table-bordered bg-white">
-    <thead>
-        <tr>
-            <th>EventId</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Location</th>
-            <th>StartTime</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Items.Any())
-        {
-            <tr><td colspan="6" class="text-center">Wishlist is empty</td></tr>
-        }
+
+@await Html.PartialAsync("_PageHeader", header)
+
+@if (Model.Items.Any())
+{
+    <div class="wishlist-grid">
         @foreach (var w in Model.Items)
         {
-            <tr>
-                <td id="@("td_eventId_" + w.EventId)">@w.EventId</td>
-                <td id="@("td_title_" + w.EventId)">@w.Title</td>
-                <td id="@("td_categoryName_" + w.EventId)">@w.CategoryName</td>
-                <td id="@("td_locationName_" + w.EventId)">@w.LocationName</td>
-                <td id="@("td_startTime_" + w.EventId)">@fmt(w.StartTime)</td>
-                <td>
-                    <form asp-action="Remove" asp-route-eventId="@w.EventId" method="post" class="d-inline">
+            <article class="wishlist-item">
+                <div class="wishlist-item__media" aria-hidden="true">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div class="stack" style="gap: var(--spacing-2); min-width: 0;">
+                    <h3 class="wishlist-item__title">
+                        <a href="@Url.Action("Details", "Event", new { id = w.EventId })">@w.Title</a>
+                    </h3>
+                    <div class="wishlist-item__meta">
+                        <span><i class="bi bi-tag" aria-hidden="true"></i>@w.CategoryName</span>
+                        <span><i class="bi bi-geo-alt" aria-hidden="true"></i>@w.LocationName</span>
+                        <span><i class="bi bi-calendar3" aria-hidden="true"></i>@w.StartTime.ToString("ddd, dd MMM yyyy HH:mm")</span>
+                        <span><partial name="_StatusBadge" model="w.Status" /></span>
+                    </div>
+                </div>
+                <div class="wishlist-item__actions">
+                    <a class="btn btn--primary btn--sm"
+                       href="@Url.Action("Buy", "Ticket", new { eventId = w.EventId })">
+                        <i class="bi bi-cart3" aria-hidden="true"></i>
+                        <span>Buy</span>
+                    </a>
+                    <form method="post"
+                          asp-action="Remove"
+                          asp-route-eventId="@w.EventId"
+                          data-wishlist-remove>
                         @Html.AntiForgeryToken()
-                        <button id="@("btn_removeWishlist_" + w.EventId)" type="submit" class="btn btn-link p-0">Remove</button>
+                        <button type="button"
+                                class="btn btn--outline-secondary btn--sm js-confirm-action"
+                                data-confirm-trigger
+                                data-confirm-title="Remove from wishlist?"
+                                data-confirm-message="@w.Title will be removed from your wishlist."
+                                data-confirm-text="Remove"
+                                data-confirm-success="Removed from wishlist.">
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+                            <span>Remove</span>
+                        </button>
                     </form>
-                    |
-                    <a id="@("lnk_viewEvent_" + w.EventId)" href="/Event/List?selectedEventId=@w.EventId">View</a>
-                    |
-                    <a id="@("lnk_buy_" + w.EventId)" href="/Ticket/Buy?eventId=@w.EventId">Buy</a>
-                </td>
-            </tr>
+                </div>
+            </article>
         }
-    </tbody>
-</table>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "Your wishlist is empty",
+        Description = "Save events you like so you can come back to them later.",
+        Icon = "bi-heart",
+        ActionLabel = "Browse events",
+        ActionUrl = Url.Action("List", "Event"),
+        ActionIcon = "bi-arrow-right"
+    })
+}
+
+@section Scripts {
+    <script type="module" src="~/js/pages/wishlist.js" asp-append-version="true"></script>
+}

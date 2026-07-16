@@ -1,15 +1,45 @@
 @model EventManagement.ViewModels.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Admin dashboard";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Admin dashboard",
+        Subtitle = "Overview of users, events and ticket sales across the platform.",
+        Eyebrow = "EMS • Admin"
+    };
 }
-<h2>Admin Dashboard</h2>
-<div class="row g-3 mt-3">
-    <div class="col-md-3"><div class="card p-3"><div>Total Users</div><h3 id="span_totalUsers">@Model.TotalUsers</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Customers</div><h3 id="span_totalCustomers">@Model.TotalCustomers</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Hosts</div><h3 id="span_totalHosts">@Model.TotalHosts</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Events</div><h3 id="span_totalEvents">@Model.TotalEvents</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Published</div><h3 id="span_totalPublishedEvents">@Model.TotalPublishedEvents</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Tickets Sold</div><h3 id="span_totalTicketsSold">@Model.TotalTicketsSold</h3></div></div>
-    <div class="col-md-3"><div class="card p-3"><div>Total Revenue</div><h3 id="span_totalRevenue">@Model.TotalRevenue.ToString("N0") đ</h3></div></div>
-</div>
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<section class="grid grid--summary">
+    <div class="summary-card">
+        <span class="summary-card__label">Total users</span>
+        <span class="summary-card__value" id="span_totalUsers">@Model.TotalUsers</span>
+    </div>
+    <div class="summary-card summary-card--info" style="background: linear-gradient(135deg, var(--color-info-500), var(--color-info-600));">
+        <span class="summary-card__label">Customers</span>
+        <span class="summary-card__value" id="span_totalCustomers">@Model.TotalCustomers</span>
+    </div>
+    <div class="summary-card summary-card--amber">
+        <span class="summary-card__label">Hosts</span>
+        <span class="summary-card__value" id="span_totalHosts">@Model.TotalHosts</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-card__label">Total events</span>
+        <span class="summary-card__value" id="span_totalEvents">@Model.TotalEvents</span>
+    </div>
+    <div class="summary-card summary-card--success">
+        <span class="summary-card__label">Published events</span>
+        <span class="summary-card__value" id="span_totalPublishedEvents">@Model.TotalPublishedEvents</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Tickets sold</span>
+        <span class="summary-card__value" id="span_totalTicketsSold">@Model.TotalTicketsSold</span>
+    </div>
+    <div class="summary-card summary-card--primary" style="grid-column: span 2;">
+        <span class="summary-card__label">Total revenue</span>
+        <span class="summary-card__value" id="span_totalRevenue">@Model.TotalRevenue.ToString("N0") đ</span>
+    </div>
+</section>

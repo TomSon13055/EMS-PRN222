@@ -1,0 +1,32 @@
+@model EventManagement.ViewModels.AlertViewModel
+
+@{
+    var type = (Model?.Type ?? "info").ToLowerInvariant();
+    var icon = type switch
+    {
+        "success" => "bi-check-circle-fill",
+        "danger" or "error" => "bi-x-octagon-fill",
+        "warning" => "bi-exclamation-triangle-fill",
+        _ => "bi-info-circle-fill"
+    };
+    var title = Model?.Title ?? (type switch
+    {
+        "success" => "Success",
+        "danger" or "error" => "Error",
+        "warning" => "Warning",
+        _ => "Information"
+    });
+}
+
+@if (Model != null && !string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="app-alert app-alert--@type" role="alert">
+        <span class="app-alert__icon" aria-hidden="true">
+            <i class="bi @icon"></i>
+        </span>
+        <div class="app-alert__body">
+            <h5 class="app-alert__title">@title</h5>
+            <p class="app-alert__message">@Model.Message</p>
+        </div>
+    </div>
+}

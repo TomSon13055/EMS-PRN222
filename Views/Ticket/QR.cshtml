@@ -2,18 +2,78 @@
 @{
     ViewData["Title"] = "Ticket QR";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
-}
-<h2>Ticket QR</h2>
-<p><strong>TicketId:</strong> <span id="span_ticketId">@Model.TicketId</span></p>
-<p><strong>SerialNumber:</strong> <span id="span_serialNumber">@Model.SerialNumber</span></p>
-<p><strong>EventTitle:</strong> <span id="span_eventTitle">@Model.EventTitle</span></p>
-<p><strong>EventTime:</strong> <span id="span_eventTime">@fmt(Model.EventTime)</span></p>
-<p><strong>Location:</strong> <span id="span_location">@Model.Location</span></p>
-<p><strong>Status:</strong> <span id="span_status">@Model.Status</span></p>
 
-<h4>QR Code for check-in</h4>
-<div id="div_qrCode" class="qr-box">@Model.QrCodeText</div>
-<p>
-    <a asp-action="MyTickets" class="btn btn-link">Back to My Tickets</a>
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Your ticket",
+        Subtitle = "Show this QR code at the check-in counter to be admitted to the event.",
+        Eyebrow = "EMS • Check-in",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My tickets", Url = Url.Action("MyTickets", "Ticket") },
+            new() { Text = Model.EventTitle }
+        }
+    };
+}
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<section class="ticket-card" aria-label="Ticket">
+    <div class="ticket-card__qr">
+        <i class="bi bi-qr-code-scan" style="font-size: 1.25rem;" aria-hidden="true"></i>
+        <div aria-hidden="true" style="background: #fff; padding: 12px; border-radius: 12px;">
+            <i class="bi bi-grid-3x3-gap-fill" style="font-size: 4rem; color: var(--color-primary-700);"></i>
+        </div>
+        <span style="font-size: var(--font-size-sm); opacity: 0.85;">Check-in QR</span>
+        <code style="font-size: 11px; word-break: break-all; padding: 4px 8px; background: rgba(255,255,255,0.12); border-radius: 4px;">
+            @Model.QrCodeText
+        </code>
+    </div>
+    <div class="ticket-card__body">
+        <header class="stack" style="gap: var(--spacing-1);">
+            <span class="text-muted" style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">
+                Ticket #@Model.TicketId
+            </span>
+            <h2 class="ticket-card__title">@Model.EventTitle</h2>
+            <div><partial name="_StatusBadge" model="Model.Status" /></div>
+        </header>
+
+        <dl class="ticket-card__meta">
+            <div>
+                <dt>Serial number</dt>
+                <dd><code class="serial">@Model.SerialNumber</code></dd>
+            </div>
+            <div>
+                <dt>Event time</dt>
+                <dd>@Model.EventTime.ToString("dddd, dd MMM yyyy HH:mm")</dd>
+            </div>
+            <div>
+                <dt>Location</dt>
+                <dd>@Model.Location</dd>
+            </div>
+            <div>
+                <dt>Ticket ID</dt>
+                <dd>@Model.TicketId</dd>
+            </div>
+        </dl>
+
+        <div class="ticket-card__actions">
+            <a class="btn btn--outline-secondary" asp-action="MyTickets">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                <span>Back to my tickets</span>
+            </a>
+            <button type="button" class="btn btn--primary" data-print-button>
+                <i class="bi bi-printer" aria-hidden="true"></i>
+                <span>Print</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<p class="text-muted text-center" style="margin-top: var(--spacing-6); max-width: 60ch; margin-left: auto; margin-right: auto;">
+    Note: The QR code is currently rendered as a placeholder. A real QR will be generated when a QR library is integrated with the backend.
 </p>
+
+@section Scripts {
+    <script type="module" src="~/js/pages/ticket-qr.js" asp-append-version="true"></script>
+}

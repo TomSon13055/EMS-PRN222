@@ -1,0 +1,49 @@
+@model EventManagement.ViewModels.PageHeaderViewModel
+
+<header class="page-header">
+    <div class="page-header__titles">
+        @if (!string.IsNullOrWhiteSpace(Model?.Eyebrow))
+        {
+            <span class="page-header__eyebrow">@Model.Eyebrow</span>
+        }
+        <h1 class="page-header__title">@Model?.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model?.Subtitle))
+        {
+            <p class="page-header__subtitle">@Model.Subtitle</p>
+        }
+        @if (Model?.Breadcrumbs != null && Model.Breadcrumbs.Count > 0)
+        {
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                @for (var i = 0; i < Model.Breadcrumbs.Count; i++)
+                {
+                    var crumb = Model.Breadcrumbs[i];
+                    var isLast = i == Model.Breadcrumbs.Count - 1;
+                    if (!string.IsNullOrWhiteSpace(crumb.Url) && !isLast)
+                    {
+                        <a href="@crumb.Url">@crumb.Text</a>
+                    }
+                    else
+                    {
+                        <span class="breadcrumb__current">@crumb.Text</span>
+                    }
+                    if (!isLast)
+                    {
+                        <span class="breadcrumb__separator" aria-hidden="true">/</span>
+                    }
+                }
+            </nav>
+        }
+    </div>
+    @if (Model?.ActionLabel != null && !string.IsNullOrWhiteSpace(Model.ActionLabel) && !string.IsNullOrWhiteSpace(Model.ActionUrl))
+    {
+        <div class="page-header__actions">
+            <a class="btn btn--primary" href="@Model.ActionUrl">
+                @if (!string.IsNullOrWhiteSpace(Model.ActionIcon))
+                {
+                    <i class="bi @Model.ActionIcon" aria-hidden="true"></i>
+                }
+                <span>@Model.ActionLabel</span>
+            </a>
+        </div>
+    }
+</header>

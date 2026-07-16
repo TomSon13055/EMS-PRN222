@@ -1,0 +1,41 @@
+@model EventManagement.ViewModels.VoucherStatusViewModel
+
+@{
+    var now = Model?.Now ?? DateTime.Now;
+    var from = Model?.ValidFrom ?? DateTime.MinValue;
+    var to = Model?.ValidTo ?? DateTime.MinValue;
+    var isActive = Model?.IsActive ?? false;
+    var used = Model?.UsedCount ?? 0;
+    var limit = Model?.UsageLimit ?? 0;
+
+    string label;
+    string variant;
+
+    if (!isActive)
+    {
+        label = "Inactive";
+        variant = "status-badge--neutral";
+    }
+    else if (now < from)
+    {
+        label = "Scheduled";
+        variant = "status-badge--info";
+    }
+    else if (now > to)
+    {
+        label = "Expired";
+        variant = "status-badge--danger";
+    }
+    else if (limit > 0 && used >= limit)
+    {
+        label = "Limit Reached";
+        variant = "status-badge--warning";
+    }
+    else
+    {
+        label = "Active";
+        variant = "status-badge--success";
+    }
+}
+
+<span class="status-badge @variant">@label</span>

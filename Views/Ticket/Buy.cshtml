@@ -1,152 +1,187 @@
 @model EventManagement.ViewModels.BuyTicketViewModel
 @{
-    ViewData["Title"] = "Buy Ticket";
+    ViewData["Title"] = "Buy ticket";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
-}
-<h2>Buy Ticket</h2>
 
-@if (!string.IsNullOrEmpty(Model.EventTitle))
-{
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4>@Model.EventTitle</h4>
-            @if (!string.IsNullOrEmpty(Model.EventDescription))
-            {
-                <p>@Model.EventDescription</p>
-            }
-            @if (Model.EventStartTime.HasValue)
-            {
-                <p class="mb-0">
-                    <strong>Start:</strong> @fmt(Model.EventStartTime.Value) |
-                    <strong>Location:</strong> @Model.LocationName
-                </p>
-            }
-        </div>
-    </div>
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Buy ticket",
+        Subtitle = "Review your selection, apply a voucher if you have one, then confirm the purchase.",
+        Eyebrow = "EMS • Checkout"
+    };
+
+    var noTickets = Model.TicketTypes == null || !Model.TicketTypes.Any();
 }
 
-@if (Model.TicketTypes == null || !Model.TicketTypes.Any())
+@await Html.PartialAsync("_PageHeader", header)
+
+@if (noTickets)
 {
-    <div class="alert alert-warning">No ticket types available for this event.</div>
-    <a asp-action="List" asp-controller="Event" class="btn btn-link">Back to Events</a>
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "No ticket types available",
+        Description = "The host has not published any ticket types for this event yet.",
+        Icon = "bi-ticket-perforated",
+        IconVariant = "neutral",
+        ActionLabel = "Back to events",
+        ActionUrl = Url.Action("List", "Event"),
+        ActionIcon = "bi-arrow-left"
+    })
     return;
 }
 
-<form asp-action="Buy" method="post" class="mt-3">
-    <input type="hidden" asp-for="EventId" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@if (!string.IsNullOrEmpty(Model.EventTitle))
+{
+    <section class="checkout-event-summary">
+        <h2 class="checkout-event-summary__title">@Model.EventTitle</h2>
+        @if (!string.IsNullOrEmpty(Model.EventDescription))
+        {
+            <p class="text-secondary" style="margin: 0 0 var(--spacing-2) 0;">@Model.EventDescription</p>
+        }
+        <div class="checkout-event-summary__meta">
+            @if (Model.EventStartTime.HasValue)
+            {
+                <span><i class="bi bi-calendar3" aria-hidden="true"></i>@Model.EventStartTime.Value.ToString("dddd, dd MMM yyyy HH:mm")</span>
+            }
+            @if (!string.IsNullOrEmpty(Model.LocationName))
+            {
+                <span><i class="bi bi-geo-alt" aria-hidden="true"></i>@Model.LocationName</span>
+            }
+        </div>
+    </section>
+}
 
-    <div class="row g-3">
-        <div class="col-md-4">
-            <label class="form-label">Ticket Type <span class="text-danger">*</span></label>
-            <select asp-for="TicketTypeId" id="sl_ticketType" class="form-select" required>
-                <option value="">-- Select Ticket Type --</option>
-                @foreach (var t in Model.TicketTypes)
-                {
-                    var priceMatch = System.Text.RegularExpressions.Regex.Match(t.Text, @"\d[\d,]*").Value.Replace(",", "");
-                    <option id="@("opt_ticketType_" + t.Value)" value="@t.Value" data-price="@priceMatch">@t.Text</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label class="form-label">Quantity <span class="text-danger">*</span></label>
-            <input asp-for="Quantity" id="txt_quantity" class="form-control" type="number" min="1" value="1" required />
-        </div>
-        <div class="col-md-3">
-            <label class="form-label">Voucher Code (optional)</label>
-            <input asp-for="VoucherCode" id="txt_voucherCode" class="form-control" placeholder="e.g. EMS10" />
-        </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button id="btn_applyVoucher" type="submit" formaction="/Ticket/ApplyVoucher" formmethod="post"
-                    class="btn btn-outline-info w-100">
-                Apply Voucher
+<div class="checkout-grid" style="margin-top: var(--spacing-6);">
+    <form asp-action="Buy" method="post"
+          class="checkout-form js-buy-ticket-form"
+          data-buy-ticket-form
+          data-apply-voucher-url="@Url.Action("ApplyVoucher", "Ticket")">
+        <input type="hidden" asp-for="EventId" />
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+        <section class="form-section">
+            <h2 class="form-section__title">Choose a ticket type</h2>
+            <p class="form-section__subtitle">Pick the experience that suits you best.</p>
+            <div class="form-field checkout-ticket-type">
+                <label asp-for="TicketTypeId" class="form-label">
+                    <span>Ticket type</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select asp-for="TicketTypeId" class="form-select" required
+                        data-ticket-type-select>
+                    <option value="">-- Select ticket type --</option>
+                    @foreach (var t in Model.TicketTypes)
+                    {
+                        var priceMatch = System.Text.RegularExpressions.Regex.Match(t.Text ?? string.Empty, @"\d[\d,]*").Value.Replace(",", "");
+                        <option value="@t.Value"
+                                data-ticket-price="@priceMatch"
+                                selected="@(Model.TicketTypeId.HasValue && Model.TicketTypeId.Value.ToString() == t.Value)">
+                            @t.Text
+                        </option>
+                    }
+                </select>
+                <span class="checkout-ticket-type__hint">Each ticket type may have a different price and availability window.</span>
+                <span asp-validation-for="TicketTypeId" class="field-validation-error"></span>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2 class="form-section__title">Quantity</h2>
+            <p class="form-section__subtitle">How many tickets would you like?</p>
+            <div class="form-field" style="margin: 0; max-width: 220px;">
+                <label asp-for="Quantity" class="form-label">
+                    <span>Quantity</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" value="@(Model.Quantity > 0 ? Model.Quantity : 1)"
+                       data-ticket-quantity required />
+                <span asp-validation-for="Quantity" class="field-validation-error"></span>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2 class="form-section__title">Voucher</h2>
+            <p class="form-section__subtitle">Have a voucher code? Apply it to get a discount.</p>
+            <div class="checkout-voucher-row">
+                <div class="form-field" style="margin: 0;">
+                    <label asp-for="VoucherCode" class="form-label">Voucher code</label>
+                    <input asp-for="VoucherCode" class="form-control" placeholder="e.g. EMS10" autocomplete="off" />
+                </div>
+                <button type="submit"
+                        name="applyVoucher"
+                        value="apply"
+                        class="btn btn--outline-primary"
+                        data-apply-voucher-button
+                        formaction="@Url.Action("ApplyVoucher", "Ticket")"
+                        formmethod="post">
+                    <i class="bi bi-tag" aria-hidden="true"></i>
+                    <span>Apply voucher</span>
+                </button>
+            </div>
+            @if (Model.VoucherApplied && !string.IsNullOrEmpty(Model.VoucherMessage))
+            {
+                <div class="checkout-voucher-message checkout-voucher-message--success">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i> @Model.VoucherMessage
+                </div>
+            }
+        </section>
+
+        <div class="form-actions">
+            <a class="btn btn--outline-secondary" asp-action="List" asp-controller="Event">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                <span>Cancel</span>
+            </a>
+            <button type="submit" class="btn btn--primary btn--lg" data-buy-button>
+                <i class="bi bi-bag-check" aria-hidden="true"></i>
+                <span>Confirm purchase</span>
             </button>
         </div>
-    </div>
+    </form>
 
-    <div class="mt-3" id="priceBreakdown">
-        <table class="table table-sm">
-            <tr>
-                <td>SubTotal</td>
-                <td class="text-end" id="subTotalDisplay">@((Model.SubTotal > 0 ? Model.SubTotal : 0).ToString("N0")) đ</td>
-            </tr>
+    <aside class="checkout-summary" aria-label="Order summary">
+        <h2 class="checkout-summary__title">Order summary</h2>
+        <div class="checkout-summary__rows">
+            <div class="checkout-summary__row">
+                <span>Unit price</span>
+                <span data-unit-price>@(Model.SubTotal > 0 ? Model.SubTotal.ToString("N0") + " đ" : "—")</span>
+            </div>
+            <div class="checkout-summary__row">
+                <span>Quantity</span>
+                <span data-summary-quantity>@Model.Quantity</span>
+            </div>
+            <div class="checkout-summary__row">
+                <span>Subtotal</span>
+                <span data-sub-total>@((Model.SubTotal > 0 ? Model.SubTotal : 0).ToString("N0")) đ</span>
+            </div>
             @if (Model.VoucherApplied)
             {
-                <tr class="text-success">
-                    <td>Discount (@Model.VoucherCode)</td>
-                    <td class="text-end" data-percentage="@Model.VoucherDiscountPercent">-@Model.DiscountAmount.ToString("N0") đ</td>
-                </tr>
+                <div class="checkout-summary__row checkout-summary__row--discount" data-discount-row>
+                    <span>Discount (@Model.VoucherCode)</span>
+                    <span data-discount-amount data-discount-percent="@Model.VoucherDiscountPercent">
+                        -@Model.DiscountAmount.ToString("N0") đ
+                    </span>
+                </div>
             }
-            <tr class="fw-bold">
-                <td>Final Amount</td>
-                <td class="text-end" id="finalAmountDisplay">@Model.FinalAmount.ToString("N0") đ</td>
-            </tr>
-        </table>
-        @if (Model.VoucherApplied && !string.IsNullOrEmpty(Model.VoucherMessage))
-        {
-            <small class="text-success">@Model.VoucherMessage</small>
-        }
-    </div>
+            <div class="checkout-summary__row checkout-summary__row--total">
+                <span>Total</span>
+                <span data-final-amount>@Model.FinalAmount.ToString("N0") đ</span>
+            </div>
+        </div>
 
-    <div class="mt-3">
-        <button id="btn_buy" type="submit" class="btn btn-primary px-4">
-            Buy Ticket@(Model.VoucherApplied ? $" (Pay " + Model.FinalAmount.ToString("N0") + " đ)" : "")
-        </button>
-        <a id="btn_back" asp-action="List" asp-controller="Event" class="btn btn-link">Cancel</a>
-    </div>
-</form>
+        <div class="checkout-summary__hint">
+            <span><i class="bi bi-wallet2" aria-hidden="true"></i> Payment is deducted from your wallet balance.</span>
+            <a href="@Url.Action("Index", "Wallet")">Top up your wallet</a>
+        </div>
+    </aside>
+</div>
 
-<p class="mt-3 text-muted small">
-    <em>* Tickets are deducted from your wallet balance. Make sure you have sufficient funds.</em>
-</p>
+<div class="checkout-warning" style="margin-top: var(--spacing-5);">
+    <i class="bi bi-info-circle" aria-hidden="true"></i>
+    <span>Tickets are non-refundable after the event starts. Make sure your selection is correct before confirming.</span>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        function updatePrice(isInitial) {
-            var sel = document.getElementById('sl_ticketType');
-            var qtyInput = document.getElementById('txt_quantity');
-            if (!sel || !qtyInput) return;
-            var qty = parseInt(qtyInput.value) || 0;
-            var selected = sel.options[sel.selectedIndex];
-            if (!sel.value || qty <= 0 || !selected) {
-                document.getElementById('subTotalDisplay').textContent = '0 đ';
-                document.getElementById('finalAmountDisplay').textContent = '0 đ';
-                return;
-            }
-            var price = parseFloat(selected.getAttribute('data-price')) || 0;
-            var sub = price * qty;
-            document.getElementById('subTotalDisplay').textContent = sub.toLocaleString('en-US') + ' đ';
-
-            var voucherApplied = document.querySelector('#priceBreakdown tr.text-success td[data-percentage]') != null;
-            if (!voucherApplied || isInitial) {
-                var final = sub;
-                var discountCell = document.querySelector('#priceBreakdown tr.text-success td[data-percentage]');
-                if (discountCell) {
-                    var percent = parseFloat(discountCell.getAttribute('data-percentage')) || 0;
-                    var discount = Math.round(sub * percent / 100);
-                    final = Math.max(0, sub - discount);
-                    discountCell.textContent = '-' + discount.toLocaleString('en-US') + ' đ';
-                }
-                document.getElementById('finalAmountDisplay').textContent = final.toLocaleString('en-US') + ' đ';
-            }
-        }
-        document.getElementById('sl_ticketType')?.addEventListener('change', function() {
-            updatePrice(false);
-        });
-        document.getElementById('txt_quantity')?.addEventListener('input', function() {
-            updatePrice(false);
-        });
-        updatePrice(true);
-    </script>
-    <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
-            var btn = document.getElementById('btn_buy');
-            if (btn && !btn.disabled) {
-                btn.disabled = true;
-                btn.textContent = 'Processing...';
-            }
-        });
-    </script>
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

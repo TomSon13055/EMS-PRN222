@@ -1,0 +1,219 @@
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-navbar);
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-xs);
+}
+
+.app-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-6);
+    height: var(--header-height);
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-6);
+}
+
+.app-main {
+    flex: 1;
+    padding: var(--spacing-8) var(--spacing-6) var(--spacing-12);
+}
+
+.app-container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.app-container--narrow {
+    max-width: var(--content-narrow-width);
+}
+
+.app-container--form {
+    max-width: var(--content-form-width);
+}
+
+.app-footer {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--color-white);
+    color: var(--text-muted);
+    padding: var(--spacing-6) var(--spacing-6);
+    font-size: var(--font-size-sm);
+}
+
+.app-footer__inner {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+}
+
+.page-shell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-6);
+    flex-wrap: wrap;
+}
+
+.page-header__titles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.page-header__eyebrow {
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: var(--font-weight-semibold);
+}
+
+.page-header__title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.page-header__subtitle {
+    font-size: var(--font-size-md);
+    color: var(--text-secondary);
+    max-width: 64ch;
+}
+
+.page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-2);
+}
+
+.breadcrumb a {
+    color: var(--text-secondary);
+}
+
+.breadcrumb a:hover {
+    color: var(--color-primary-600);
+}
+
+.breadcrumb__separator {
+    color: var(--color-neutral-300);
+}
+
+.breadcrumb__current {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+.section-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.section-card__header {
+    padding: var(--spacing-5) var(--spacing-6);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+    flex-wrap: wrap;
+}
+
+.section-card__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.section-card__subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.section-card__body {
+    padding: var(--spacing-6);
+}
+
+.section-card__footer {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--color-neutral-50);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacing-6);
+}
+
+.grid--cards {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.grid--summary {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.grid--form {
+    grid-template-columns: 1fr 1fr;
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.stack--lg {
+    gap: var(--spacing-5);
+}
+
+.row {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.row--end {
+    justify-content: flex-end;
+}
+
+.row--between {
+    justify-content: space-between;
+}

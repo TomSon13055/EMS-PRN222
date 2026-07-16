@@ -2,38 +2,77 @@
 @{
     ViewData["Title"] = "Accounts";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Accounts",
+        Subtitle = "Manage all user accounts on the platform. Lock or unlock access as needed.",
+        Eyebrow = "EMS • Admin"
+    };
 }
-<h2>Accounts</h2>
-<table class="table table-bordered bg-white">
-    <thead>
-        <tr>
-            <th>UserId</th>
-            <th>FullName</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>IsActive</th>
-            <th>CreatedAt</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model.Accounts)
-        {
-            <tr>
-                <td id="@("td_userId_" + u.UserId)">@u.UserId</td>
-                <td id="@("td_fullName_" + u.UserId)">@u.FullName</td>
-                <td id="@("td_email_" + u.UserId)">@u.Email</td>
-                <td id="@("td_role_" + u.UserId)">@u.Role</td>
-                <td id="@("td_isActive_" + u.UserId)">@(u.IsActive ? "Active" : "Locked")</td>
-                <td id="@("td_createdAt_" + u.UserId)">@fmt(u.CreatedAt)</td>
-                <td>
-                    <form asp-action="ToggleAccount" asp-route-userId="@u.UserId" method="post" class="d-inline">
-                        @Html.AntiForgeryToken()
-                        <button id="@("btn_toggle_" + u.UserId)" type="submit" class="btn btn-sm btn-warning">@(u.IsActive ? "Lock" : "Unlock")</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+@await Html.PartialAsync("_PageHeader", header)
+
+@if (Model.Accounts.Any())
+{
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Created at</th>
+                    <th class="actions">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model.Accounts)
+                {
+                    var roleClass = u.Role switch
+                    {
+                        "Host" => "role-pill role-pill--host",
+                        "Customer" => "role-pill role-pill--customer",
+                        "Admin" => "role-pill role-pill--admin",
+                        _ => "role-pill"
+                    };
+                    <tr>
+                        <td>
+                            <div class="table-title">@u.FullName</div>
+                            <small class="text-muted">#@u.UserId</small>
+                        </td>
+                        <td>@u.Email</td>
+                        <td><span class="@roleClass">@u.Role</span></td>
+                        <td>
+                            <span class="status-badge @(u.IsActive ? "status-badge--success" : "status-badge--danger")">
+                                @(u.IsActive ? "Active" : "Locked")
+                            </span>
+                        </td>
+                        <td class="text-secondary nowrap">@u.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td class="actions">
+                            <form asp-action="ToggleAccount" asp-route-userId="@u.UserId" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="btn @(u.IsActive ? "btn--warning" : "btn--success") btn--sm">
+                                    <i class="bi @(u.IsActive ? "bi-lock" : "bi-unlock")" aria-hidden="true"></i>
+                                    <span>@(u.IsActive ? "Lock" : "Unlock")</span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "No accounts",
+        Description = "There are no accounts in the system yet.",
+        Icon = "bi-people",
+        IconVariant = "neutral"
+    })
+}

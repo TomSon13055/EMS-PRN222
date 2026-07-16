@@ -1,0 +1,15 @@
+@model string
+
+@{
+    var value = (Model ?? string.Empty).Trim();
+    var variant = value.ToLowerInvariant() switch
+    {
+        "published" or "active" or "assigned" or "success" or "paid" or "completed" => "status-badge--success",
+        "draft" or "pending" or "scheduled" => "status-badge--warning",
+        "cancelled" or "inactive" or "expired" or "used" or "refunded" or "failed" or "rejected" or "danger" => "status-badge--danger",
+        "ongoing" or "info" => "status-badge--info",
+        _ => "status-badge--neutral"
+    };
+}
+
+<span class="status-badge @variant">@value</span>

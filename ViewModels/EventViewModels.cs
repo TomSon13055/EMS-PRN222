@@ -56,9 +56,48 @@ public class EventListItemViewModel
     public string Status { get; set; } = string.Empty;
     public string HostName { get; set; } = string.Empty;
     public int HostId { get; set; }
+    public string? ImageUrl { get; set; }
+    public decimal? MinPrice { get; set; }
+    public int? AvailableTickets { get; set; }
     public bool CanEdit { get; set; }
     public bool CanBuy { get; set; }
     public bool CanWishlist { get; set; }
+}
+
+public class EventCardViewModel
+{
+    public int EventId { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string CategoryName { get; set; } = string.Empty;
+    public string LocationName { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string HostName { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public decimal? MinPrice { get; set; }
+    public int? AvailableTickets { get; set; }
+    public bool CanEdit { get; set; }
+    public bool CanBuy { get; set; }
+    public bool CanWishlist { get; set; }
+
+    public static EventCardViewModel FromListItem(EventListItemViewModel item) => new()
+    {
+        EventId = item.EventId,
+        Title = item.Title,
+        CategoryName = item.CategoryName,
+        LocationName = item.LocationName,
+        Status = item.Status,
+        HostName = item.HostName,
+        ImageUrl = item.ImageUrl,
+        StartTime = item.StartTime,
+        EndTime = item.EndTime,
+        MinPrice = item.MinPrice,
+        AvailableTickets = item.AvailableTickets,
+        CanEdit = item.CanEdit,
+        CanBuy = item.CanBuy,
+        CanWishlist = item.CanWishlist
+    };
 }
 
 public class EventListPageViewModel

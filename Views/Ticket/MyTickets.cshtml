@@ -1,68 +1,116 @@
 @model EventManagement.ViewModels.MyTicketsPageViewModel
 @{
-    ViewData["Title"] = "My Tickets";
+    ViewData["Title"] = "My tickets";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
-}
-<h2>My Tickets</h2>
-<p>
-    Total: <span id="span_totalTickets">@Model.TotalTickets</span> |
-    Assigned: <span id="span_assignedTickets">@Model.AssignedTickets</span> |
-    Used: <span id="span_usedTickets">@Model.UsedTickets</span> |
-    Refunded: <span id="span_refundedTickets">@Model.RefundedTickets</span>
-</p>
 
-<form method="get" class="row g-2 mb-3">
-    <div class="col-md-3">
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My tickets",
+        Subtitle = "All your purchased tickets. Show the QR code at the door for check-in.",
+        Eyebrow = "EMS • Customer"
+    };
+}
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<section class="tickets-summary-grid">
+    <div class="summary-card">
+        <span class="summary-card__label">Total</span>
+        <span class="summary-card__value" id="span_totalTickets">@Model.TotalTickets</span>
+        <span class="summary-card__hint">Tickets owned</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Assigned</span>
+        <span class="summary-card__value" id="span_assignedTickets">@Model.AssignedTickets</span>
+        <span class="summary-card__hint">Ready to use</span>
+    </div>
+    <div class="summary-card summary-card--success">
+        <span class="summary-card__label">Used</span>
+        <span class="summary-card__value" id="span_usedTickets">@Model.UsedTickets</span>
+        <span class="summary-card__hint">Checked in</span>
+    </div>
+    <div class="summary-card summary-card--amber">
+        <span class="summary-card__label">Refunded</span>
+        <span class="summary-card__value" id="span_refundedTickets">@Model.RefundedTickets</span>
+        <span class="summary-card__hint">Returned</span>
+    </div>
+</section>
+
+<form method="get" class="tickets-toolbar" data-my-tickets-filter>
+    <div class="form-field" style="margin: 0;">
         <label class="form-label">Status</label>
-        <select id="sl_status" name="status" class="form-select">
+        <select name="status" class="form-select" data-my-tickets-status>
             @foreach (var s in Model.Statuses)
             {
-                <option value="@s.Value" selected="@(s.Value == (Model.Status ?? "All"))">@s.Text</option>
+                <option value="@s.Value" selected="@(string.Equals(Model.Status ?? "All", s.Value, StringComparison.OrdinalIgnoreCase))">@s.Text</option>
             }
         </select>
     </div>
-    <div class="col-md-7">
+    <div class="form-field" style="margin: 0;">
         <label class="form-label">Search</label>
-        <input id="txt_search" name="search" value="@Model.Search" class="form-control" />
+        <input type="search" name="search" value="@Model.Search"
+               class="form-control" placeholder="Search by event or serial number" />
     </div>
-    <div class="col-md-2 d-flex align-items-end">
-        <button id="btn_filter" type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
+    <button type="submit" class="btn btn--primary">
+        <i class="bi bi-funnel" aria-hidden="true"></i>
+        <span>Filter</span>
+    </button>
 </form>
 
-<table class="table table-bordered bg-white">
-    <thead>
-        <tr>
-            <th>TicketId</th>
-            <th>SerialNumber</th>
-            <th>EventTitle</th>
-            <th>TicketTypeName</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>IssuedAt</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Tickets.Any())
-        {
-            <tr><td colspan="8" class="text-center">No tickets</td></tr>
-        }
-        @foreach (var t in Model.Tickets)
-        {
-            <tr>
-                <td id="@("td_ticketId_" + t.TicketId)">@t.TicketId</td>
-                <td id="@("td_serialNumber_" + t.TicketId)">@t.SerialNumber</td>
-                <td id="@("td_eventTitle_" + t.TicketId)">@t.EventTitle</td>
-                <td id="@("td_ticketTypeName_" + t.TicketId)">@t.TicketTypeName</td>
-                <td id="@("td_price_" + t.TicketId)">@t.Price.ToString("N0") đ</td>
-                <td id="@("td_status_" + t.TicketId)">@t.Status</td>
-                <td id="@("td_issuedAt_" + t.TicketId)">@fmt(t.IssuedAt)</td>
-                <td>
-                    <a id="@("lnk_qr_" + t.TicketId)" href="/Ticket/QR/@t.TicketId">QR</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (Model.Tickets.Any())
+{
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Ticket</th>
+                    <th>Event</th>
+                    <th>Ticket type</th>
+                    <th class="numeric">Price</th>
+                    <th>Status</th>
+                    <th>Issued at</th>
+                    <th class="actions">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.Tickets)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-title">#@t.TicketId</div>
+                            <code class="serial" title="@t.SerialNumber">@t.SerialNumber</code>
+                        </td>
+                        <td class="table-title">@t.EventTitle</td>
+                        <td>@t.TicketTypeName</td>
+                        <td class="numeric">@t.Price.ToString("N0") đ</td>
+                        <td><partial name="_StatusBadge" model="t.Status" /></td>
+                        <td class="text-secondary nowrap">@t.IssuedAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td class="actions">
+                            <a class="btn btn--secondary btn--sm"
+                               href="@Url.Action("QR", "Ticket", new { id = t.TicketId })">
+                                <i class="bi bi-qr-code" aria-hidden="true"></i>
+                                <span>View QR</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "No tickets yet",
+        Description = "Buy tickets to your favourite events and they will appear here.",
+        Icon = "bi-ticket-perforated",
+        ActionLabel = "Browse events",
+        ActionUrl = Url.Action("List", "Event"),
+        ActionIcon = "bi-arrow-right"
+    })
+}
+
+@section Scripts {
+    <script type="module" src="~/js/pages/my-tickets.js" asp-append-version="true"></script>
+}

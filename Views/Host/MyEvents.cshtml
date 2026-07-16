@@ -1,68 +1,176 @@
 @model EventManagement.ViewModels.HostMyEventsPageViewModel
 @{
-    ViewData["Title"] = "My Events";
+    ViewData["Title"] = "My events";
     Layout = "_Layout";
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My events",
+        Subtitle = "Manage events you host, view ticket sales, and create vouchers.",
+        Eyebrow = "EMS • Host"
+    };
+
+    var totalTickets = Model.Events.Sum(e => e.TicketSold);
+    var totalRevenue = Model.Events.Sum(e => e.Revenue);
+    var published = Model.Events.Count(e => string.Equals(e.Status, "Published", StringComparison.OrdinalIgnoreCase));
+    var draft = Model.Events.Count(e => string.Equals(e.Status, "Draft", StringComparison.OrdinalIgnoreCase));
 }
-<h2>My Events</h2>
-<form method="get" class="row g-2 mb-3">
-    <div class="col-md-3">
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<section class="host-summary-grid">
+    <div class="summary-card">
+        <span class="summary-card__label">Total events</span>
+        <span class="summary-card__value">@Model.Events.Count</span>
+        <span class="summary-card__hint">All time</span>
+    </div>
+    <div class="summary-card summary-card--success">
+        <span class="summary-card__label">Published</span>
+        <span class="summary-card__value">@published</span>
+        <span class="summary-card__hint">Visible to customers</span>
+    </div>
+    <div class="summary-card summary-card--amber">
+        <span class="summary-card__label">Draft</span>
+        <span class="summary-card__value">@draft</span>
+        <span class="summary-card__hint">Work in progress</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Tickets sold</span>
+        <span class="summary-card__value">@totalTickets</span>
+        <span class="summary-card__hint">Across all events</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Revenue</span>
+        <span class="summary-card__value">@totalRevenue.ToString("N0") đ</span>
+        <span class="summary-card__hint">Gross ticket sales</span>
+    </div>
+</section>
+
+<form method="get" class="host-toolbar" data-host-filter>
+    <div class="form-field">
         <label class="form-label">Status</label>
-        <select id="sl_status" name="status" class="form-select">
+        <select name="status" class="form-select" data-host-status>
             @foreach (var s in Model.Statuses)
             {
-                <option value="@s.Value" selected="@(s.Value == (Model.Status ?? ""))">@s.Text</option>
+                <option value="@s.Value" selected="@(string.Equals(Model.Status ?? "", s.Value, StringComparison.OrdinalIgnoreCase))">@s.Text</option>
             }
         </select>
     </div>
-    <div class="col-md-7">
+    <div class="form-field">
         <label class="form-label">Search</label>
-        <input id="txt_search" name="search" value="@Model.Search" class="form-control" />
+        <input type="search" name="search" value="@Model.Search" class="form-control" placeholder="Search by title" />
     </div>
-    <div class="col-md-2 d-flex align-items-end">
-        <button id="btn_filter" type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
+    <button type="submit" class="btn btn--primary">
+        <i class="bi bi-funnel" aria-hidden="true"></i>
+        <span>Filter</span>
+    </button>
 </form>
 
-<table class="table table-bordered bg-white">
-    <thead>
-        <tr>
-            <th>EventId</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Location</th>
-            <th>StartTime</th>
-            <th>Status</th>
-            <th>TicketSold</th>
-            <th>Revenue</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Events.Any())
-        {
-            <tr><td colspan="9" class="text-center">No events</td></tr>
-        }
-        @foreach (var e in Model.Events)
-        {
-            <tr>
-                <td>@e.EventId</td>
-                <td>@e.Title</td>
-                <td>@e.Category</td>
-                <td>@e.Location</td>
-                <td>@fmt(e.StartTime)</td>
-                <td>@e.Status</td>
-                <td>@e.TicketSold</td>
-                <td>@e.Revenue.ToString("N0") đ</td>
-                <td>
-                    <a id="@("lnk_edit_" + e.EventId)" href="/Event/Edit/@e.EventId">Edit</a> |
-                    <a id="@("lnk_createTicketType_" + e.EventId)" href="/TicketType/Create/@e.EventId">Create Ticket Type</a> |
-                    <a id="@("lnk_createVoucher_" + e.EventId)" href="/Voucher/Create?eventId=@e.EventId">Create Voucher</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<p>
-    <a asp-action="CreateEvent" class="btn btn-success">Create New Event</a>
-</p>
+<div class="row row--between" style="margin-bottom: var(--spacing-4);">
+    <span class="text-muted">Showing @Model.Events.Count event@(Model.Events.Count == 1 ? "" : "s")</span>
+    <a class="btn btn--success" asp-action="CreateEvent">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i>
+        <span>Create new event</span>
+    </a>
+</div>
+
+@if (Model.Events.Any())
+{
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Starts</th>
+                    <th>Status</th>
+                    <th class="numeric">Tickets sold</th>
+                    <th class="numeric">Revenue</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Events)
+                {
+                    <tr>
+                        <td>
+                            <div class="table-title">@e.Title</div>
+                            <small class="text-muted">#@e.EventId</small>
+                        </td>
+                        <td>@e.Category</td>
+                        <td>@e.Location</td>
+                        <td class="text-secondary nowrap">@e.StartTime.ToString("dd MMM yyyy HH:mm")</td>
+                        <td><partial name="_StatusBadge" model="e.Status" /></td>
+                        <td class="numeric">@e.TicketSold</td>
+                        <td class="numeric">@e.Revenue.ToString("N0") đ</td>
+                        <td class="actions">
+                            <div class="action-dropdown" data-action-dropdown aria-expanded="false">
+                                <button type="button"
+                                        class="btn btn--secondary btn--sm"
+                                        data-action-dropdown-trigger
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <i class="bi bi-three-dots" aria-hidden="true"></i>
+                                    <span>Actions</span>
+                                </button>
+                                <ul class="action-dropdown__menu" role="menu">
+                                    <li>
+                                        <a class="action-dropdown__item" role="menuitem"
+                                           href="@Url.Action("Edit", "Event", new { id = e.EventId })">
+                                            <i class="bi bi-pencil" aria-hidden="true"></i>
+                                            <span>Edit</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="action-dropdown__item" role="menuitem"
+                                           href="@Url.Action("Create", "TicketType", new { eventId = e.EventId })">
+                                            <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+                                            <span>Manage ticket types</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="action-dropdown__item" role="menuitem"
+                                           href="@Url.Action("Create", "Voucher", new { eventId = e.EventId })">
+                                            <i class="bi bi-gift" aria-hidden="true"></i>
+                                            <span>Create voucher</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="action-dropdown__item" role="menuitem"
+                                           href="@Url.Action("Details", "Event", new { id = e.EventId })">
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                            <span>View public page</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a class="btn btn--outline-primary btn--sm"
+                               href="@Url.Action("Edit", "Event", new { id = e.EventId })">
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                                <span>Edit</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "No events yet",
+        Description = "Create your first event to start selling tickets on EMS.",
+        Icon = "bi-calendar-plus",
+        ActionLabel = "Create your first event",
+        ActionUrl = Url.Action("CreateEvent", "Host"),
+        ActionIcon = "bi-plus-circle"
+    })
+}
+
+@section Scripts {
+    <script type="module" src="~/js/pages/host-events.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/pages/action-dropdown.js" asp-append-version="true"></script>
+}

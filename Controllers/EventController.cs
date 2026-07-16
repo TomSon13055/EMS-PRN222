@@ -20,6 +20,23 @@ public class EventController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var ev = await _events.GetEventDetailAsync(id);
+        if (ev == null)
+        {
+            TempData["Error"] = "Event not found.";
+            return RedirectToAction("List");
+        }
+
+        ViewBag.CanBuy = HttpContext.IsInRole("Customer");
+        ViewBag.CanWishlist = HttpContext.IsInRole("Customer");
+        ViewBag.CanEdit = (HttpContext.IsInRole("Host") && HttpContext.GetUserId() == ev.HostId)
+                          || HttpContext.IsInRole("Admin");
+        return View(ev);
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
         var userId = HttpContext.GetUserId() ?? 0;

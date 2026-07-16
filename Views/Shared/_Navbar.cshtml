@@ -1,0 +1,218 @@
+@using EventManagement.Helpers
+@{
+    var fullName = Context.GetFullName();
+    var role = Context.GetRole() ?? "Guest";
+    var initials = string.Empty;
+    if (!string.IsNullOrWhiteSpace(fullName))
+    {
+        var parts = fullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        initials = parts.Length == 1
+            ? parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpperInvariant()
+            : (parts[0][0].ToString() + parts[^1][0].ToString()).ToUpperInvariant();
+    }
+    var avatarClass = role switch
+    {
+        "Host" => "account-menu__avatar account-menu__avatar--host",
+        "Admin" => "account-menu__avatar account-menu__avatar--admin",
+        _ => "account-menu__avatar"
+    };
+    var roleClass = role switch
+    {
+        "Host" => "role-pill role-pill--host",
+        "Customer" => "role-pill role-pill--customer",
+        "Admin" => "role-pill role-pill--admin",
+        _ => "role-pill"
+    };
+}
+
+<header class="app-header">
+    <div class="app-header__inner">
+        <a class="app-navbar__brand" href="@Url.Action("List", "Event")" aria-label="EMS home">
+            <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
+            <span>EMS</span>
+        </a>
+
+        <nav class="app-navbar" aria-label="Primary navigation">
+            <ul class="app-navbar__primary">
+                <li>
+                    <a class="nav-link-app js-nav-events @(IsActive("Event", "List") ? "is-active" : null)"
+                       href="@Url.Action("List", "Event")">
+                        <i class="bi bi-calendar-event" aria-hidden="true"></i>
+                        <span>Events</span>
+                    </a>
+                </li>
+
+                @if (Context.IsInRole("Customer"))
+                {
+                    <li>
+                        <a class="nav-link-app js-nav-wishlist @(IsActive("Wishlist", "List") ? "is-active" : null)"
+                           href="@Url.Action("List", "Wishlist")">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                            <span>Wishlist</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-app js-nav-my-tickets @(IsActive("Ticket", "MyTickets") ? "is-active" : null)"
+                           href="@Url.Action("MyTickets", "Ticket")">
+                            <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+                            <span>My Tickets</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Context.IsInRole("Host"))
+                {
+                    <li>
+                        <a class="nav-link-app js-nav-my-events @(IsActive("Host", "MyEvents") ? "is-active" : null)"
+                           href="@Url.Action("MyEvents", "Host")">
+                            <i class="bi bi-collection" aria-hidden="true"></i>
+                            <span>My Events</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-app js-nav-create-event @(IsActive("Host", "CreateEvent") ? "is-active" : null)"
+                           href="@Url.Action("CreateEvent", "Host")">
+                            <i class="bi bi-plus-square" aria-hidden="true"></i>
+                            <span>Create Event</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-app js-nav-vouchers @(IsActive("Voucher", "List") || IsActive("Voucher", "Create") ? "is-active" : null)"
+                           href="@Url.Action("List", "Voucher")">
+                            <i class="bi bi-gift" aria-hidden="true"></i>
+                            <span>Vouchers</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Context.IsInRole("Admin"))
+                {
+                    <li>
+                        <a class="nav-link-app js-nav-admin-dashboard @(IsActive("Admin", "Dashboard") ? "is-active" : null)"
+                           href="@Url.Action("Dashboard", "Admin")">
+                            <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-app js-nav-admin-accounts @(IsActive("Admin", "Accounts") ? "is-active" : null)"
+                           href="@Url.Action("Accounts", "Admin")">
+                            <i class="bi bi-people" aria-hidden="true"></i>
+                            <span>Accounts</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Context.IsLoggedIn())
+                {
+                    <li>
+                        <a class="nav-link-app js-nav-notifications @(IsActive("Notification", "List") ? "is-active" : null)"
+                           href="@Url.Action("List", "Notification")">
+                            <i class="bi bi-bell" aria-hidden="true"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <div class="app-navbar__spacer"></div>
+
+            <ul class="app-navbar__secondary">
+                @if (Context.IsLoggedIn())
+                {
+                    @if (Context.IsInRole("Customer"))
+                    {
+                        <li>
+                            <a class="nav-link-app nav-link-app--wallet js-nav-wallet @(IsActive("Wallet", "Index") ? "is-active" : null)"
+                               href="@Url.Action("Index", "Wallet")">
+                                <i class="bi bi-wallet2" aria-hidden="true"></i>
+                                <span>Wallet</span>
+                            </a>
+                        </li>
+                    }
+
+                    <li class="account-menu" data-account-menu aria-expanded="false">
+                        <button type="button"
+                                class="account-menu__trigger"
+                                data-account-trigger
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            <span class="@avatarClass" aria-hidden="true">@initials</span>
+                            <span class="stack" style="gap: 0; align-items: flex-start;">
+                                <span class="account-menu__name">@fullName</span>
+                                <span class="@roleClass">@role</span>
+                            </span>
+                            <i class="bi bi-chevron-down account-menu__chevron" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="account-menu__panel" role="menu">
+                            <div class="account-menu__header">
+                                <span class="account-menu__header-name">@fullName</span>
+                                <span class="@roleClass">@role</span>
+                            </div>
+                            @if (Context.IsInRole("Customer"))
+                            {
+                                <a class="account-menu__item" href="@Url.Action("Index", "Wallet")" role="menuitem">
+                                    <i class="bi bi-wallet2" aria-hidden="true"></i>
+                                    <span>My Wallet</span>
+                                </a>
+                                <a class="account-menu__item" href="@Url.Action("MyTickets", "Ticket")" role="menuitem">
+                                    <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+                                    <span>My Tickets</span>
+                                </a>
+                            }
+                            @if (Context.IsInRole("Host"))
+                            {
+                                <a class="account-menu__item" href="@Url.Action("CreateEvent", "Host")" role="menuitem">
+                                    <i class="bi bi-plus-square" aria-hidden="true"></i>
+                                    <span>Create Event</span>
+                                </a>
+                                <a class="account-menu__item" href="@Url.Action("List", "Voucher")" role="menuitem">
+                                    <i class="bi bi-gift" aria-hidden="true"></i>
+                                    <span>Vouchers</span>
+                                </a>
+                            }
+                            <a class="account-menu__item" href="@Url.Action("List", "Notification")" role="menuitem">
+                                <i class="bi bi-bell" aria-hidden="true"></i>
+                                <span>Notifications</span>
+                            </a>
+                            <div class="account-menu__divider" role="separator"></div>
+                            <a class="account-menu__item account-menu__item--danger"
+                               href="@Url.Action("Logout", "Account")"
+                               role="menuitem">
+                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="btn btn--ghost btn--sm js-nav-login" href="@Url.Action("Login", "Account")">
+                            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn btn--primary btn--sm js-nav-register" href="@Url.Action("Register", "Account")">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i>
+                            <span>Register</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</header>
+
+@functions {
+    bool IsActive(string controller, string action)
+    {
+        var routeData = ViewContext.RouteData.Values;
+        var currentController = routeData["controller"]?.ToString();
+        var currentAction = routeData["action"]?.ToString();
+        return string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase);
+    }
+}

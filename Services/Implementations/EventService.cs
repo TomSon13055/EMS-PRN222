@@ -71,6 +71,17 @@ public class EventService : IEventService
 
         foreach (var e in list)
         {
+            var types = await _ticketTypes.GetByEventIdAsync(e.EventId);
+            decimal? minPrice = null;
+            int? available = null;
+            foreach (var t in types)
+            {
+                if (!minPrice.HasValue || t.Price < minPrice.Value) minPrice = t.Price;
+                var sold = await _ticketTypes.CountSoldAsync(t.TicketTypeId);
+                var left = Math.Max(0, t.Quantity - sold);
+                available = (available ?? 0) + left;
+            }
+
             vm.Events.Add(new EventListItemViewModel
             {
                 EventId = e.EventId,
@@ -82,6 +93,9 @@ public class EventService : IEventService
                 Status = e.Status,
                 HostName = e.Host?.FullName ?? string.Empty,
                 HostId = e.HostId,
+                ImageUrl = e.ImageUrl,
+                MinPrice = minPrice,
+                AvailableTickets = available,
                 CanBuy = isCustomer && e.Status == "Published",
                 CanWishlist = isCustomer && e.Status == "Published",
                 CanEdit = isAdmin || (isHost && currentUserId == e.HostId)

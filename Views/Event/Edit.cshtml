@@ -1,114 +1,202 @@
 @model EventManagement.ViewModels.EditEventViewModel
 @{
-    ViewData["Title"] = "Edit Event";
+    ViewData["Title"] = "Edit event";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Edit event",
+        Subtitle = "Update the details of your event. Changes are visible to customers immediately after saving.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
+            new() { Text = Model.Title }
+        }
+    };
 }
-<h2>Edit Event</h2>
-<form asp-action="Edit" method="post" class="mt-3">
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<form asp-action="Edit" method="post" novalidate>
     <input type="hidden" asp-for="EventId" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label class="form-label">Title</label>
-        <input asp-for="Title" id="txt_title" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea asp-for="Description" id="txt_description" class="form-control" rows="4"></textarea>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Category</label>
-            <select asp-for="EventCategoryId" id="sl_category" class="form-select">
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Basic information</h2>
+        <p class="form-section__subtitle">Make sure the title and description are up to date.</p>
+
+        <div class="form-field">
+            <label asp-for="Title" class="form-label">
+                <span>Title</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <input asp-for="Title" class="form-control" maxlength="150" />
+            <span asp-validation-for="Title" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="Description" class="form-label">
+                <span>Description</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <textarea asp-for="Description" class="form-control form-control--textarea" rows="5"></textarea>
+            <span asp-validation-for="Description" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="EventCategoryId" class="form-label">
+                <span>Category</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <select asp-for="EventCategoryId" class="form-select">
                 @if (Model.Categories != null)
                 {
-                    int idx = 0;
-                    foreach (var c in Model.Categories)
+                    foreach (var c in Model.Categories.Where(x => !string.IsNullOrEmpty(x.Value)))
                     {
-                        idx++;
-                        <option id="@("opt_category_" + idx)" value="@c.Value" selected="@(c.Value == Model.EventCategoryId.ToString())">@c.Text</option>
+                        <option value="@c.Value" selected="@(c.Value == Model.EventCategoryId.ToString())">@c.Text</option>
                     }
                 }
             </select>
+            <span asp-validation-for="EventCategoryId" class="field-validation-error"></span>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Location</label>
-            <select asp-for="EventLocationId" id="sl_location" class="form-select">
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Date and location</h2>
+        <p class="form-section__subtitle">When and where will it happen?</p>
+
+        <div class="form-field">
+            <label asp-for="EventLocationId" class="form-label">
+                <span>Location</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <select asp-for="EventLocationId" class="form-select">
                 @if (Model.Locations != null)
                 {
-                    int idx = 0;
-                    foreach (var l in Model.Locations)
+                    foreach (var l in Model.Locations.Where(x => !string.IsNullOrEmpty(x.Value)))
                     {
-                        idx++;
-                        <option id="@("opt_location_" + idx)" value="@l.Value" selected="@(l.Value == Model.EventLocationId.ToString())">@l.Text</option>
+                        <option value="@l.Value" selected="@(l.Value == Model.EventLocationId.ToString())">@l.Text</option>
                     }
                 }
             </select>
+            <span asp-validation-for="EventLocationId" class="field-validation-error"></span>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Start Time</label>
-            <input asp-for="StartTime" id="txt_startTime" class="form-control" type="datetime-local" value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")" />
+
+        <div class="form-grid-2">
+            <div class="form-field">
+                <label asp-for="StartTime" class="form-label">
+                    <span>Start time</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="StartTime" type="datetime-local" class="form-control"
+                       value="@(Model.StartTime == default ? string.Empty : Model.StartTime.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="StartTime" class="field-validation-error"></span>
+            </div>
+            <div class="form-field">
+                <label asp-for="EndTime" class="form-label">
+                    <span>End time</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="EndTime" type="datetime-local" class="form-control"
+                       value="@(Model.EndTime == default ? string.Empty : Model.EndTime.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="EndTime" class="field-validation-error"></span>
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">End Time</label>
-            <input asp-for="EndTime" id="txt_endTime" class="form-control" type="datetime-local" value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Image URL</label>
-        <input asp-for="ImageUrl" id="txt_imageUrl" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select asp-for="Status" id="sl_status" class="form-select">
-            @if (Model.Statuses != null)
-            {
-                foreach (var s in Model.Statuses)
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Media</h2>
+        <p class="form-section__subtitle">Replace the cover image if needed.</p>
+        <div class="form-field">
+            <label asp-for="ImageUrl" class="form-label">Image URL</label>
+            <input asp-for="ImageUrl" class="form-control" data-image-preview-input="#imagePreview" />
+            <div class="image-preview" id="imagePreview">
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
-                    <option value="@s.Value" selected="@(s.Value == Model.Status)">@s.Text</option>
+                    <div class="image-preview__thumb"><img src="@Model.ImageUrl" alt="Event cover preview" /></div>
+                    <span class="image-preview__caption">Current image</span>
                 }
-            }
-        </select>
-    </div>
-    <button id="btn_save" type="submit" class="btn btn-primary">Save</button>
-    <a id="btn_back" asp-action="List" asp-controller="Event" class="btn btn-link">Back</a>
-</form>
+                else
+                {
+                    <span class="image-preview__caption">No image URL provided yet.</span>
+                }
+            </div>
+            <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
+        </div>
+    </section>
 
-<div class="mt-4">
-    <h5>Ticket Types</h5>
+    <section class="form-section">
+        <h2 class="form-section__title">Publishing</h2>
+        <div class="form-field">
+            <label asp-for="Status" class="form-label">Status</label>
+            <select asp-for="Status" class="form-select">
+                @if (Model.Statuses != null)
+                {
+                    foreach (var s in Model.Statuses)
+                    {
+                        <option value="@s.Value" selected="@(s.Value == Model.Status)">@s.Text</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Status" class="field-validation-error"></span>
+        </div>
+    </section>
 
-    @if (Model.TicketTypes == null || !Model.TicketTypes.Any())
+    @if (Model.TicketTypes != null && Model.TicketTypes.Any())
     {
-        <div class="alert alert-warning">No ticket types yet. Click "Add Ticket Type" to create one.</div>
+        <section class="form-section">
+            <h2 class="form-section__title">Existing ticket types</h2>
+            <p class="form-section__subtitle">These tickets are already on sale and cannot be deleted from here.</p>
+            <div class="ticket-type-list">
+                @foreach (var t in Model.TicketTypes)
+                {
+                    <article class="ticket-type-card">
+                        <header>
+                            <h3 class="ticket-type-card__name">@t.TypeName</h3>
+                            <span class="status-badge @(t.Status == "Active" ? "status-badge--success" : "status-badge--neutral")">@t.Status</span>
+                        </header>
+                        <div class="ticket-type-card__price">@t.Price.ToString("N0") đ</div>
+                        <div class="ticket-type-card__meta">
+                            <span><strong>@t.Quantity</strong> tickets</span>
+                            <span class="text-muted">@t.SaleStart.ToString("dd MMM") - @t.SaleEnd.ToString("dd MMM")</span>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
     }
     else
     {
-        <table class="table table-bordered table-striped">
-            <thead class="table-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Sale Window</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var t in Model.TicketTypes)
-                {
-                    <tr>
-                        <td>@t.TypeName</td>
-                        <td>@t.Price.ToString("N0") đ</td>
-                        <td>@t.Quantity</td>
-                        <td>@t.SaleStart.ToString("yyyy-MM-dd HH:mm") – @t.SaleEnd.ToString("yyyy-MM-dd HH:mm")</td>
-                        <td><span class="badge @(t.Status == "Active" ? "bg-success" : "bg-secondary")">@t.Status</span></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <section class="form-section">
+            <h2 class="form-section__title">Ticket types</h2>
+            <p class="form-section__subtitle">You can add ticket types after saving the event.</p>
+            @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+            {
+                Title = "No ticket types yet",
+                Description = "Save the event first, then add ticket types so customers can purchase tickets.",
+                Icon = "bi-ticket-perforated",
+                IconVariant = "neutral",
+                ActionLabel = "Add ticket type",
+                ActionUrl = Url.Action("Create", "TicketType", new { eventId = Model.EventId }),
+                ActionIcon = "bi-plus-circle"
+            })
+        </section>
     }
-</div>
+
+    <div class="form-actions">
+        <a class="btn btn--outline-secondary" asp-action="List" asp-controller="Event">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            <span>Cancel</span>
+        </a>
+        <button type="submit" class="btn btn--primary btn--lg">
+            <i class="bi bi-check2-circle" aria-hidden="true"></i>
+            <span>Save changes</span>
+        </button>
+    </div>
+</form>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

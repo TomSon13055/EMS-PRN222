@@ -1,8 +1,27 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="auth-shell">
+    <div class="auth-card" style="text-align: center;">
+        <div class="auth-card__brand" style="justify-content: center;">
+            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
+            <span class="text-strong">Event Management System</span>
+        </div>
+        <h1 class="auth-card__title">Welcome to EMS</h1>
+        <p class="auth-card__subtitle">
+            Discover, host and manage events with a modern toolkit.
+        </p>
+        <div class="row" style="justify-content: center; gap: var(--spacing-3);">
+            <a class="btn btn--primary" href="@Url.Action("List", "Event")">
+                <i class="bi bi-calendar-event" aria-hidden="true"></i>
+                <span>Browse events</span>
+            </a>
+            <a class="btn btn--outline-secondary" href="@Url.Action("Login", "Account")">
+                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                <span>Sign in</span>
+            </a>
+        </div>
+    </div>
+</section>

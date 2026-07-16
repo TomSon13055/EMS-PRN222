@@ -1,82 +1,130 @@
 @model EventManagement.ViewModels.WalletPageViewModel
 @{
-    ViewData["Title"] = "My Wallet";
+    ViewData["Title"] = "My wallet";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My wallet",
+        Subtitle = "Top up your wallet to buy tickets instantly without leaving the app.",
+        Eyebrow = "EMS • Customer"
+    };
+
+    var topUps = new[] { 100000, 200000, 500000, 1000000, 2000000 };
 }
-<h2>My Wallet</h2>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <h3>Balance: <span class="text-success">@Model.Balance.ToString("N0") đ</span></h3>
-    </div>
-</div>
+@await Html.PartialAsync("_PageHeader", header)
 
-<div class="card mb-4">
-    <div class="card-body">
-        <h5>Top Up</h5>
-        <form asp-action="TopUp" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="row g-2 align-items-end">
-                <div class="col-auto">
-                    <label class="form-label">Amount (VND)</label>
-                    <input name="amount" id="txt_topup_amount" class="form-control" type="number" min="10000" step="10000" placeholder="10000" required />
-                </div>
-                <div class="col-auto">
-                    <button id="btn_topup" type="submit" class="btn btn-success">Top Up</button>
-                </div>
+<section class="grid grid--summary" style="grid-template-columns: minmax(280px, 1fr) minmax(320px, 2fr);">
+    <article class="summary-card summary-card--amber" style="padding: var(--spacing-6);">
+        <span class="summary-card__label">Available balance</span>
+        <span class="summary-card__value" style="font-size: var(--font-size-4xl);">@Model.Balance.ToString("N0") đ</span>
+        <span class="summary-card__hint">Use this balance to buy tickets.</span>
+    </article>
+
+    <article class="section-card">
+        <div class="section-card__header">
+            <div>
+                <h2 class="section-card__title">Top up wallet</h2>
+                <p class="section-card__subtitle">Add funds to your wallet using one of the quick amounts below.</p>
             </div>
-            <small class="text-muted">Quick amounts: </small>
-            @foreach (var amt in new[] { 100000, 500000, 1000000, 5000000 })
-            {
-                <button type="button" class="btn btn-outline-success btn-sm ms-1" onclick="document.getElementById('txt_topup_amount').value = @amt">@amt.ToString("N0") đ</button>
-            }
-        </form>
-    </div>
-</div>
+        </div>
+        <div class="section-card__body">
+            <form asp-action="TopUp" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
-<h5>Transaction History</h5>
-@if (!Model.Transactions.Any())
-{
-    <p class="text-muted">No transactions yet.</p>
-}
-else
-{
-    <table class="table table-sm table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Balance After</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in Model.Transactions)
+                <div class="form-field">
+                    <label class="form-label" for="topupAmount">Amount (VND)</label>
+                    <input id="topupAmount"
+                           name="amount"
+                           type="number"
+                           min="10000"
+                           step="10000"
+                           class="form-control"
+                           placeholder="100,000"
+                           required />
+                    <span class="field-hint">Minimum top-up: 10,000 đ.</span>
+                </div>
+
+                <div class="form-field">
+                    <span class="form-label">Quick amounts</span>
+                    <div class="row" style="gap: var(--spacing-2);">
+                        @foreach (var amt in topUps)
+                        {
+                            <button type="button"
+                                    class="btn btn--outline-secondary btn--sm"
+                                    data-quick-amount="@amt"
+                                    data-quick-amount-target="#topupAmount">
+                                @amt.ToString("N0") đ
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--primary">
+                        <i class="bi bi-wallet" aria-hidden="true"></i>
+                        <span>Top up</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </article>
+</section>
+
+<section class="section-card" style="margin-top: var(--spacing-6);">
+    <div class="section-card__header">
+        <div>
+            <h2 class="section-card__title">Transaction history</h2>
+            <p class="section-card__subtitle">All your top-ups and ticket purchases.</p>
+        </div>
+    </div>
+    <div class="section-card__body" style="padding: 0;">
+        @if (Model.Transactions.Any())
+        {
+            <div class="data-table-wrap" style="border: 0; border-radius: 0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th class="numeric">Amount</th>
+                            <th>Description</th>
+                            <th class="numeric">Balance after</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in Model.Transactions)
+                        {
+                            var isTopUp = t.TransactionType == "TopUp";
+                            var sign = isTopUp ? "+" : "-";
+                            <tr>
+                                <td class="text-secondary nowrap">@t.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td><partial name="_StatusBadge" model="t.TransactionType" /></td>
+                                <td class="numeric @(isTopUp ? "text-success" : "text-danger")">
+                                    @sign@t.Amount.ToString("N0") đ
+                                </td>
+                                <td>@t.Description</td>
+                                <td class="numeric">@t.BalanceAfter.ToString("N0") đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
             {
-                <tr>
-                    <td>@t.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>
-                        @if (t.TransactionType == "TopUp")
-                        {
-                            <span class="badge bg-success">TopUp</span>
-                        }
-                        else if (t.TransactionType == "Payment")
-                        {
-                            <span class="badge bg-danger">Payment</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">@t.TransactionType</span>
-                        }
-                    </td>
-                    <td class="@(t.TransactionType == "TopUp" ? "text-success" : "text-danger")">
-                        @(t.TransactionType == "TopUp" ? "+" : "-")@t.Amount.ToString("N0") đ
-                    </td>
-                    <td>@t.Description</td>
-                    <td>@t.BalanceAfter.ToString("N0") đ</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                Title = "No transactions yet",
+                Description = "Your top-ups and ticket purchases will appear here.",
+                Icon = "bi-receipt",
+                IconVariant = "neutral"
+            })
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

@@ -1,0 +1,47 @@
+@using EventManagement.Helpers
+@model EventManagement.ViewModels.PaginationViewModel
+
+@if (Model != null && Model.TotalPages > 1)
+{
+    <nav class="pagination" aria-label="Pagination">
+        <span class="pagination__summary">
+            Showing page @Model.Page of @Model.TotalPages (@Model.TotalItems items)
+        </span>
+        <ul class="pagination__list">
+            <li>
+                @{
+                    var prevDisabled = Model.Page <= 1;
+                    var prevPage = prevDisabled ? Model.Page : Model.Page - 1;
+                }
+                <a class="pagination__link @(prevDisabled ? "pagination__link--disabled" : null)"
+                   href="@Url.Action(Model.Action, Model.Controller, PaginationHelper.WithPage(Model.Query, Model.PageQuery, prevPage))"
+                   aria-disabled="@prevDisabled.ToString().ToLowerInvariant()"
+                   rel="prev">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                    <span>Previous</span>
+                </a>
+            </li>
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li>
+                    <a class="pagination__link @(i == Model.Page ? "pagination__link--active" : null)"
+                       href="@Url.Action(Model.Action, Model.Controller, PaginationHelper.WithPage(Model.Query, Model.PageQuery, i))"
+                       aria-current="@(i == Model.Page ? "page" : null)">@i</a>
+                </li>
+            }
+            <li>
+                @{
+                    var nextDisabled = Model.Page >= Model.TotalPages;
+                    var nextPage = nextDisabled ? Model.Page : Model.Page + 1;
+                }
+                <a class="pagination__link @(nextDisabled ? "pagination__link--disabled" : null)"
+                   href="@Url.Action(Model.Action, Model.Controller, PaginationHelper.WithPage(Model.Query, Model.PageQuery, nextPage))"
+                   aria-disabled="@nextDisabled.ToString().ToLowerInvariant()"
+                   rel="next">
+                    <span>Next</span>
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

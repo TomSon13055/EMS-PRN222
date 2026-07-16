@@ -1,50 +1,126 @@
 @model EventManagement.ViewModels.CreateTicketTypeViewModel
 @{
-    ViewData["Title"] = "Create Ticket Type";
+    ViewData["Title"] = "Create ticket type";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Create ticket type",
+        Subtitle = !string.IsNullOrEmpty(Model.EventTitle)
+            ? $"Add a new ticket type for {Model.EventTitle}."
+            : "Add a new ticket type for this event.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
+            new() { Text = "Create ticket type" }
+        }
+    };
 }
-<h2>Create Ticket Type</h2>
+
+@await Html.PartialAsync("_PageHeader", header)
+
 @if (!string.IsNullOrEmpty(Model.EventTitle))
 {
-    <p>For event: <strong>@Model.EventTitle</strong></p>
+    <section class="checkout-event-summary" style="margin-bottom: var(--spacing-5);">
+        <h2 class="checkout-event-summary__title">@Model.EventTitle</h2>
+        <p class="text-muted" style="margin: 0;">Event ID #@Model.EventId</p>
+    </section>
 }
-<form asp-action="Create" method="post" class="mt-3">
+
+<form asp-action="Create" method="post" novalidate style="max-width: var(--content-form-width);">
     <input type="hidden" asp-for="EventId" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label class="form-label">Type Name</label>
-        <input asp-for="TypeName" id="txt_typeName" class="form-control" />
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Price</label>
-            <input asp-for="Price" id="txt_price" class="form-control" type="number" step="0.01" min="0.01" />
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Ticket details</h2>
+        <p class="form-section__subtitle">Define the type, price and quantity.</p>
+
+        <div class="form-field">
+            <label asp-for="TypeName" class="form-label">
+                <span>Type name</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <input asp-for="TypeName" class="form-control" maxlength="100"
+                   placeholder="e.g. Standard, VIP, Early Bird" />
+            <span asp-validation-for="TypeName" class="field-validation-error"></span>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Quantity</label>
-            <input asp-for="Quantity" id="txt_quantity" class="form-control" type="number" min="1" />
+
+        <div class="form-grid-2">
+            <div class="form-field">
+                <label asp-for="Price" class="form-label">
+                    <span>Price</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01"
+                       placeholder="0.00" />
+                <span class="field-hint">Price is in VND.</span>
+                <span asp-validation-for="Price" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Quantity" class="form-label">
+                    <span>Quantity</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                <span class="field-hint">Total tickets available.</span>
+                <span asp-validation-for="Quantity" class="field-validation-error"></span>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Sale Start</label>
-            <input asp-for="SaleStart" id="txt_saleStart" class="form-control" type="datetime-local" value="@Model.SaleStart.ToString("yyyy-MM-ddTHH:mm")" />
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Sale window</h2>
+        <p class="form-section__subtitle">When customers can buy tickets.</p>
+
+        <div class="form-grid-2">
+            <div class="form-field">
+                <label asp-for="SaleStart" class="form-label">
+                    <span>Sale start</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="SaleStart" type="datetime-local" class="form-control"
+                       value="@(Model.SaleStart == default ? string.Empty : Model.SaleStart.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="SaleStart" class="field-validation-error"></span>
+            </div>
+            <div class="form-field">
+                <label asp-for="SaleEnd" class="form-label">
+                    <span>Sale end</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="SaleEnd" type="datetime-local" class="form-control"
+                       value="@(Model.SaleEnd == default ? string.Empty : Model.SaleEnd.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span class="field-hint">Sale end must be before the event starts.</span>
+                <span asp-validation-for="SaleEnd" class="field-validation-error"></span>
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Sale End</label>
-            <input asp-for="SaleEnd" id="txt_saleEnd" class="form-control" type="datetime-local" value="@Model.SaleEnd.ToString("yyyy-MM-ddTHH:mm")" />
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Status</h2>
+        <div class="form-field">
+            <label asp-for="Status" class="form-label">Status</label>
+            <select asp-for="Status" class="form-select">
+                <option value="Active" selected="@(Model.Status == "Active")">Active</option>
+                <option value="Inactive" selected="@(Model.Status == "Inactive")">Inactive</option>
+            </select>
+            <span asp-validation-for="Status" class="field-validation-error"></span>
         </div>
+    </section>
+
+    <div class="form-actions">
+        <a class="btn btn--outline-secondary" asp-action="MyEvents" asp-controller="Host">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            <span>Cancel</span>
+        </a>
+        <button type="submit" class="btn btn--primary btn--lg">
+            <i class="bi bi-check2-circle" aria-hidden="true"></i>
+            <span>Create ticket type</span>
+        </button>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select asp-for="Status" id="sl_status" class="form-select">
-            <option value="Active" selected="@(Model.Status == "Active")">Active</option>
-            <option value="Inactive" selected="@(Model.Status == "Inactive")">Inactive</option>
-        </select>
-    </div>
-    <button id="btn_create" type="submit" class="btn btn-primary">Create</button>
-    <a id="btn_back" asp-action="MyEvents" asp-controller="Host" class="btn btn-link">Back</a>
 </form>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

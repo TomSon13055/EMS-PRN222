@@ -1,78 +1,159 @@
 @model EventManagement.ViewModels.CreateEventViewModel
 @{
-    ViewData["Title"] = "Create Event";
+    ViewData["Title"] = "Create event";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Create a new event",
+        Subtitle = "Fill in the basics. You can add ticket types after creating the event.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
+            new() { Text = "Create event" }
+        }
+    };
 }
-<h2>Create Event</h2>
-<form asp-action="CreateEvent" method="post" class="mt-3">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label class="form-label">Title</label>
-        <input asp-for="Title" id="txt_title" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea asp-for="Description" id="txt_description" class="form-control" rows="4"></textarea>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Category</label>
-            <select asp-for="EventCategoryId" id="sl_category" class="form-select">
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<form asp-action="CreateEvent" method="post" novalidate>
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Basic information</h2>
+        <p class="form-section__subtitle">What's your event about?</p>
+
+        <div class="form-field">
+            <label asp-for="Title" class="form-label">
+                <span>Title</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <input asp-for="Title" class="form-control" maxlength="150"
+                   placeholder="e.g. EMS Music Festival 2026" />
+            <span asp-validation-for="Title" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="Description" class="form-label">
+                <span>Description</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <textarea asp-for="Description" class="form-control form-control--textarea" rows="5"
+                      placeholder="Tell attendees what to expect from your event."></textarea>
+            <span asp-validation-for="Description" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="EventCategoryId" class="form-label">
+                <span>Category</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <select asp-for="EventCategoryId" class="form-select">
+                <option value="">-- Select category --</option>
                 @if (Model.Categories != null)
                 {
-                    int idx = 0;
                     foreach (var c in Model.Categories.Where(x => !string.IsNullOrEmpty(x.Value)))
                     {
-                        idx++;
-                        <option id="@("opt_category_" + idx)" value="@c.Value">@c.Text</option>
+                        <option value="@c.Value">@c.Text</option>
                     }
                 }
             </select>
+            <span asp-validation-for="EventCategoryId" class="field-validation-error"></span>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Location</label>
-            <select asp-for="EventLocationId" id="sl_location" class="form-select">
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Date and location</h2>
+        <p class="form-section__subtitle">When and where will it happen?</p>
+
+        <div class="form-field">
+            <label asp-for="EventLocationId" class="form-label">
+                <span>Location</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <select asp-for="EventLocationId" class="form-select">
+                <option value="">-- Select location --</option>
                 @if (Model.Locations != null)
                 {
-                    int idx = 0;
                     foreach (var l in Model.Locations.Where(x => !string.IsNullOrEmpty(x.Value)))
                     {
-                        idx++;
-                        <option id="@("opt_location_" + idx)" value="@l.Value">@l.Text</option>
+                        <option value="@l.Value">@l.Text</option>
                     }
                 }
             </select>
+            <span asp-validation-for="EventLocationId" class="field-validation-error"></span>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Start Time</label>
-            <input asp-for="StartTime" id="txt_startTime" class="form-control" type="datetime-local" value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")" />
+
+        <div class="form-grid-2">
+            <div class="form-field">
+                <label asp-for="StartTime" class="form-label">
+                    <span>Start time</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="StartTime" type="datetime-local"
+                       class="form-control"
+                       value="@(Model.StartTime == default ? string.Empty : Model.StartTime.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="StartTime" class="field-validation-error"></span>
+            </div>
+            <div class="form-field">
+                <label asp-for="EndTime" class="form-label">
+                    <span>End time</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="EndTime" type="datetime-local"
+                       class="form-control"
+                       value="@(Model.EndTime == default ? string.Empty : Model.EndTime.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="EndTime" class="field-validation-error"></span>
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">End Time</label>
-            <input asp-for="EndTime" id="txt_endTime" class="form-control" type="datetime-local" value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")" />
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Media</h2>
+        <p class="form-section__subtitle">Add a cover image to make your event stand out.</p>
+        <div class="form-field">
+            <label asp-for="ImageUrl" class="form-label">Image URL</label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+            <div class="image-preview" id="imagePreview">
+                <span class="image-preview__caption">No image URL provided yet.</span>
+            </div>
+            <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
         </div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Image URL</label>
-        <input asp-for="ImageUrl" id="txt_imageUrl" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Status</label>
-        <select asp-for="Status" id="sl_status" class="form-select">
-            @if (Model.Statuses != null)
-            {
-                foreach (var s in Model.Statuses)
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Publishing</h2>
+        <p class="form-section__subtitle">Save as draft to keep working on it, or publish immediately.</p>
+        <div class="form-field">
+            <label asp-for="Status" class="form-label">Status</label>
+            <select asp-for="Status" class="form-select">
+                @if (Model.Statuses != null)
                 {
-                    <option value="@s.Value" selected="@(s.Value == Model.Status)">@s.Text</option>
+                    foreach (var s in Model.Statuses)
+                    {
+                        <option value="@s.Value" selected="@(s.Value == Model.Status)">@s.Text</option>
+                    }
                 }
-            }
-        </select>
+            </select>
+            <span asp-validation-for="Status" class="field-validation-error"></span>
+        </div>
+    </section>
+
+    <div class="form-actions">
+        <a class="btn btn--outline-secondary" asp-action="MyEvents" asp-controller="Host">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            <span>Cancel</span>
+        </a>
+        <button type="submit" class="btn btn--primary btn--lg">
+            <i class="bi bi-check2-circle" aria-hidden="true"></i>
+            <span>Create event</span>
+        </button>
     </div>
-    <button id="btn_create" type="submit" class="btn btn-primary">Create</button>
-    <a id="btn_back" asp-action="MyEvents" class="btn btn-link">Back</a>
 </form>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

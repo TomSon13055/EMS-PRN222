@@ -1,0 +1,104 @@
+.app-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4) var(--spacing-5);
+    border-radius: var(--radius-lg);
+    border: 1px solid transparent;
+    margin-bottom: var(--spacing-4);
+    background-color: var(--color-white);
+}
+
+.app-alert__icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: currentColor;
+}
+
+.app-alert__icon i {
+    color: var(--color-white);
+    font-size: 0.95rem;
+}
+
+.app-alert__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.app-alert__title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.app-alert__message {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.app-alert--success {
+    background-color: var(--color-success-50);
+    border-color: var(--color-success-100);
+    color: var(--color-success-600);
+}
+
+.app-alert--success .app-alert__title {
+    color: var(--color-success-700);
+}
+
+.app-alert--danger,
+.app-alert--error {
+    background-color: var(--color-danger-50);
+    border-color: var(--color-danger-100);
+    color: var(--color-danger-600);
+}
+
+.app-alert--danger .app-alert__title,
+.app-alert--error .app-alert__title {
+    color: var(--color-danger-700);
+}
+
+.app-alert--warning {
+    background-color: var(--color-warning-50);
+    border-color: var(--color-warning-100);
+    color: var(--color-warning-600);
+}
+
+.app-alert--warning .app-alert__title {
+    color: var(--color-warning-700);
+}
+
+.app-alert--info {
+    background-color: var(--color-info-50);
+    border-color: var(--color-info-100);
+    color: var(--color-info-600);
+}
+
+.app-alert--info .app-alert__title {
+    color: var(--color-info-600);
+}
+
+.app-alert__dismiss {
+    background: transparent;
+    border: 0;
+    color: currentColor;
+    cursor: pointer;
+    opacity: 0.7;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.app-alert__dismiss:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+}

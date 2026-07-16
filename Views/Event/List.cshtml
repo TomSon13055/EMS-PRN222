@@ -1,181 +1,92 @@
 @model EventManagement.ViewModels.EventListPageViewModel
 @using EventManagement.Helpers
 @{
-    ViewData["Title"] = "Events";
+    ViewData["Title"] = "Discover events";
     Layout = "_Layout";
-    int catIdx = 0;
-    int locIdx = 0;
-    int sttIdx = 0;
-    string fmt(DateTime d) => d.ToString("yyyy-MM-dd HH:mm");
-}
-<h2>Events</h2>
 
-<form method="get" asp-action="List" class="row g-2 mb-3">
-    <div class="col-md-3">
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Discover events",
+        Subtitle = "Browse upcoming events, save them to your wishlist, and grab your tickets.",
+        Eyebrow = "EMS • Events"
+    };
+}
+
+@await Html.PartialAsync("_PageHeader", header)
+
+<form method="get" asp-action="List" class="event-toolbar" aria-label="Filter events">
+    <div class="field--category form-field" style="margin: 0;">
         <label class="form-label">Category</label>
-        <select id="sl_category" name="categoryId" class="form-select">
+        <select name="categoryId" class="form-select">
             @foreach (var c in Model.Categories)
             {
-                if (string.IsNullOrEmpty(c.Value))
-                {
-                    <option id="opt_category_default" value="@c.Value" selected="@(Model.Filter.CategoryId == null)">@c.Text</option>
-                }
-                else
-                {
-                    catIdx++;
-                    <option id="opt_category_@catIdx" value="@c.Value" selected="@(Model.Filter.CategoryId.ToString() == c.Value)">@c.Text</option>
-                }
+                <option value="@c.Value" selected="@(string.Equals(Model.Filter.CategoryId?.ToString(), c.Value, StringComparison.Ordinal))">@c.Text</option>
             }
         </select>
     </div>
-    <div class="col-md-3">
+    <div class="field--location form-field" style="margin: 0;">
         <label class="form-label">Location</label>
-        <select id="sl_location" name="locationId" class="form-select">
+        <select name="locationId" class="form-select">
             @foreach (var l in Model.Locations)
             {
-                if (string.IsNullOrEmpty(l.Value))
-                {
-                    <option id="opt_location_default" value="@l.Value" selected="@(Model.Filter.LocationId == null)">@l.Text</option>
-                }
-                else
-                {
-                    locIdx++;
-                    <option id="opt_location_@locIdx" value="@l.Value" selected="@(Model.Filter.LocationId.ToString() == l.Value)">@l.Text</option>
-                }
+                <option value="@l.Value" selected="@(string.Equals(Model.Filter.LocationId?.ToString(), l.Value, StringComparison.Ordinal))">@l.Text</option>
             }
         </select>
     </div>
-    <div class="col-md-2">
+    <div class="field--status form-field" style="margin: 0;">
         <label class="form-label">Status</label>
-        <select id="sl_status" name="status" class="form-select">
+        <select name="status" class="form-select">
             @foreach (var s in Model.Statuses)
             {
-                if (string.IsNullOrEmpty(s.Value))
-                {
-                    <option id="opt_status_default" value="@s.Value" selected="@(string.IsNullOrEmpty(Model.Filter.Status))">@s.Text</option>
-                }
-                else
-                {
-                    sttIdx++;
-                    <option id="opt_status_@sttIdx" value="@s.Value" selected="@(Model.Filter.Status == s.Value)">@s.Text</option>
-                }
+                <option value="@s.Value" selected="@(string.Equals(Model.Filter.Status ?? string.Empty, s.Value, StringComparison.Ordinal))">@s.Text</option>
             }
         </select>
     </div>
-    <div class="col-md-3">
+    <div class="field--search form-field" style="margin: 0;">
         <label class="form-label">Search</label>
-        <input id="txt_search" name="search" value="@Model.Filter.Search" class="form-control" />
+        <input type="search" name="search" value="@Model.Filter.Search"
+               class="form-control" placeholder="Search by title or description"
+               data-search-input />
     </div>
-    <div class="col-md-1 d-flex align-items-end">
-        <button id="btn_filter" type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
-    <div class="col-md-12">
-        <a id="btn_clearFilter" asp-action="List" class="btn btn-link p-0">Clear Filter</a>
+    <div class="field--filter">
+        <button type="submit" class="btn btn--primary">
+            <i class="bi bi-funnel" aria-hidden="true"></i>
+            <span>Filter</span>
+        </button>
+        <a asp-action="List" class="btn btn--ghost">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            <span>Clear</span>
+        </a>
     </div>
 </form>
 
-<table class="table table-bordered bg-white">
-    <thead>
-        <tr>
-            <th>EventId</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Location</th>
-            <th>StartTime</th>
-            <th>EndTime</th>
-            <th>Status</th>
-            <th>Host</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Events.Any())
-        {
-            <tr><td colspan="9" class="text-center">No events found</td></tr>
-        }
-        @foreach (var e in Model.Events)
-        {
-            <tr>
-                <td id="@("td_eventId_" + e.EventId)">@e.EventId</td>
-                <td id="@("td_title_" + e.EventId)"><a id="@("a_event_" + e.EventId)" href="/Event/List?selectedEventId=@e.EventId">@e.Title</a></td>
-                <td id="@("td_categoryName_" + e.EventId)">@e.CategoryName</td>
-                <td id="@("td_locationName_" + e.EventId)">@e.LocationName</td>
-                <td id="@("td_startTime_" + e.EventId)">@fmt(e.StartTime)</td>
-                <td id="@("td_endTime_" + e.EventId)">@fmt(e.EndTime)</td>
-                <td id="@("td_status_" + e.EventId)">@e.Status</td>
-                <td id="@("td_hostName_" + e.EventId)">@e.HostName</td>
-                <td>
-                    <a id="@("lnk_view_" + e.EventId)" href="/Event/List?selectedEventId=@e.EventId">View</a>
-                    @if (e.CanBuy)
-                    {
-                        <text> | </text><a id="@("lnk_buy_" + e.EventId)" asp-controller="Ticket" asp-action="Buy" asp-route-eventId="@e.EventId">Buy</a>
-                    }
-                    @if (e.CanWishlist)
-                    {
-                        <text> | </text>
-                        <form asp-controller="Wishlist" asp-action="Add" asp-route-eventId="@e.EventId" method="post" class="d-inline">
-                            @Html.AntiForgeryToken()
-                            <button id="@("btn_wishlist_" + e.EventId)" type="submit" class="btn btn-link p-0">Wishlist</button>
-                        </form>
-                    }
-                    @if (e.CanEdit)
-                    {
-                        <text> | </text><a id="@("lnk_edit_" + e.EventId)" href="/Event/Edit/@e.EventId">Edit</a>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@if (Model.SelectedEvent != null)
-{
-    var ev = Model.SelectedEvent;
-    <hr />
-    <h3>Selected Event: @ev.Title</h3>
-    @if (!string.IsNullOrEmpty(ev.ImageUrl))
+<div class="event-results-meta">
+    <span>Showing @Model.Events.Count event@(Model.Events.Count == 1 ? "" : "s")</span>
+    @if (Model.Filter.CategoryId.HasValue || Model.Filter.LocationId.HasValue ||
+         !string.IsNullOrEmpty(Model.Filter.Status) || !string.IsNullOrEmpty(Model.Filter.Search))
     {
-        <p><img id="img_event" src="@ev.ImageUrl" alt="@ev.Title" style="max-width:100%;max-height:300px;" /></p>
+        <span>Filters applied</span>
     }
-    <p><strong>Description:</strong> @ev.Description</p>
-    <p><strong>Start:</strong> @fmt(ev.StartTime) | <strong>End:</strong> @fmt(ev.EndTime)</p>
-    <p><strong>Location:</strong> @ev.LocationName</p>
-    <p><strong>Host:</strong> @ev.HostName</p>
+</div>
 
-    <p>
-        <strong>Total ticket types:</strong> <span id="span_ticketTypeCount">@ev.TicketTypeCount</span> |
-        <strong>Total available tickets:</strong> <span id="span_totalAvailableTickets">@ev.TotalAvailableTickets</span>
-    </p>
-
-    <table class="table table-bordered bg-white">
-        <thead>
-            <tr>
-                <th>TicketTypeId</th>
-                <th>TypeName</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Sold</th>
-                <th>Available</th>
-                <th>SaleStart</th>
-                <th>SaleEnd</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in ev.TicketTypes)
-            {
-                <tr>
-                    <td id="@("td_ticketTypeId_" + t.TicketTypeId)">@t.TicketTypeId</td>
-                    <td id="@("td_typeName_" + t.TicketTypeId)">@t.TypeName</td>
-                    <td id="@("td_price_" + t.TicketTypeId)">@t.Price.ToString("N0") đ</td>
-                    <td id="@("td_quantity_" + t.TicketTypeId)">@t.Quantity</td>
-                    <td id="@("td_sold_" + t.TicketTypeId)">@t.Sold</td>
-                    <td id="@("td_available_" + t.TicketTypeId)">@t.Available</td>
-                    <td id="@("td_saleStart_" + t.TicketTypeId)">@fmt(t.SaleStart)</td>
-                    <td id="@("td_saleEnd_" + t.TicketTypeId)">@fmt(t.SaleEnd)</td>
-                    <td id="@("td_status_" + t.TicketTypeId)">@t.Status</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@if (Model.Events.Any())
+{
+    <div class="event-grid">
+        @foreach (var item in Model.Events)
+        {
+            @await Html.PartialAsync("_EventCard", EventManagement.ViewModels.EventCardViewModel.FromListItem(item))
+        }
+    </div>
+}
+else
+{
+    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+    {
+        Title = "No events found",
+        Description = "Try adjusting your filters or clearing them to see all available events.",
+        Icon = "bi-calendar-x",
+        ActionLabel = "Clear filters",
+        ActionUrl = Url.Action("List", "Event"),
+        ActionIcon = "bi-arrow-counterclockwise"
+    })
 }

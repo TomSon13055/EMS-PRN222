@@ -50,6 +50,7 @@ public class WishlistService : IWishlistService
                 Title = w.Event.Title,
                 CategoryName = w.Event.Category?.CategoryName ?? string.Empty,
                 LocationName = w.Event.Location?.LocationName ?? string.Empty,
+                HostName = w.Event.Host?.FullName ?? string.Empty,
                 StartTime = w.Event.StartTime,
                 Status = w.Event.Status
             });

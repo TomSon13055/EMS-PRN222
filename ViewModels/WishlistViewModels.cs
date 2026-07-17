@@ -6,6 +6,7 @@ public class WishlistItemViewModel
     public string Title { get; set; } = string.Empty;
     public string CategoryName { get; set; } = string.Empty;
     public string LocationName { get; set; } = string.Empty;
+    public string HostName { get; set; } = string.Empty;
     public DateTime StartTime { get; set; }
     public string Status { get; set; } = string.Empty;
 }

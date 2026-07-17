@@ -4,18 +4,55 @@
     ViewData["Title"] = "Discover events";
     Layout = "_Layout";
 
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "Discover events",
-        Subtitle = "Browse upcoming events, save them to your wishlist, and grab your tickets.",
-        Eyebrow = "EMS • Events"
-    };
+    var hasFilters = Model.Filter.CategoryId.HasValue
+        || Model.Filter.LocationId.HasValue
+        || !string.IsNullOrEmpty(Model.Filter.Status)
+        || !string.IsNullOrEmpty(Model.Filter.Search);
+    var totalCount = Model.TotalCount ?? Model.Events.Count;
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<section class="page-hero">
+    <div class="page-hero__body">
+        <span class="page-hero__eyebrow"><span class="accent-line"></span> What's on this season</span>
+        <h1 class="page-hero__title">
+            Find an event<br />
+            worth <em>showing up</em> for.
+        </h1>
+        <p class="page-hero__lead">
+            A curated mix of concerts, workshops, conferences and community gatherings —
+            curated, ticketed and waiting for you.
+        </p>
+        <div class="page-hero__meta">
+            <span class="eyebrow eyebrow--muted">@totalCount event@(totalCount == 1 ? "" : "s") live</span>
+            <span class="page-hero__meta-dot"></span>
+            <span>Updated daily</span>
+        </div>
+    </div>
+    <aside class="page-hero__visual" aria-hidden="true">
+        <div class="page-hero__visual-inner">
+            <span class="page-hero__visual-tag">EMS · curated</span>
+            <div class="page-hero__visual-stats">
+                <div>
+                    <div class="page-hero__visual-stat-label">Curated this month</div>
+                    <div class="page-hero__visual-stat-value">@totalCount<span class="page-hero__visual-stat-suffix">events</span></div>
+                </div>
+                <div>
+                    <div class="page-hero__visual-stat-label">Trusted by</div>
+                    <div class="page-hero__visual-stat-value">120<span class="page-hero__visual-stat-suffix">hosts</span></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</section>
 
-<form method="get" asp-action="List" class="event-toolbar" aria-label="Filter events">
-    <div class="field--category form-field" style="margin: 0;">
+<form method="get" asp-action="List" class="filter-bar" aria-label="Filter events">
+    <div class="filter-bar__search">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <input type="search" name="search" value="@Model.Filter.Search"
+               class="form-control" placeholder="Search by event title or description"
+               autocomplete="off" data-search-input />
+    </div>
+    <div class="filter-bar__select">
         <label class="form-label">Category</label>
         <select name="categoryId" class="form-select">
             @foreach (var c in Model.Categories)
@@ -24,7 +61,7 @@
             }
         </select>
     </div>
-    <div class="field--location form-field" style="margin: 0;">
+    <div class="filter-bar__select">
         <label class="form-label">Location</label>
         <select name="locationId" class="form-select">
             @foreach (var l in Model.Locations)
@@ -33,7 +70,7 @@
             }
         </select>
     </div>
-    <div class="field--status form-field" style="margin: 0;">
+    <div class="filter-bar__select">
         <label class="form-label">Status</label>
         <select name="status" class="form-select">
             @foreach (var s in Model.Statuses)
@@ -42,51 +79,60 @@
             }
         </select>
     </div>
-    <div class="field--search form-field" style="margin: 0;">
-        <label class="form-label">Search</label>
-        <input type="search" name="search" value="@Model.Filter.Search"
-               class="form-control" placeholder="Search by title or description"
-               data-search-input />
-    </div>
-    <div class="field--filter">
+    <div class="filter-bar__actions">
         <button type="submit" class="btn btn--primary">
-            <i class="bi bi-funnel" aria-hidden="true"></i>
-            <span>Filter</span>
+            <span>Refine results</span>
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
         </button>
-        <a asp-action="List" class="btn btn--ghost">
-            <i class="bi bi-x-lg" aria-hidden="true"></i>
-            <span>Clear</span>
-        </a>
+        @if (hasFilters)
+        {
+            <a asp-action="List" class="btn btn--ghost" title="Clear filters">
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+                <span>Clear</span>
+            </a>
+        }
     </div>
 </form>
 
-<div class="event-results-meta">
-    <span>Showing @Model.Events.Count event@(Model.Events.Count == 1 ? "" : "s")</span>
-    @if (Model.Filter.CategoryId.HasValue || Model.Filter.LocationId.HasValue ||
-         !string.IsNullOrEmpty(Model.Filter.Status) || !string.IsNullOrEmpty(Model.Filter.Search))
+<div class="section-block">
+    <header class="section-heading">
+        <div class="section-heading__titles">
+            <span class="section-heading__eyebrow">All events</span>
+            <h2 class="section-heading__title">@totalCount result@(totalCount == 1 ? "" : "s")</h2>
+            <p class="section-heading__subtitle">
+                @if (hasFilters)
+                {
+                    <text>Filtered view · Use clear to see everything.</text>
+                }
+                else
+                {
+                    <text>Browse the latest additions across categories and locations.</text>
+                }
+            </p>
+        </div>
+    </header>
+
+    @if (Model.Events.Any())
     {
-        <span>Filters applied</span>
+        <div class="event-grid">
+            @foreach (var item in Model.Events)
+            {
+                @await Html.PartialAsync("_EventCard", EventManagement.ViewModels.EventCardViewModel.FromListItem(item))
+            }
+        </div>
+    }
+    else
+    {
+        @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+        {
+            Title = "Nothing matches your filters",
+            Description = "We couldn't find any events with those filters. Try clearing them or searching for something specific.",
+            Icon = "bi-calendar2-x",
+            ActionLabel = "Clear filters",
+            ActionUrl = Url.Action("List", "Event"),
+            ActionIcon = "bi-arrow-counterclockwise"
+        })
     }
 </div>
 
-@if (Model.Events.Any())
-{
-    <div class="event-grid">
-        @foreach (var item in Model.Events)
-        {
-            @await Html.PartialAsync("_EventCard", EventManagement.ViewModels.EventCardViewModel.FromListItem(item))
-        }
-    </div>
-}
-else
-{
-    @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
-    {
-        Title = "No events found",
-        Description = "Try adjusting your filters or clearing them to see all available events.",
-        Icon = "bi-calendar-x",
-        ActionLabel = "Clear filters",
-        ActionUrl = Url.Action("List", "Event"),
-        ActionIcon = "bi-arrow-counterclockwise"
-    })
-}
+@await Html.PartialAsync("_Pagination", Model.Pagination)

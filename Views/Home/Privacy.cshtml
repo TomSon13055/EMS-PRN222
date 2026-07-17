@@ -5,15 +5,14 @@
     var header = new EventManagement.ViewModels.PageHeaderViewModel
     {
         Title = "Privacy policy",
-        Subtitle = "How we handle your data at Event Management System."
+        Subtitle = "How we handle your data at Event Management System.",
+        Eyebrow = "EMS · Legal"
     };
 }
 
 @await Html.PartialAsync("_PageHeader", header)
 
-<section class="section-card">
-    <div class="section-card__body">
-        <p>Event Management System is committed to protecting your privacy. We only collect information needed to provide our services such as account details, event bookings and wallet transactions. We do not sell your data to third parties.</p>
-        <p>For questions about your data, please contact the EMS team.</p>
-    </div>
-</section>
+<article class="body-text" style="max-width: 64ch; padding-top: var(--space-4);">
+    <p>Event Management System is committed to protecting your privacy. We only collect information needed to provide our services such as account details, event bookings and wallet transactions. We do not sell your data to third parties.</p>
+    <p>For questions about your data, please contact the EMS team.</p>
+</article>

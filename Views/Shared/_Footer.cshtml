@@ -1,11 +1,12 @@
+@{
+    var year = DateTime.UtcNow.Year;
+}
 <footer class="app-footer">
     <div class="app-footer__inner">
-        <div class="app-footer__brand">
-            <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
-            <span>Event Management System</span>
-        </div>
-        <div class="app-footer__copy">
-            &copy; @DateTime.Now.Year EMS. All rights reserved.
-        </div>
+        <span class="app-footer__brand">
+            <span class="brand-mark brand-mark--sm" aria-hidden="true">E</span>
+            <span>EMS · Event Management</span>
+        </span>
+        <span class="app-footer__copy">© @year · Built for hosts &amp; attendees.</span>
     </div>
 </footer>

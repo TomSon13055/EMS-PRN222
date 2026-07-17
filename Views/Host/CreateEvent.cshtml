@@ -2,28 +2,29 @@
 @{
     ViewData["Title"] = "Create event";
     Layout = "_Layout";
-
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "Create a new event",
-        Subtitle = "Fill in the basics. You can add ticket types after creating the event.",
-        Eyebrow = "EMS • Host",
-        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
-        {
-            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
-            new() { Text = "Create event" }
-        }
-    };
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
+    <a href="@Url.Action("MyEvents", "Host")">My events</a>
+    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
+    <span class="breadcrumb__current">Create event</span>
+</nav>
+
+<header class="page-header page-header--compact" style="border-bottom: 0;">
+    <div class="page-header__titles">
+        <span class="page-header__eyebrow">New event</span>
+        <h1 class="page-header__title">Create an event worth attending.</h1>
+        <p class="page-header__subtitle">Fill in the basics now — you can add ticket types and details after saving.</p>
+    </div>
+</header>
 
 <form asp-action="CreateEvent" method="post" novalidate>
     <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
     <section class="form-section">
-        <h2 class="form-section__title">Basic information</h2>
-        <p class="form-section__subtitle">What's your event about?</p>
+        <span class="form-section__step">01 · Event identity</span>
+        <h2 class="form-section__title">The basics</h2>
+        <p class="form-section__subtitle">Start with a clear title and a story customers can connect with.</p>
 
         <div class="form-field">
             <label asp-for="Title" class="form-label">
@@ -40,7 +41,7 @@
                 <span>Description</span>
                 <span class="form-label__required" aria-hidden="true">*</span>
             </label>
-            <textarea asp-for="Description" class="form-control form-control--textarea" rows="5"
+            <textarea asp-for="Description" class="form-control form-control--textarea" rows="6"
                       placeholder="Tell attendees what to expect from your event."></textarea>
             <span asp-validation-for="Description" class="field-validation-error"></span>
         </div>
@@ -65,8 +66,9 @@
     </section>
 
     <section class="form-section">
-        <h2 class="form-section__title">Date and location</h2>
-        <p class="form-section__subtitle">When and where will it happen?</p>
+        <span class="form-section__step">02 · Schedule</span>
+        <h2 class="form-section__title">When &amp; where</h2>
+        <p class="form-section__subtitle">Pick the venue and the start/end times for the event.</p>
 
         <div class="form-field">
             <label asp-for="EventLocationId" class="form-label">
@@ -87,7 +89,7 @@
         </div>
 
         <div class="form-grid-2">
-            <div class="form-field">
+            <div class="form-field" style="margin: 0;">
                 <label asp-for="StartTime" class="form-label">
                     <span>Start time</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -97,7 +99,7 @@
                        value="@(Model.StartTime == default ? string.Empty : Model.StartTime.ToString("yyyy-MM-ddTHH:mm"))" />
                 <span asp-validation-for="StartTime" class="field-validation-error"></span>
             </div>
-            <div class="form-field">
+            <div class="form-field" style="margin: 0;">
                 <label asp-for="EndTime" class="form-label">
                     <span>End time</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -111,22 +113,28 @@
     </section>
 
     <section class="form-section">
-        <h2 class="form-section__title">Media</h2>
-        <p class="form-section__subtitle">Add a cover image to make your event stand out.</p>
-        <div class="form-field">
-            <label asp-for="ImageUrl" class="form-label">Image URL</label>
-            <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
-            <div class="image-preview" id="imagePreview">
-                <span class="image-preview__caption">No image URL provided yet.</span>
+        <span class="form-section__step">03 · Visual</span>
+        <h2 class="form-section__title">Cover image</h2>
+        <p class="form-section__subtitle">A great cover image is the difference between scrolling past and grabbing a ticket.</p>
+
+        <div class="event-form-image">
+            <div class="form-field" style="margin: 0;">
+                <label asp-for="ImageUrl" class="form-label">Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://..."
+                       data-image-preview-input="#imagePreview" />
+                <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
             </div>
-            <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
+            <div class="image-preview" id="imagePreview">
+                <span class="image-preview__caption">Paste an image URL above to preview it here.</span>
+            </div>
         </div>
     </section>
 
     <section class="form-section">
-        <h2 class="form-section__title">Publishing</h2>
-        <p class="form-section__subtitle">Save as draft to keep working on it, or publish immediately.</p>
-        <div class="form-field">
+        <span class="form-section__step">04 · Publishing</span>
+        <h2 class="form-section__title">Visibility</h2>
+        <p class="form-section__subtitle">Save as draft to keep working, or publish right away.</p>
+        <div class="form-field" style="max-width: 320px;">
             <label asp-for="Status" class="form-label">Status</label>
             <select asp-for="Status" class="form-select">
                 @if (Model.Statuses != null)
@@ -137,13 +145,13 @@
                     }
                 }
             </select>
+            <span class="field-hint">Draft keeps the event hidden from customers.</span>
             <span asp-validation-for="Status" class="field-validation-error"></span>
         </div>
     </section>
 
     <div class="form-actions">
         <a class="btn btn--outline-secondary" asp-action="MyEvents" asp-controller="Host">
-            <i class="bi bi-x-lg" aria-hidden="true"></i>
             <span>Cancel</span>
         </a>
         <button type="submit" class="btn btn--primary btn--lg">
@@ -155,5 +163,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/pages/event-form.js" asp-append-version="true"></script>
 }

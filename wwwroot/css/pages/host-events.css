@@ -1,32 +1,138 @@
-.host-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-4);
-    margin-bottom: var(--spacing-5);
-}
+/* =========================================================================
+   EMS Host Dashboard
+   ========================================================================= */
 
 .host-toolbar {
-    display: grid;
-    grid-template-columns: 1fr 2fr auto;
-    gap: var(--spacing-4);
+    display: flex;
     align-items: end;
-    background-color: var(--surface-card);
-    border: 1px solid var(--border-color);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-4);
-    margin-bottom: var(--spacing-4);
 }
 
-.host-toolbar .form-field {
-    margin: 0;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 720px) {
     .host-toolbar {
-        grid-template-columns: 1fr;
+        flex-wrap: wrap;
+    }
+    .host-toolbar > * {
+        flex: 1;
     }
 }
 
+/* ---------- Overview band ---------- */
+.host-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 0;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    margin-bottom: var(--space-8);
+    box-shadow: var(--shadow-sm);
+}
+
+.host-overview__revenue {
+    padding: var(--space-7) var(--space-8);
+    background: var(--brand-ink);
+    color: var(--text-on-dark);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.host-overview__revenue::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(242, 154, 110, 0.25) 0, transparent 60%);
+    z-index: -1;
+}
+
+.host-overview__eyebrow {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--brand-accent);
+    font-weight: var(--weight-semibold);
+}
+
+.host-overview__revenue-value {
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-display);
+    line-height: 0.95;
+    color: var(--text-on-dark);
+}
+
+.host-overview__currency {
+    font-size: 0.4em;
+    color: var(--text-on-dark-muted);
+    margin-left: 6px;
+    font-family: var(--font-sans);
+}
+
+.host-overview__hint {
+    font-size: var(--text-sm);
+    color: var(--text-on-dark-muted);
+}
+
+.host-overview__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.host-overview__metric {
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-right: 1px solid var(--border-subtle);
+}
+
+.host-overview__metric:last-child { border-right: 0; }
+
+.host-overview__metric-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted);
+    font-weight: var(--weight-semibold);
+}
+
+.host-overview__metric-value {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-tight);
+    color: var(--brand-ink);
+    line-height: 1;
+}
+
+@media (max-width: 960px) {
+    .host-overview { grid-template-columns: 1fr; }
+    .host-overview__metrics { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .host-overview__metrics { grid-template-columns: 1fr; }
+    .host-overview__metric { border-right: 0; border-bottom: 1px solid var(--border-subtle); }
+    .host-overview__metric:last-child { border-bottom: 0; }
+    .host-overview__revenue-value { font-size: 3rem; }
+}
+
+/* ---------- Action dropdown ---------- */
 .action-dropdown {
     position: relative;
     display: inline-block;
@@ -34,65 +140,44 @@
 
 .action-dropdown__menu {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 6px);
     right: 0;
     min-width: 200px;
-    background-color: var(--color-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    padding: var(--spacing-1);
-    z-index: var(--z-dropdown);
-    display: none;
+    padding: var(--space-2);
     list-style: none;
     margin: 0;
+    display: none;
+    z-index: var(--z-dropdown);
 }
 
 .action-dropdown[aria-expanded="true"] .action-dropdown__menu {
     display: block;
-    animation: dropdown-pop 150ms ease;
+    animation: dropdown-pop 160ms var(--ease-out);
 }
 
 .action-dropdown__item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    gap: var(--space-3);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    color: var(--text-strong);
+    font-size: var(--text-sm);
     text-decoration: none;
     cursor: pointer;
-    width: 100%;
-    background: transparent;
-    border: 0;
-    text-align: left;
+    transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.action-dropdown__item:hover {
+    background: var(--surface-canvas);
 }
 
 .action-dropdown__item i {
     color: var(--text-muted);
     width: 16px;
     text-align: center;
-}
-
-.action-dropdown__item:hover {
-    background-color: var(--color-neutral-100);
-}
-
-.action-dropdown__item--danger {
-    color: var(--color-danger-600);
-}
-
-.action-dropdown__item--danger i {
-    color: var(--color-danger-600);
-}
-
-.action-dropdown__item--danger:hover {
-    background-color: var(--color-danger-50);
-}
-
-.action-dropdown__divider {
-    height: 1px;
-    background-color: var(--border-color);
-    margin: var(--spacing-1) 0;
 }

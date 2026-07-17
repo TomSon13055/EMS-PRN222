@@ -32,6 +32,7 @@ public class WishlistRepository : IWishlistRepository
         _db.Wishlists.AsNoTracking()
             .Include(w => w.Event)!.ThenInclude(e => e!.Category)
             .Include(w => w.Event)!.ThenInclude(e => e!.Location)
+            .Include(w => w.Event)!.ThenInclude(e => e!.Host)
             .Where(w => w.CustomerId == customerId)
             .OrderByDescending(w => w.CreatedAt)
             .ToListAsync();

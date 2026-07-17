@@ -3,163 +3,233 @@
     ViewData["Title"] = Model.Title;
     Layout = "_Layout";
 
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = Model.Title,
-        Subtitle = Model.CategoryName,
-        Eyebrow = "Event details",
-        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
-        {
-            new() { Text = "Events", Url = Url.Action("List", "Event") },
-            new() { Text = Model.Title }
-        }
-    };
-
     var canBuy = ViewBag.CanBuy == true;
     var canWishlist = ViewBag.CanWishlist == true;
     var canEdit = ViewBag.CanEdit == true;
+
+    var startDate = Model.StartTime;
+    var hasFree = Model.TicketTypes.Any(t => t.Price <= 0);
+    var minPrice = Model.TicketTypes.Any() ? Model.TicketTypes.Min(t => t.Price) : (decimal?)null;
+    var totalAvailable = Model.TotalAvailableTickets;
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
+    <a href="@Url.Action("List", "Event")">Events</a>
+    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
+    @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+    {
+        <span>@Model.CategoryName</span>
+        <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
+    }
+    <span class="breadcrumb__current">@Model.Title</span>
+</nav>
 
-<div class="event-detail-cover">
+<div class="event-detail__hero">
     @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
     {
-        <img src="@Model.ImageUrl" alt="@Model.Title" />
+        <img src="@Model.ImageUrl" alt="" />
     }
     else
     {
-        <i class="bi bi-calendar-event" aria-hidden="true"></i>
-    }
-</div>
-
-<div class="event-detail-meta">
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Starts</span>
-        <span class="event-detail-meta-item__value">@Model.StartTime.ToString("dddd, dd MMM yyyy")</span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">
-            @Model.StartTime.ToString("HH:mm") &mdash; @Model.EndTime.ToString("HH:mm")
-        </span>
-    </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Location</span>
-        <span class="event-detail-meta-item__value">@Model.LocationName</span>
-        @if (!string.IsNullOrWhiteSpace(Model.Address))
-        {
-            <span class="text-secondary" style="font-size: var(--font-size-sm);">@Model.Address</span>
-        }
-    </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Host</span>
-        <span class="event-detail-meta-item__value">@Model.HostName</span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">Event organizer</span>
-    </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Status</span>
-        <span class="event-detail-meta-item__value">
-            <partial name="_StatusBadge" model="Model.Status" />
-        </span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">
-            @Model.TicketTypeCount ticket type@(Model.TicketTypeCount == 1 ? "" : "s") • @Model.TotalAvailableTickets available
-        </span>
-    </div>
-</div>
-
-<section class="section-card">
-    <div class="section-card__header">
-        <div>
-            <h2 class="section-card__title">About this event</h2>
-            <p class="section-card__subtitle">Everything you need to know before you go.</p>
+        <div class="event-detail__hero-placeholder" aria-hidden="true">
+            <i class="bi bi-calendar-event"></i>
         </div>
-        <div class="event-detail-actions">
-            @if (canBuy)
+    }
+    <div class="event-detail__hero-inner">
+        @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+        {
+            <span class="event-detail__hero-eyebrow">@Model.CategoryName</span>
+        }
+        <h1 class="event-detail__hero-title">@Model.Title</h1>
+    </div>
+</div>
+
+<div class="event-detail">
+    <div>
+        <article class="event-detail__narrative">
+            <span class="event-detail__section-title">About this event</span>
+            <h3>The story</h3>
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
             {
-                <a class="btn btn--primary" href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId })">
-                    <i class="bi bi-cart3" aria-hidden="true"></i>
-                    <span>Buy ticket</span>
-                </a>
+                <p>@Model.Description</p>
             }
+            else
+            {
+                <p class="muted">No description has been provided for this event yet.</p>
+            }
+        </article>
+
+        <article class="event-detail__narrative" style="margin-top: var(--space-12);">
+            <span class="event-detail__section-title">The lineup</span>
+            <h3>Hosts &amp; schedule</h3>
+            <p>
+                <strong>@Model.HostName</strong> is bringing this event to <strong>@Model.LocationName</strong>
+                on <strong>@startDate.ToString("dddd, dd MMMM yyyy")</strong>
+                from <strong>@startDate.ToString("HH:mm")</strong> to <strong>@Model.EndTime.ToString("HH:mm")</strong>.
+            </p>
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <p class="muted">Venue address · @Model.Address</p>
+            }
+        </article>
+
+        <section style="margin-top: var(--space-12);">
+            <header style="display: flex; align-items: end; justify-content: space-between; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+                <div>
+                    <span class="event-detail__section-title">Tickets</span>
+                    <h3 style="font-family: var(--font-display); font-size: var(--text-2xl); color: var(--brand-ink); margin: 0;">
+                        Choose your experience
+                    </h3>
+                </div>
+                @if (Model.TicketTypes.Any())
+                {
+                    <span class="muted">@totalAvailable ticket@(totalAvailable == 1 ? "" : "s") left across @Model.TicketTypes.Count type@(Model.TicketTypes.Count == 1 ? "" : "s")</span>
+                }
+            </header>
+
+            @if (Model.TicketTypes.Any())
+            {
+                <div class="ticket-type-list">
+                    @foreach (var t in Model.TicketTypes)
+                    {
+                        var canBuyThis = canBuy && t.Status == "Active" && t.Available > 0;
+                        <article class="ticket-type-row">
+                            <div>
+                                <h4 class="ticket-type-row__name">@t.TypeName</h4>
+                                <div class="ticket-type-row__meta">
+                                    <span><strong>@t.Available</strong> of @t.Quantity available</span>
+                                    <span class="muted">Sale ends @t.SaleEnd.ToString("dd MMM, HH:mm")</span>
+                                    <partial name="_StatusBadge" model="t.Status" />
+                                </div>
+                            </div>
+                            <div>
+                                @if (canBuyThis)
+                                {
+                                    <a class="btn btn--primary btn--block"
+                                       href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId, selectedTicketTypeId = t.TicketTypeId })">
+                                        <span>Reserve</span>
+                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                    </a>
+                                }
+                                else if (t.Available <= 0)
+                                {
+                                    <button class="btn btn--secondary btn--block" disabled>
+                                        <span>Sold out</span>
+                                    </button>
+                                }
+                                else if (canBuy)
+                                {
+                                    <a class="btn btn--secondary btn--block"
+                                       href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId, selectedTicketTypeId = t.TicketTypeId })">
+                                        <span>Buy</span>
+                                    </a>
+                                }
+                            </div>
+                            <div class="ticket-type-row__price">
+                                @if (t.Price <= 0)
+                                {
+                                    <span style="color: var(--success);">Free</span>
+                                }
+                                else
+                                {
+                                    @t.Price.ToString("N0")<span style="font-size: 0.55em; margin-left: 2px;">đ</span>
+                                }
+                                <span class="ticket-type-row__price-suffix">per ticket</span>
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+            else
+            {
+                @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+                {
+                    Title = "Tickets aren't on sale yet",
+                    Description = "The host hasn't released tickets for this event. Check back soon.",
+                    Icon = "bi-ticket-perforated"
+                })
+            }
+        </section>
+    </div>
+
+    <aside class="event-detail__rail" aria-label="Quick info">
+        @if (canBuy && Model.TicketTypes.Any())
+        {
+            <a class="btn btn--primary btn--block btn--lg"
+               href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId })">
+                <span>Get ticket</span>
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+            </a>
+        }
+
+        <div class="event-detail__rail-block">
+            <span class="event-detail__rail-label">When</span>
+            <span class="event-detail__rail-value">@startDate.ToString("ddd, dd MMM")</span>
+            <span class="event-detail__rail-sub">@startDate.ToString("HH:mm") – @Model.EndTime.ToString("HH:mm")</span>
+        </div>
+
+        <div class="event-detail__rail-block">
+            <span class="event-detail__rail-label">Where</span>
+            <span class="event-detail__rail-value">@Model.LocationName</span>
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <span class="event-detail__rail-sub">@Model.Address</span>
+            }
+        </div>
+
+        @if (minPrice.HasValue)
+        {
+            <div class="event-detail__rail-block">
+                <span class="event-detail__rail-label">Starting from</span>
+                <span class="event-detail__rail-value" style="font-family: var(--font-display); font-size: var(--text-2xl);">
+                    @if (minPrice.Value <= 0)
+                    {
+                        <span style="color: var(--success);">Free</span>
+                    }
+                    else
+                    {
+                        @minPrice.Value.ToString("N0")<span style="font-size: 0.7em; margin-left: 2px;">đ</span>
+                    }
+                </span>
+                <span class="event-detail__rail-sub">@totalAvailable ticket@(totalAvailable == 1 ? "" : "s") left</span>
+            </div>
+        }
+
+        <div class="event-detail__rail-block">
+            <span class="event-detail__rail-label">Hosted by</span>
+            <span class="event-detail__rail-value">@Model.HostName</span>
+        </div>
+
+        <div class="event-detail__rail-block">
+            <span class="event-detail__rail-label">Status</span>
+            <span class="event-detail__rail-value">
+                <partial name="_StatusBadge" model="Model.Status" />
+            </span>
+        </div>
+
+        <div class="event-detail__rail-actions">
             @if (canWishlist)
             {
-                <form method="post" asp-controller="Wishlist" asp-action="Add" asp-route-eventId="@Model.EventId" class="d-inline">
+                <form method="post" asp-controller="Wishlist" asp-action="Add" asp-route-eventId="@Model.EventId">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn--outline-primary">
+                    <button type="submit" class="btn btn--secondary btn--block">
                         <i class="bi bi-heart" aria-hidden="true"></i>
-                        <span>Add to wishlist</span>
+                        <span>Save to wishlist</span>
                     </button>
                 </form>
             }
             @if (canEdit)
             {
-                <a class="btn btn--secondary" href="@Url.Action("Edit", "Event", new { id = Model.EventId })">
+                <a class="btn btn--outline-secondary btn--block"
+                   href="@Url.Action("Edit", "Event", new { id = Model.EventId })">
                     <i class="bi bi-pencil" aria-hidden="true"></i>
                     <span>Edit event</span>
                 </a>
             }
-            <a class="btn btn--ghost" href="@Url.Action("List", "Event")">
+            <a class="btn btn--ghost btn--block" href="@Url.Action("List", "Event")">
                 <i class="bi bi-arrow-left" aria-hidden="true"></i>
                 <span>Back to events</span>
             </a>
         </div>
-    </div>
-    <div class="section-card__body">
-        @if (!string.IsNullOrWhiteSpace(Model.Description))
-        {
-            <p style="white-space: pre-line; color: var(--text-secondary); line-height: var(--line-height-relaxed);">@Model.Description</p>
-        }
-        else
-        {
-            <p class="text-muted">No description provided.</p>
-        }
-    </div>
-</section>
-
-<section class="section-card" style="margin-top: var(--spacing-6);">
-    <div class="section-card__header">
-        <div>
-            <h2 class="section-card__title">Ticket types</h2>
-            <p class="section-card__subtitle">Choose the experience that fits you best.</p>
-        </div>
-    </div>
-    <div class="section-card__body">
-        @if (Model.TicketTypes.Any())
-        {
-            <div class="ticket-type-list">
-                @foreach (var t in Model.TicketTypes)
-                {
-                    <article class="ticket-type-card">
-                        <header>
-                            <h3 class="ticket-type-card__name">@t.TypeName</h3>
-                            <span class="status-badge @(t.Status == "Active" ? "status-badge--success" : "status-badge--neutral")">
-                                @t.Status
-                            </span>
-                        </header>
-                        <div class="ticket-type-card__price">@t.Price.ToString("N0") &nbsp;đ</div>
-                        <div class="ticket-type-card__meta">
-                            <span><strong>@t.Available</strong> / @t.Quantity available</span>
-                            <span class="text-muted">Sale ends @t.SaleEnd.ToString("dd MMM HH:mm")</span>
-                        </div>
-                        @if (canBuy && t.Status == "Active" && t.Available > 0)
-                        {
-                            <a class="btn btn--primary"
-                               href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId, selectedTicketTypeId = t.TicketTypeId })">
-                                <span>Buy this ticket</span>
-                                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                            </a>
-                        }
-                    </article>
-                }
-            </div>
-        }
-        else
-        {
-            @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
-            {
-                Title = "No ticket types yet",
-                Description = "The host hasn't published any tickets for this event yet. Please check back later.",
-                Icon = "bi-ticket-perforated",
-                IconVariant = "neutral"
-            })
-        }
-    </div>
-</section>
+    </aside>
+</div>

@@ -2,42 +2,82 @@
 @{
     ViewData["Title"] = "My wishlist";
     Layout = "_Layout";
-
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "My wishlist",
-        Subtitle = "Events you've saved for later. Buy tickets or remove them anytime.",
-        Eyebrow = "EMS • Customer"
-    };
+    var count = Model.Items.Count;
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<section class="page-hero" style="padding-bottom: var(--space-7); padding-top: var(--space-12);">
+    <div class="page-hero__body">
+        <span class="page-hero__eyebrow"><span class="accent-line"></span> Saved for you</span>
+        <h1 class="page-hero__title">Your <em>wishlist</em>.</h1>
+        <p class="page-hero__lead">
+            @if (count > 0)
+            {
+                <text>@count event@(count == 1 ? "" : "s") you've curated. Buy tickets when you're ready — your list will be waiting.</text>
+            }
+            else
+            {
+                <text>Save events you love and come back to them when you're ready.</text>
+            }
+        </p>
+    </div>
+    <aside class="page-hero__visual" aria-hidden="true">
+        <div class="page-hero__visual-inner">
+            <span class="page-hero__visual-tag">Wishlist</span>
+            <div class="page-hero__visual-stats">
+                <div>
+                    <div class="page-hero__visual-stat-label">Saved</div>
+                    <div class="page-hero__visual-stat-value">@count<span class="page-hero__visual-stat-suffix">events</span></div>
+                </div>
+                <div>
+                    <div class="page-hero__visual-stat-label">Status</div>
+                    <div class="page-hero__visual-stat-value" style="font-size: var(--text-2xl);">Curated</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</section>
 
 @if (Model.Items.Any())
 {
-    <div class="wishlist-grid">
+    <div class="wishlist-list">
         @foreach (var w in Model.Items)
         {
-            <article class="wishlist-item">
-                <div class="wishlist-item__media" aria-hidden="true">
-                    <i class="bi bi-calendar-event"></i>
+            <article class="wishlist-row">
+                <div class="wishlist-row__date" aria-label="@w.StartTime.ToString("dddd, dd MMMM yyyy")">
+                    <span class="event-card__date-day">@w.StartTime.ToString("dd")</span>
+                    <span class="event-card__date-month">@w.StartTime.ToString("MMM").ToUpperInvariant()</span>
                 </div>
-                <div class="stack" style="gap: var(--spacing-2); min-width: 0;">
-                    <h3 class="wishlist-item__title">
+
+                <div class="wishlist-row__body">
+                    <div class="wishlist-row__head">
+                        @if (!string.IsNullOrWhiteSpace(w.CategoryName))
+                        {
+                            <span class="status-badge status-badge--quiet">@w.CategoryName</span>
+                        }
+                        <partial name="_StatusBadge" model="w.Status" />
+                    </div>
+                    <h3 class="wishlist-row__title">
                         <a href="@Url.Action("Details", "Event", new { id = w.EventId })">@w.Title</a>
                     </h3>
-                    <div class="wishlist-item__meta">
-                        <span><i class="bi bi-tag" aria-hidden="true"></i>@w.CategoryName</span>
-                        <span><i class="bi bi-geo-alt" aria-hidden="true"></i>@w.LocationName</span>
-                        <span><i class="bi bi-calendar3" aria-hidden="true"></i>@w.StartTime.ToString("ddd, dd MMM yyyy HH:mm")</span>
-                        <span><partial name="_StatusBadge" model="w.Status" /></span>
+                    <div class="wishlist-row__meta">
+                        <span><i class="bi bi-clock" aria-hidden="true"></i> @w.StartTime.ToString("HH:mm")</span>
+                        <span><i class="bi bi-geo-alt" aria-hidden="true"></i> @w.LocationName</span>
+                        @if (!string.IsNullOrWhiteSpace(w.HostName))
+                        {
+                            <span><i class="bi bi-mic" aria-hidden="true"></i> @w.HostName</span>
+                        }
                     </div>
                 </div>
-                <div class="wishlist-item__actions">
+
+                <div class="wishlist-row__actions">
+                    <a class="btn btn--secondary btn--sm"
+                       href="@Url.Action("Details", "Event", new { id = w.EventId })">
+                        <span>View</span>
+                    </a>
                     <a class="btn btn--primary btn--sm"
                        href="@Url.Action("Buy", "Ticket", new { eventId = w.EventId })">
-                        <i class="bi bi-cart3" aria-hidden="true"></i>
-                        <span>Buy</span>
+                        <span>Get ticket</span>
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
                     </a>
                     <form method="post"
                           asp-action="Remove"
@@ -45,14 +85,14 @@
                           data-wishlist-remove>
                         @Html.AntiForgeryToken()
                         <button type="button"
-                                class="btn btn--outline-secondary btn--sm js-confirm-action"
+                                class="icon-btn js-confirm-action"
                                 data-confirm-trigger
                                 data-confirm-title="Remove from wishlist?"
                                 data-confirm-message="@w.Title will be removed from your wishlist."
                                 data-confirm-text="Remove"
-                                data-confirm-success="Removed from wishlist.">
-                            <i class="bi bi-trash" aria-hidden="true"></i>
-                            <span>Remove</span>
+                                data-confirm-success="Removed from wishlist."
+                                aria-label="Remove @w.Title from wishlist">
+                            <i class="bi bi-trash3" aria-hidden="true"></i>
                         </button>
                     </form>
                 </div>

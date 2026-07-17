@@ -1,43 +1,35 @@
-.app-navbar {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-6);
-    width: 100%;
-}
+/* =========================================================================
+   EMS Navbar — Editorial, ink-on-canvas, wallet amber pill, account menu
+   ========================================================================= */
 
-.app-navbar__brand {
+.app-header__brand {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
-    color: var(--text-primary);
+    gap: var(--space-2);
+    color: var(--brand-ink);
     text-decoration: none;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-lg);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-md);
     letter-spacing: -0.01em;
 }
 
-.app-navbar__brand:hover {
-    color: var(--color-primary-600);
+.app-header__brand:hover { color: var(--brand-ink); }
+
+.brand-mark {
+    flex-shrink: 0;
 }
 
-.app-navbar__brand-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-    color: var(--color-white);
-    display: inline-flex;
+.app-navbar {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: var(--font-weight-bold);
-    font-size: 0.875rem;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+    gap: var(--space-5);
+    width: 100%;
 }
 
 .app-navbar__primary {
     display: flex;
     align-items: center;
-    gap: var(--spacing-1);
+    gap: var(--space-1);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -46,97 +38,89 @@
 .app-navbar__secondary {
     display: flex;
     align-items: center;
-    gap: var(--spacing-3);
+    gap: var(--space-2);
     list-style: none;
     margin: 0 0 0 auto;
     padding: 0;
 }
 
-.app-navbar__spacer {
-    flex: 1;
-}
+.app-navbar__spacer { flex: 1; }
 
+/* ---------- Nav links ---------- */
 .nav-link-app {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    gap: var(--space-2);
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    color: var(--text-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     text-decoration: none;
-    transition: background-color var(--transition-fast),
-        color var(--transition-fast);
+    transition: background-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out);
     position: relative;
+    white-space: nowrap;
 }
 
 .nav-link-app i {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: currentColor;
 }
 
 .nav-link-app:hover {
-    background-color: var(--color-neutral-100);
-    color: var(--text-primary);
+    background-color: rgba(13, 27, 46, 0.05);
+    color: var(--text-strong);
 }
 
 .nav-link-app.is-active {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-700);
+    background-color: var(--brand-ink);
+    color: var(--text-on-dark);
 }
 
 .nav-link-app.is-active i {
-    color: var(--color-primary-700);
+    color: var(--text-on-dark);
 }
 
-.nav-link-app__badge {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--color-danger-500);
-    border: 2px solid var(--color-white);
-}
-
+/* Wallet pill */
 .nav-link-app--wallet {
-    color: var(--color-warning-700);
-    background-color: var(--color-warning-50);
+    background: var(--warning-soft);
+    color: var(--warning-ink);
+    font-variant-numeric: tabular-nums;
 }
 
 .nav-link-app--wallet:hover {
-    background-color: var(--color-warning-100);
-    color: var(--color-warning-700);
+    background: #f7e0bd;
+    color: var(--warning-ink);
 }
 
 .nav-link-app--wallet.is-active {
-    background-color: var(--color-warning-100);
-    color: var(--color-warning-700);
+    background: var(--warning);
+    color: var(--text-on-dark);
 }
 
-.account-menu {
-    position: relative;
-}
+/* ---------- Account menu ---------- */
+.account-menu { position: relative; }
 
 .account-menu__trigger {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-1) var(--spacing-2) var(--spacing-1) var(--spacing-1);
-    background-color: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    gap: var(--space-2);
+    padding: 0.25rem 0.75rem 0.25rem 0.375rem;
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
     cursor: pointer;
-    transition: background-color var(--transition-fast),
-        border-color var(--transition-fast);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    transition: background-color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out);
+    color: var(--text-strong);
+    font-size: var(--text-sm);
+    height: 42px;
 }
 
 .account-menu__trigger:hover {
-    background-color: var(--color-neutral-100);
+    background: var(--surface-card);
+    border-color: var(--border-strong);
 }
 
 .account-menu__trigger:focus-visible {
@@ -145,44 +129,40 @@
 }
 
 .account-menu__avatar {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-    color: var(--color-white);
+    background: var(--brand-ink);
+    color: var(--text-on-dark);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-xs);
+    font-weight: var(--weight-semibold);
+    font-size: 0.75rem;
+    flex-shrink: 0;
 }
 
 .account-menu__avatar--host {
-    background: linear-gradient(135deg, var(--color-warning-500), var(--color-warning-600));
+    background: linear-gradient(135deg, var(--brand-accent-600), var(--warning));
 }
 
 .account-menu__avatar--admin {
-    background: linear-gradient(135deg, var(--color-neutral-700), var(--color-neutral-900));
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-ink));
 }
 
 .account-menu__name {
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary);
+    font-weight: var(--weight-medium);
+    color: var(--text-strong);
     max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.account-menu__role {
-    color: var(--text-muted);
-    font-size: var(--font-size-xs);
-}
-
 .account-menu__chevron {
     color: var(--text-muted);
     font-size: 0.75rem;
-    transition: transform var(--transition-fast);
+    transition: transform var(--dur-fast) var(--ease-out);
 }
 
 .account-menu[aria-expanded="true"] .account-menu__chevron {
@@ -191,52 +171,53 @@
 
 .account-menu__panel {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + 8px);
     right: 0;
-    min-width: 220px;
-    background-color: var(--color-white);
-    border: 1px solid var(--border-color);
+    min-width: 240px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    padding: var(--spacing-2);
+    padding: var(--space-2);
     display: none;
     z-index: var(--z-dropdown);
 }
 
 .account-menu[aria-expanded="true"] .account-menu__panel {
     display: block;
-    animation: dropdown-pop 150ms ease;
+    animation: dropdown-pop 160ms var(--ease-out);
 }
 
 .account-menu__header {
-    padding: var(--spacing-3);
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: var(--spacing-2);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-2);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-1);
+    gap: var(--space-1);
 }
 
 .account-menu__header-name {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--text-strong);
 }
 
 .account-menu__item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-3);
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    gap: var(--space-3);
+    padding: 0.5rem var(--space-3);
+    border-radius: 8px;
+    color: var(--text-strong);
+    font-size: var(--text-sm);
     text-decoration: none;
     cursor: pointer;
     width: 100%;
     background: transparent;
     border: 0;
     text-align: left;
+    transition: background-color var(--dur-fast) var(--ease-out);
 }
 
 .account-menu__item i {
@@ -246,52 +227,41 @@
 }
 
 .account-menu__item:hover {
-    background-color: var(--color-neutral-100);
+    background-color: var(--surface-canvas-strong);
 }
 
 .account-menu__item--danger {
-    color: var(--color-danger-600);
+    color: var(--danger);
 }
 
 .account-menu__item--danger i {
-    color: var(--color-danger-600);
+    color: var(--danger);
 }
 
 .account-menu__item--danger:hover {
-    background-color: var(--color-danger-50);
+    background-color: var(--danger-soft);
 }
 
 .account-menu__divider {
     height: 1px;
-    background-color: var(--border-color);
-    margin: var(--spacing-2) 0;
+    background: var(--border-subtle);
+    margin: var(--space-2) 0;
 }
 
 @keyframes dropdown-pop {
-    from {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .app-header__inner {
         flex-wrap: wrap;
         height: auto;
-        padding-top: var(--spacing-3);
-        padding-bottom: var(--spacing-3);
+        padding-top: var(--space-3);
+        padding-bottom: var(--space-3);
+        gap: var(--space-4);
     }
-    .app-navbar {
-        flex-wrap: wrap;
-        gap: var(--spacing-3);
-    }
+    .app-navbar { flex-wrap: wrap; gap: var(--space-3); }
     .app-navbar__primary,
-    .app-navbar__secondary {
-        flex-wrap: wrap;
-        gap: var(--spacing-2);
-    }
+    .app-navbar__secondary { flex-wrap: wrap; gap: var(--space-2); }
 }

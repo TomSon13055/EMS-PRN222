@@ -108,6 +108,8 @@ public class EventListPageViewModel
     public List<SelectListItem> Statuses { get; set; } = new();
     public EventDetailViewModel? SelectedEvent { get; set; }
     public EventFilterViewModel Filter { get; set; } = new();
+    public int? TotalCount { get; set; }
+    public PaginationViewModel? Pagination { get; set; }
 }
 
 public class CreateEventViewModel

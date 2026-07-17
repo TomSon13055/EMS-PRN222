@@ -3,18 +3,27 @@
     ViewData["Title"] = "Notifications";
     Layout = "_Layout";
 
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "Notifications",
-        Subtitle = "Updates about your events, tickets and account activity.",
-        Eyebrow = "EMS • Inbox"
-    };
-
     var unread = Model.Items.Count(n => !n.IsRead);
     var read = Model.Items.Count(n => n.IsRead);
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<header class="page-header page-header--compact">
+    <div class="page-header__titles">
+        <span class="page-header__eyebrow">Your inbox</span>
+        <h1 class="page-header__title">Notifications.</h1>
+        <p class="page-header__subtitle">
+            Updates about your events, tickets and account activity.
+        </p>
+    </div>
+    @if (unread > 0)
+    {
+        <div class="page-header__actions">
+            <span class="status-badge status-badge--accent">
+                @unread unread
+            </span>
+        </div>
+    }
+</header>
 
 <div class="notification-toolbar">
     <div class="notification-tabs" role="tablist" aria-label="Notification filter">
@@ -23,21 +32,24 @@
                 data-notification-filter
                 data-notification-filter-target=".js-notification-item"
                 data-notification-filter-value="all">
-            All <span class="count-pill" style="background: var(--color-neutral-300); color: var(--text-primary);">@Model.Items.Count</span>
+            <span>All</span>
+            <span class="count-pill count-pill--quiet">@Model.Items.Count</span>
         </button>
         <button type="button"
                 class="notification-tab"
                 data-notification-filter
                 data-notification-filter-target=".js-notification-item"
                 data-notification-filter-value="unread">
-            Unread <span class="count-pill">@unread</span>
+            <span>Unread</span>
+            <span class="count-pill">@unread</span>
         </button>
         <button type="button"
                 class="notification-tab"
                 data-notification-filter
                 data-notification-filter-target=".js-notification-item"
                 data-notification-filter-value="read">
-            Read <span class="count-pill" style="background: var(--color-neutral-300); color: var(--text-primary);">@read</span>
+            <span>Read</span>
+            <span class="count-pill count-pill--quiet">@read</span>
         </button>
     </div>
 </div>
@@ -50,24 +62,18 @@
             var status = n.IsRead ? "read" : "unread";
             <article class="notification-item js-notification-item notification-item--@status"
                      data-notification-status="@status">
-                <span class="notification-item__icon" aria-hidden="true">
-                    <i class="bi bi-bell-fill"></i>
-                </span>
+                <span class="notification-item__marker" aria-hidden="true"></span>
                 <div class="notification-item__body">
                     <header class="notification-item__header">
                         <h3 class="notification-item__title">@n.Title</h3>
-                        @if (!n.IsRead)
-                        {
-                            <span class="notification-item__dot" aria-label="Unread"></span>
-                        }
+                        <span class="notification-item__time">@n.CreatedAt.ToString("dd MMM · HH:mm")</span>
                     </header>
                     <p class="notification-item__message">@n.Message</p>
-                    <span class="notification-item__time">@n.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
                 </div>
                 <div class="notification-item__actions">
                     @if (!n.IsRead)
                     {
-                        <form method="post" asp-action="MarkRead" asp-route-id="@n.UserNotificationId" class="d-inline">
+                        <form method="post" asp-action="MarkRead" asp-route-id="@n.UserNotificationId">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn--ghost btn--sm" data-mark-read-button>
                                 <i class="bi bi-check2" aria-hidden="true"></i>

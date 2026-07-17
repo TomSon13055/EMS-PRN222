@@ -1,25 +1,41 @@
+/* =========================================================================
+   EMS Buttons — Editorial weight, restrained radius, clear hierarchy
+   ========================================================================= */
+
 .btn {
+    --btn-h: 42px;
+    --btn-pad-x: 1.125rem;
+    --btn-radius: 10px;
+    --btn-fg: var(--brand-ink);
+    --btn-bg: transparent;
+    --btn-border: transparent;
+    --btn-bg-hover: rgba(13, 27, 46, 0.05);
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-2);
-    height: 40px;
-    padding: 0 var(--spacing-5);
-    border-radius: var(--radius-md);
-    border: 1px solid transparent;
+    gap: var(--space-2);
+    height: var(--btn-h);
+    padding: 0 var(--btn-pad-x);
+    border-radius: var(--btn-radius);
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
     font-family: inherit;
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     line-height: 1;
+    letter-spacing: 0.005em;
     cursor: pointer;
     user-select: none;
     text-decoration: none;
     white-space: nowrap;
-    transition: background-color var(--transition-fast),
-        color var(--transition-fast),
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast),
-        transform var(--transition-fast);
+    transition:
+        background-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out),
+        box-shadow var(--dur-fast) var(--ease-out),
+        transform var(--dur-fast) var(--ease-out);
 }
 
 .btn:focus-visible {
@@ -29,147 +45,172 @@
 
 .btn:disabled,
 .btn[aria-disabled="true"] {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
+.btn i {
+    font-size: 1rem;
+    line-height: 1;
+    color: currentColor;
+}
+
+/* ---------- Primary (Brand) ---------- */
 .btn--primary {
-    background-color: var(--color-primary-600);
-    color: var(--color-white);
-    border-color: var(--color-primary-600);
+    --btn-fg: var(--text-on-dark);
+    --btn-bg: var(--brand-ink);
+    --btn-border: var(--brand-ink);
 }
 
 .btn--primary:hover:not(:disabled) {
-    background-color: var(--color-primary-700);
-    border-color: var(--color-primary-700);
-    color: var(--color-white);
+    --btn-bg: #1c2c44;
+    --btn-border: #1c2c44;
 }
 
 .btn--primary:active:not(:disabled) {
-    background-color: var(--color-primary-800);
+    transform: translateY(1px);
 }
 
+.btn--primary.is-bright {
+    --btn-bg: var(--brand-primary);
+    --btn-border: var(--brand-primary);
+}
+
+.btn--primary.is-bright:hover:not(:disabled) {
+    --btn-bg: var(--brand-primary-600);
+    --btn-border: var(--brand-primary-600);
+}
+
+/* ---------- Secondary (white with hairline) ---------- */
 .btn--secondary {
-    background-color: var(--color-white);
-    color: var(--text-primary);
-    border-color: var(--border-color-strong);
+    --btn-fg: var(--text-strong);
+    --btn-bg: var(--surface-card);
+    --btn-border: var(--border-default);
 }
 
 .btn--secondary:hover:not(:disabled) {
-    background-color: var(--color-neutral-50);
-    color: var(--text-primary);
+    --btn-bg: var(--surface-card-soft);
+    --btn-border: var(--border-strong);
 }
 
-.btn--success {
-    background-color: var(--color-success-600);
-    color: var(--color-white);
-    border-color: var(--color-success-600);
-}
-
-.btn--success:hover:not(:disabled) {
-    background-color: var(--color-success-700);
-    color: var(--color-white);
-}
-
-.btn--danger {
-    background-color: var(--color-danger-600);
-    color: var(--color-white);
-    border-color: var(--color-danger-600);
-}
-
-.btn--danger:hover:not(:disabled) {
-    background-color: var(--color-danger-700);
-    color: var(--color-white);
-}
-
-.btn--warning {
-    background-color: var(--color-warning-500);
-    color: var(--color-white);
-    border-color: var(--color-warning-500);
-}
-
-.btn--warning:hover:not(:disabled) {
-    background-color: var(--color-warning-600);
-    color: var(--color-white);
-}
-
+/* ---------- Outline primary ---------- */
 .btn--outline-primary {
-    background-color: transparent;
-    color: var(--color-primary-600);
-    border-color: var(--color-primary-600);
+    --btn-fg: var(--brand-ink);
+    --btn-bg: transparent;
+    --btn-border: var(--brand-ink);
 }
 
 .btn--outline-primary:hover:not(:disabled) {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-700);
+    --btn-bg: var(--brand-ink);
+    --btn-fg: var(--text-on-dark);
 }
 
+/* ---------- Outline secondary ---------- */
 .btn--outline-secondary {
-    background-color: transparent;
-    color: var(--text-secondary);
-    border-color: var(--border-color-strong);
+    --btn-fg: var(--text-body);
+    --btn-bg: transparent;
+    --btn-border: var(--border-default);
 }
 
 .btn--outline-secondary:hover:not(:disabled) {
-    background-color: var(--color-neutral-100);
-    color: var(--text-primary);
+    --btn-bg: var(--surface-card-soft);
+    --btn-border: var(--border-strong);
+    --btn-fg: var(--text-strong);
 }
 
+/* ---------- Ghost ---------- */
 .btn--ghost {
-    background-color: transparent;
-    color: var(--text-secondary);
-    border-color: transparent;
+    --btn-fg: var(--text-body);
+    --btn-bg: transparent;
+    --btn-border: transparent;
 }
 
 .btn--ghost:hover:not(:disabled) {
-    background-color: var(--color-neutral-100);
-    color: var(--text-primary);
+    --btn-bg: rgba(13, 27, 46, 0.05);
+    --btn-fg: var(--text-strong);
 }
 
+/* ---------- Success ---------- */
+.btn--success {
+    --btn-fg: var(--text-on-dark);
+    --btn-bg: var(--success);
+    --btn-border: var(--success);
+}
+
+.btn--success:hover:not(:disabled) {
+    --btn-bg: var(--success-ink);
+    --btn-border: var(--success-ink);
+}
+
+/* ---------- Danger ---------- */
+.btn--danger {
+    --btn-fg: var(--text-on-dark);
+    --btn-bg: var(--danger);
+    --btn-border: var(--danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+    --btn-bg: var(--danger-ink);
+    --btn-border: var(--danger-ink);
+}
+
+/* ---------- Warning (amber) — used for wallet, money ---------- */
+.btn--warning,
+.btn--amber {
+    --btn-fg: var(--text-on-dark);
+    --btn-bg: var(--warning);
+    --btn-border: var(--warning);
+}
+
+.btn--warning:hover:not(:disabled),
+.btn--amber:hover:not(:disabled) {
+    --btn-bg: var(--warning-ink);
+    --btn-border: var(--warning-ink);
+}
+
+/* ---------- Link ---------- */
 .btn--link {
+    --btn-fg: var(--brand-ink);
     background: transparent;
     border: 0;
     padding: 0;
     height: auto;
-    color: var(--color-primary-600);
     text-decoration: none;
+    font-weight: var(--weight-medium);
+    border-radius: 0;
 }
 
 .btn--link:hover:not(:disabled) {
-    color: var(--color-primary-700);
     text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
+/* ---------- Sizes ---------- */
 .btn--sm {
-    height: 32px;
-    padding: 0 var(--spacing-3);
-    font-size: var(--font-size-sm);
+    --btn-h: 34px;
+    --btn-pad-x: 0.875rem;
+    font-size: var(--text-xs);
 }
 
 .btn--lg {
-    height: 48px;
-    padding: 0 var(--spacing-6);
-    font-size: var(--font-size-md);
+    --btn-h: 50px;
+    --btn-pad-x: 1.5rem;
+    font-size: var(--text-base);
 }
 
-.btn--block {
-    width: 100%;
-}
+.btn--block { width: 100%; }
 
+/* ---------- Icon button ---------- */
 .btn--icon {
-    width: 40px;
+    width: var(--btn-h);
     padding: 0;
     flex-shrink: 0;
 }
 
-.btn--icon.btn--sm {
-    width: 32px;
-}
+.btn--sm.btn--icon { width: 34px; }
+.btn--lg.btn--icon { width: 50px; }
 
-.btn--icon.btn--lg {
-    width: 48px;
-}
-
+/* ---------- Loading ---------- */
 .btn[aria-busy="true"] {
     position: relative;
     color: transparent !important;
@@ -184,55 +225,53 @@
     border-radius: 50%;
     border: 2px solid currentColor;
     border-top-color: transparent;
-    color: var(--color-white);
+    color: var(--text-on-dark);
     animation: btn-spin 0.7s linear infinite;
 }
 
-.btn--outline-primary[aria-busy="true"]::after,
 .btn--secondary[aria-busy="true"]::after,
+.btn--outline-primary[aria-busy="true"]::after,
 .btn--outline-secondary[aria-busy="true"]::after,
 .btn--ghost[aria-busy="true"]::after {
-    color: var(--color-primary-600);
+    color: var(--brand-ink);
 }
 
-@keyframes btn-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+@keyframes btn-spin { to { transform: rotate(360deg); } }
 
+/* ---------- Groups ---------- */
 .btn-group {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--space-2);
 }
 
 .action-group {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--space-2);
     flex-wrap: wrap;
 }
 
+/* ---------- Icon-only button ---------- */
 .icon-btn {
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
+    border-radius: 10px;
     border: 1px solid transparent;
-    background-color: transparent;
-    color: var(--text-secondary);
+    background: transparent;
+    color: var(--text-body);
     cursor: pointer;
-    transition: background-color var(--transition-fast),
-        color var(--transition-fast),
-        border-color var(--transition-fast);
+    transition: background-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out);
 }
 
 .icon-btn:hover {
-    background-color: var(--color-neutral-100);
-    color: var(--text-primary);
+    background-color: rgba(13, 27, 46, 0.05);
+    color: var(--text-strong);
 }
 
 .icon-btn:focus-visible {
@@ -240,48 +279,30 @@
     box-shadow: var(--shadow-focus);
 }
 
-.icon-btn--primary {
-    color: var(--color-primary-600);
-}
+.icon-btn--danger { color: var(--danger); }
+.icon-btn--danger:hover { background: var(--danger-soft); color: var(--danger-ink); }
 
-.icon-btn--primary:hover {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-700);
-}
-
-.icon-btn--danger {
-    color: var(--color-danger-600);
-}
-
-.icon-btn--danger:hover {
-    background-color: var(--color-danger-50);
-    color: var(--color-danger-700);
-}
-
-.icon-btn--warning {
-    color: var(--color-warning-600);
-}
-
-.icon-btn--warning:hover {
-    background-color: var(--color-warning-50);
-    color: var(--color-warning-700);
-}
-
+.icon-btn--warning,
 .icon-btn--amber {
-    color: var(--color-warning-600);
+    color: var(--warning);
 }
 
+.icon-btn--warning:hover,
 .icon-btn--amber:hover {
-    background-color: var(--color-warning-50);
-    color: var(--color-warning-700);
+    background: var(--warning-soft);
+    color: var(--warning-ink);
+}
+
+.icon-btn--ghost {
+    color: var(--text-muted);
 }
 
 .icon-btn[aria-pressed="true"] {
-    background-color: var(--color-danger-50);
-    color: var(--color-danger-600);
+    background: var(--danger-soft);
+    color: var(--danger);
 }
 
-i.bi {
-    font-size: 1rem;
-    line-height: 1;
+.icon-btn[aria-pressed="true"] i.bi-heart::before {
+    content: "\f415";
+    font-weight: 900;
 }

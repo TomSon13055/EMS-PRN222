@@ -1,11 +1,19 @@
 @model EventManagement.ViewModels.BuyTicketViewModel
 @{
-    ViewData["Title"] = "Complete your booking";
+    ViewData["Title"] = "Buy ticket";
     Layout = "_Layout";
 
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Buy ticket",
+        Subtitle = "Review your selection, apply a voucher if you have one, then confirm the purchase.",
+        Eyebrow = "EMS • Checkout"
+    };
+
     var noTickets = Model.TicketTypes == null || !Model.TicketTypes.Any();
-    var ticketTypeCount = Model.TicketTypes?.Count() ?? 0;
 }
+
+@await Html.PartialAsync("_PageHeader", header)
 
 @if (noTickets)
 {
@@ -14,6 +22,7 @@
         Title = "No ticket types available",
         Description = "The host has not published any ticket types for this event yet.",
         Icon = "bi-ticket-perforated",
+        IconVariant = "neutral",
         ActionLabel = "Back to events",
         ActionUrl = Url.Action("List", "Event"),
         ActionIcon = "bi-arrow-left"
@@ -21,49 +30,28 @@
     return;
 }
 
-<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
-    <a href="@Url.Action("List", "Event")">Events</a>
-    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    @if (!string.IsNullOrEmpty(Model.EventTitle))
-    {
-        <a href="@Url.Action("Details", "Event", new { id = Model.EventId })">@Model.EventTitle</a>
-        <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    }
-    <span class="breadcrumb__current">Checkout</span>
-</nav>
-
-<header class="page-header page-header--compact" style="border-bottom: 0; padding-bottom: var(--space-3);">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Step 3 of 3 · Complete your booking</span>
-        <h1 class="page-header__title">You're almost there.</h1>
-        <p class="page-header__subtitle">
-            Review your selection, apply a voucher if you have one, then confirm the purchase. Tickets are issued instantly to your account.
-        </p>
-    </div>
-</header>
-
 @if (!string.IsNullOrEmpty(Model.EventTitle))
 {
     <section class="checkout-event-summary">
-        <div class="checkout-event-summary__head">
-            <span class="eyebrow eyebrow--muted">Event</span>
-            <h2 class="checkout-event-summary__title">@Model.EventTitle</h2>
-        </div>
+        <h2 class="checkout-event-summary__title">@Model.EventTitle</h2>
+        @if (!string.IsNullOrEmpty(Model.EventDescription))
+        {
+            <p class="text-secondary" style="margin: 0 0 var(--spacing-2) 0;">@Model.EventDescription</p>
+        }
         <div class="checkout-event-summary__meta">
             @if (Model.EventStartTime.HasValue)
             {
-                <span><i class="bi bi-calendar3" aria-hidden="true"></i> @Model.EventStartTime.Value.ToString("dddd, dd MMM yyyy")</span>
-                <span><i class="bi bi-clock" aria-hidden="true"></i> @Model.EventStartTime.Value.ToString("HH:mm")</span>
+                <span><i class="bi bi-calendar3" aria-hidden="true"></i>@Model.EventStartTime.Value.ToString("dddd, dd MMM yyyy HH:mm")</span>
             }
             @if (!string.IsNullOrEmpty(Model.LocationName))
             {
-                <span><i class="bi bi-geo-alt" aria-hidden="true"></i> @Model.LocationName</span>
+                <span><i class="bi bi-geo-alt" aria-hidden="true"></i>@Model.LocationName</span>
             }
         </div>
     </section>
 }
 
-<div class="checkout-grid">
+<div class="checkout-grid" style="margin-top: var(--spacing-6);">
     <form asp-action="Buy" method="post"
           class="checkout-form js-buy-ticket-form"
           data-buy-ticket-form
@@ -73,108 +61,52 @@
         <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
         <section class="form-section">
-            <span class="form-section__step">Step 1 · Ticket</span>
             <h2 class="form-section__title">Choose a ticket type</h2>
             <p class="form-section__subtitle">Pick the experience that suits you best.</p>
-
-            @if (ticketTypeCount > 0 && ticketTypeCount <= 4)
-            {
-                <div class="ticket-tiles">
-                    @foreach (var t in Model.TicketTypes)
-                    {
-                        var priceMatch = System.Text.RegularExpressions.Regex.Match(t.Text ?? string.Empty, @"\d[\d,]*").Value.Replace(",", "");
-                        var isChecked = Model.TicketTypeId.HasValue && Model.TicketTypeId.Value.ToString() == t.Value;
-                        <label class="option-tile">
-                            <input type="radio" name="TicketTypeId" value="@t.Value"
-                                   class="option-tile__input"
-                                   data-ticket-type-radio
-                                   data-ticket-price="@priceMatch"
-                                   checked="@isChecked" />
-                            <div class="option-tile__body">
-                                <span class="option-tile__indicator" aria-hidden="true"></span>
-                                <div>
-                                    <div class="option-tile__name">@t.Text</div>
-                                    <div class="option-tile__hint">Standard admission</div>
-                                </div>
-                            </div>
-                            <div class="option-tile__price numeric">
-                                @if (decimal.TryParse(priceMatch, out var p))
-                                {
-                                    @p.ToString("N0")<span style="font-size: 0.55em; margin-left: 2px;">đ</span>
-                                }
-                                else
-                                {
-                                    <text>—</text>
-                                }
-                            </div>
-                        </label>
-                    }
-                </div>
-                <select asp-for="TicketTypeId" class="form-select js-ticket-type-hidden"
-                        data-ticket-type-select hidden required>
+            <div class="form-field checkout-ticket-type">
+                <label asp-for="TicketTypeId" class="form-label">
+                    <span>Ticket type</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <select asp-for="TicketTypeId" class="form-select" required
+                        data-ticket-type-select>
                     <option value="">-- Select ticket type --</option>
                     @foreach (var t in Model.TicketTypes)
                     {
+                        var priceMatch = System.Text.RegularExpressions.Regex.Match(t.Text ?? string.Empty, @"\d[\d,]*").Value.Replace(",", "");
                         <option value="@t.Value"
+                                data-ticket-price="@priceMatch"
                                 selected="@(Model.TicketTypeId.HasValue && Model.TicketTypeId.Value.ToString() == t.Value)">
                             @t.Text
                         </option>
                     }
                 </select>
-            }
-            else
-            {
-                <div class="form-field">
-                    <label asp-for="TicketTypeId" class="form-label">
-                        <span>Ticket type</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <select asp-for="TicketTypeId" class="form-select" required data-ticket-type-select>
-                        <option value="">-- Select ticket type --</option>
-                        @foreach (var t in Model.TicketTypes)
-                        {
-                            var priceMatch = System.Text.RegularExpressions.Regex.Match(t.Text ?? string.Empty, @"\d[\d,]*").Value.Replace(",", "");
-                            <option value="@t.Value"
-                                    data-ticket-price="@priceMatch"
-                                    selected="@(Model.TicketTypeId.HasValue && Model.TicketTypeId.Value.ToString() == t.Value)">
-                                @t.Text
-                            </option>
-                        }
-                    </select>
-                    <span asp-validation-for="TicketTypeId" class="field-validation-error"></span>
-                </div>
-            }
+                <span class="checkout-ticket-type__hint">Each ticket type may have a different price and availability window.</span>
+                <span asp-validation-for="TicketTypeId" class="field-validation-error"></span>
+            </div>
         </section>
 
         <section class="form-section">
-            <span class="form-section__step">Step 2 · Quantity</span>
-            <h2 class="form-section__title">How many tickets?</h2>
-            <div class="form-field" style="margin: 0;">
-                <label class="form-label">Quantity</label>
-                <div class="qty-stepper" data-qty-stepper>
-                    <button type="button" data-qty-minus aria-label="Decrease quantity">
-                        <i class="bi bi-dash-lg" aria-hidden="true"></i>
-                    </button>
-                    <input asp-for="Quantity" type="number" min="1"
-                           value="@(Model.Quantity > 0 ? Model.Quantity : 1)"
-                           data-ticket-quantity data-qty-input />
-                    <button type="button" data-qty-plus aria-label="Increase quantity">
-                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
-                    </button>
-                </div>
+            <h2 class="form-section__title">Quantity</h2>
+            <p class="form-section__subtitle">How many tickets would you like?</p>
+            <div class="form-field" style="margin: 0; max-width: 220px;">
+                <label asp-for="Quantity" class="form-label">
+                    <span>Quantity</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" value="@(Model.Quantity > 0 ? Model.Quantity : 1)"
+                       data-ticket-quantity required />
                 <span asp-validation-for="Quantity" class="field-validation-error"></span>
             </div>
         </section>
 
         <section class="form-section">
-            <span class="form-section__step">Step 3 · Voucher (optional)</span>
-            <h2 class="form-section__title">Have a voucher?</h2>
-            <p class="form-section__subtitle">Apply it now to reduce your total.</p>
+            <h2 class="form-section__title">Voucher</h2>
+            <p class="form-section__subtitle">Have a voucher code? Apply it to get a discount.</p>
             <div class="checkout-voucher-row">
                 <div class="form-field" style="margin: 0;">
                     <label asp-for="VoucherCode" class="form-label">Voucher code</label>
-                    <input asp-for="VoucherCode" class="form-control mono"
-                           placeholder="EMS10" autocomplete="off" style="text-transform: uppercase;" />
+                    <input asp-for="VoucherCode" class="form-control" placeholder="e.g. EMS10" autocomplete="off" />
                 </div>
                 <button type="submit"
                         name="applyVoucher"
@@ -184,7 +116,7 @@
                         formaction="@Url.Action("ApplyVoucher", "Ticket")"
                         formmethod="post">
                     <i class="bi bi-tag" aria-hidden="true"></i>
-                    <span>Apply</span>
+                    <span>Apply voucher</span>
                 </button>
             </div>
             @if (Model.VoucherApplied && !string.IsNullOrEmpty(Model.VoucherMessage))
@@ -201,64 +133,50 @@
                 <span>Cancel</span>
             </a>
             <button type="submit" class="btn btn--primary btn--lg" data-buy-button>
-                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                <i class="bi bi-bag-check" aria-hidden="true"></i>
                 <span>Confirm purchase</span>
             </button>
         </div>
     </form>
 
     <aside class="checkout-summary" aria-label="Order summary">
-        <header class="checkout-summary__head">
-            <span class="eyebrow eyebrow--muted">Order summary</span>
-            <h2 class="checkout-summary__title">Your booking</h2>
-        </header>
-
+        <h2 class="checkout-summary__title">Order summary</h2>
         <div class="checkout-summary__rows">
             <div class="checkout-summary__row">
-                <span class="muted">Unit price</span>
-                <span class="numeric" data-unit-price>@(Model.SubTotal > 0 ? Model.SubTotal.ToString("N0") + " đ" : "—")</span>
+                <span>Unit price</span>
+                <span data-unit-price>@(Model.SubTotal > 0 ? Model.SubTotal.ToString("N0") + " đ" : "—")</span>
             </div>
             <div class="checkout-summary__row">
-                <span class="muted">Quantity</span>
-                <span class="numeric" data-summary-quantity>@Model.Quantity</span>
+                <span>Quantity</span>
+                <span data-summary-quantity>@Model.Quantity</span>
             </div>
             <div class="checkout-summary__row">
-                <span class="muted">Subtotal</span>
-                <span class="numeric" data-sub-total>@((Model.SubTotal > 0 ? Model.SubTotal : 0).ToString("N0")) đ</span>
+                <span>Subtotal</span>
+                <span data-sub-total>@((Model.SubTotal > 0 ? Model.SubTotal : 0).ToString("N0")) đ</span>
             </div>
             @if (Model.VoucherApplied)
             {
                 <div class="checkout-summary__row checkout-summary__row--discount" data-discount-row>
                     <span>Discount (@Model.VoucherCode)</span>
-                    <span class="numeric" data-discount-amount data-discount-percent="@Model.VoucherDiscountPercent">
+                    <span data-discount-amount data-discount-percent="@Model.VoucherDiscountPercent">
                         -@Model.DiscountAmount.ToString("N0") đ
                     </span>
                 </div>
             }
-            <div class="checkout-summary__divider"></div>
             <div class="checkout-summary__row checkout-summary__row--total">
-                <span>Total due</span>
-                <span class="numeric" data-final-amount>@Model.FinalAmount.ToString("N0") đ</span>
+                <span>Total</span>
+                <span data-final-amount>@Model.FinalAmount.ToString("N0") đ</span>
             </div>
         </div>
 
-        <ul class="checkout-summary__trust">
-            <li><i class="bi bi-shield-check" aria-hidden="true"></i> Secure wallet payment</li>
-            <li><i class="bi bi-lightning-charge" aria-hidden="true"></i> Tickets issued instantly</li>
-            <li><i class="bi bi-ticket-perforated" aria-hidden="true"></i> QR code sent to your account</li>
-        </ul>
-
-        @if (Model.WalletBalance.HasValue)
-        {
-            <div class="checkout-summary__wallet">
-                <span class="muted">Wallet balance</span>
-                <span class="numeric">@Model.WalletBalance.Value.ToString("N0") đ</span>
-            </div>
-        }
+        <div class="checkout-summary__hint">
+            <span><i class="bi bi-wallet2" aria-hidden="true"></i> Payment is deducted from your wallet balance.</span>
+            <a href="@Url.Action("Index", "Wallet")">Top up your wallet</a>
+        </div>
     </aside>
 </div>
 
-<div class="checkout-warning" style="margin-top: var(--space-5);">
+<div class="checkout-warning" style="margin-top: var(--spacing-5);">
     <i class="bi bi-info-circle" aria-hidden="true"></i>
     <span>Tickets are non-refundable after the event starts. Make sure your selection is correct before confirming.</span>
 </div>

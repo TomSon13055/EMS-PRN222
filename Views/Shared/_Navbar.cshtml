@@ -27,8 +27,8 @@
 
 <header class="app-header">
     <div class="app-header__inner">
-        <a class="app-header__brand" href="@Url.Action("List", "Event")" aria-label="EMS home">
-            <span class="brand-mark brand-mark--sm" aria-hidden="true">E</span>
+        <a class="app-navbar__brand" href="@Url.Action("List", "Event")" aria-label="EMS home">
+            <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
             <span>EMS</span>
         </a>
 
@@ -67,6 +67,13 @@
                            href="@Url.Action("MyEvents", "Host")">
                             <i class="bi bi-collection" aria-hidden="true"></i>
                             <span>My Events</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-app js-nav-create-event @(IsActive("Host", "CreateEvent") ? "is-active" : null)"
+                           href="@Url.Action("CreateEvent", "Host")">
+                            <i class="bi bi-plus-square" aria-hidden="true"></i>
+                            <span>Create Event</span>
                         </a>
                     </li>
                     <li>
@@ -124,17 +131,6 @@
                         </li>
                     }
 
-                    @if (Context.IsInRole("Host"))
-                    {
-                        <li>
-                            <a class="btn btn--primary btn--sm js-nav-create-event"
-                               href="@Url.Action("CreateEvent", "Host")">
-                                <i class="bi bi-plus-lg" aria-hidden="true"></i>
-                                <span>Create Event</span>
-                            </a>
-                        </li>
-                    }
-
                     <li class="account-menu" data-account-menu aria-expanded="false">
                         <button type="button"
                                 class="account-menu__trigger"
@@ -142,7 +138,10 @@
                                 aria-haspopup="true"
                                 aria-expanded="false">
                             <span class="@avatarClass" aria-hidden="true">@initials</span>
-                            <span class="account-menu__name">@fullName</span>
+                            <span class="stack" style="gap: 0; align-items: flex-start;">
+                                <span class="account-menu__name">@fullName</span>
+                                <span class="@roleClass">@role</span>
+                            </span>
                             <i class="bi bi-chevron-down account-menu__chevron" aria-hidden="true"></i>
                         </button>
 
@@ -160,10 +159,6 @@
                                 <a class="account-menu__item" href="@Url.Action("MyTickets", "Ticket")" role="menuitem">
                                     <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
                                     <span>My Tickets</span>
-                                </a>
-                                <a class="account-menu__item" href="@Url.Action("List", "Wishlist")" role="menuitem">
-                                    <i class="bi bi-heart" aria-hidden="true"></i>
-                                    <span>Wishlist</span>
                                 </a>
                             }
                             @if (Context.IsInRole("Host"))
@@ -195,11 +190,13 @@
                 {
                     <li>
                         <a class="btn btn--ghost btn--sm js-nav-login" href="@Url.Action("Login", "Account")">
+                            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                             <span>Login</span>
                         </a>
                     </li>
                     <li>
                         <a class="btn btn--primary btn--sm js-nav-register" href="@Url.Action("Register", "Account")">
+                            <i class="bi bi-person-plus" aria-hidden="true"></i>
                             <span>Register</span>
                         </a>
                     </li>

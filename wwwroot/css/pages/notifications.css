@@ -1,154 +1,148 @@
-/* =========================================================================
-   EMS Notifications — Inbox timeline
-   ========================================================================= */
-
 .notification-toolbar {
-    margin-bottom: var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    flex-wrap: wrap;
 }
 
 .notification-tabs {
     display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-pill);
+    background-color: var(--color-neutral-100);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    gap: 4px;
 }
 
 .notification-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 0.5rem 0.875rem;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-full);
     border: 0;
     background: transparent;
-    color: var(--text-body);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: background-color var(--dur-fast) var(--ease-out),
-        color var(--dur-fast) var(--ease-out);
-    font-family: inherit;
-}
-
-.notification-tab:hover {
-    background: var(--surface-canvas);
-    color: var(--text-strong);
+    text-decoration: none;
+    transition: background-color var(--transition-fast),
+        color var(--transition-fast);
 }
 
 .notification-tab.is-active {
-    background: var(--brand-ink);
-    color: var(--text-on-dark);
+    background-color: var(--color-white);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-xs);
 }
 
-.notification-tab.is-active .count-pill {
-    background: rgba(247, 246, 242, 0.18);
-    color: var(--text-on-dark);
+.notification-tab:hover:not(.is-active) {
+    color: var(--text-primary);
 }
 
-.notification-tab.is-active .count-pill--quiet {
-    background: rgba(247, 246, 242, 0.18);
-    color: var(--text-on-dark);
-}
-
-.notification-tab:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-focus);
-}
-
-/* ---------- List ---------- */
 .notification-list {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--border-subtle);
+    gap: var(--spacing-2);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .notification-item {
     display: grid;
-    grid-template-columns: 8px minmax(0, 1fr) auto;
-    gap: var(--space-5);
-    align-items: start;
-    padding: var(--space-5) 0;
-    border-bottom: 1px solid var(--border-subtle);
-    transition: background-color var(--dur-fast) var(--ease-out);
+    grid-template-columns: auto 1fr auto;
+    gap: var(--spacing-4);
+    align-items: flex-start;
+    padding: var(--spacing-4) var(--spacing-5);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--color-white);
+    transition: background-color var(--transition-fast);
+}
+
+.notification-item:last-child {
+    border-bottom: 0;
 }
 
 .notification-item:hover {
-    background: var(--surface-card-soft);
+    background-color: var(--color-neutral-50);
 }
 
 .notification-item--unread {
-    background: var(--brand-primary-50);
+    background-color: var(--color-primary-50);
 }
 
-.notification-item--unread:hover {
-    background: #e3e9ff;
+.notification-item--unread .notification-item__title {
+    color: var(--color-primary-800);
 }
 
-.notification-item__marker {
-    width: 8px;
-    height: 8px;
+.notification-item__icon {
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: transparent;
-    margin-top: 12px;
-    transition: background-color var(--dur-fast) var(--ease-out);
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-700);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.notification-item--unread .notification-item__marker {
-    background: var(--brand-accent-600);
+.notification-item--unread .notification-item__icon {
+    background-color: var(--color-primary-600);
+    color: var(--color-white);
 }
 
 .notification-item__body {
-    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--spacing-1);
 }
 
 .notification-item__header {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4);
+    align-items: center;
+    gap: var(--spacing-2);
 }
 
 .notification-item__title {
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-tight);
-    color: var(--brand-ink);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
     margin: 0;
-    line-height: var(--leading-snug);
 }
 
-.notification-item--unread .notification-item__title {
-    color: var(--brand-ink);
-    font-weight: var(--weight-semibold);
-}
-
-.notification-item--read .notification-item__title {
-    color: var(--text-body);
-    font-weight: var(--weight-medium);
+.notification-item__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-primary-600);
+    display: inline-block;
 }
 
 .notification-item__message {
-    font-size: var(--text-base);
-    color: var(--text-body);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
     margin: 0;
-    line-height: var(--leading-relaxed);
-    max-width: 80ch;
 }
 
 .notification-item__time {
-    font-size: var(--text-xs);
+    font-size: var(--font-size-xs);
     color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
 }
 
 .notification-item__actions {
-    padding-top: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-2);
+}
+
+.notification-item--read .notification-item__title {
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+.notification-item--read .notification-item__icon {
+    background-color: var(--color-neutral-100);
+    color: var(--text-muted);
 }

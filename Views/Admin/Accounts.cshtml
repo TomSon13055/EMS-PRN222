@@ -2,20 +2,21 @@
 @{
     ViewData["Title"] = "Accounts";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Accounts",
+        Subtitle = "Manage all user accounts on the platform. Lock or unlock access as needed.",
+        Eyebrow = "EMS • Admin"
+    };
 }
 
-<header class="page-header page-header--compact">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">User management</span>
-        <h1 class="page-header__title">Accounts.</h1>
-        <p class="page-header__subtitle">Manage all user accounts on the platform. Lock or unlock access as needed.</p>
-    </div>
-</header>
+@await Html.PartialAsync("_PageHeader", header)
 
 @if (Model.Accounts.Any())
 {
     <div class="data-table-wrap">
-        <table class="data-table data-table--compact">
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>User</th>
@@ -41,7 +42,7 @@
                             <div class="table-title">@u.FullName</div>
                             <small class="text-muted">#@u.UserId</small>
                         </td>
-                        <td class="table-sub">@u.Email</td>
+                        <td>@u.Email</td>
                         <td><span class="@roleClass">@u.Role</span></td>
                         <td>
                             <span class="status-badge @(u.IsActive ? "status-badge--success" : "status-badge--danger")">
@@ -50,10 +51,10 @@
                         </td>
                         <td class="text-secondary nowrap">@u.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
                         <td class="actions">
-                            <form asp-action="ToggleAccount" asp-route-userId="@u.UserId" method="post">
+                            <form asp-action="ToggleAccount" asp-route-userId="@u.UserId" method="post" class="d-inline">
                                 @Html.AntiForgeryToken()
                                 <button type="submit"
-                                        class="btn @(u.IsActive ? "btn--outline-secondary" : "btn--success") btn--sm">
+                                        class="btn @(u.IsActive ? "btn--warning" : "btn--success") btn--sm">
                                     <i class="bi @(u.IsActive ? "bi-lock" : "bi-unlock")" aria-hidden="true"></i>
                                     <span>@(u.IsActive ? "Lock" : "Unlock")</span>
                                 </button>
@@ -71,6 +72,7 @@ else
     {
         Title = "No accounts",
         Description = "There are no accounts in the system yet.",
-        Icon = "bi-people"
+        Icon = "bi-people",
+        IconVariant = "neutral"
     })
 }

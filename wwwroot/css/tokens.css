@@ -1,219 +1,121 @@
-/* =========================================================================
-   EMS Design Tokens — Editorial Event Commerce
-   Confident · Welcoming · Curated · Reliable · Energetic but controlled
-   ========================================================================= */
-
 :root {
-    /* ---------- Brand palette ---------- */
-    --brand-ink: #0d1b2e;
-    --brand-ink-soft: #1c2c44;
-    --brand-primary: #1f4dff;
-    --brand-primary-600: #1a44e6;
-    --brand-primary-700: #1638c1;
-    --brand-primary-50: #eef2ff;
-    --brand-primary-100: #dbe3ff;
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
 
-    --brand-accent: #f29a6e;
-    --brand-accent-600: #e38657;
-    --brand-accent-soft: #fdebe1;
-    --brand-accent-tint: #fff5ef;
+    --color-success-50: #ecfdf5;
+    --color-success-100: #d1fae5;
+    --color-success-500: #10b981;
+    --color-success-600: #059669;
+    --color-success-700: #047857;
 
-    /* ---------- Surfaces (warm-neutral canvas) ---------- */
-    --surface-canvas: #f6f4ef;
-    --surface-canvas-strong: #efece4;
-    --surface-subtle: #ebe7dd;
-    --surface-card: #ffffff;
-    --surface-card-soft: #fbfaf6;
-    --surface-raised: #ffffff;
-    --surface-inverse: #0d1b2e;
-    --surface-inverse-soft: #18253e;
-    --surface-overlay: rgba(13, 27, 46, 0.55);
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-300: #fcd34d;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+    --color-warning-700: #b45309;
 
-    /* ---------- Text ---------- */
-    --text-strong: #0d1b2e;
-    --text-body: #3d4a5f;
-    --text-muted: #6f7a8e;
-    --text-faint: #98a1b3;
-    --text-on-dark: #f7f6f2;
-    --text-on-dark-muted: rgba(247, 246, 242, 0.72);
+    --color-danger-50: #fef2f2;
+    --color-danger-100: #fee2e2;
+    --color-danger-500: #ef4444;
+    --color-danger-600: #dc2626;
+    --color-danger-700: #b91c1c;
 
-    /* ---------- Borders ---------- */
-    --border-subtle: #ebe7dd;
-    --border-default: #e0dbcf;
-    --border-strong: #c9c3b3;
-    --border-dark: #2a3a55;
-    --border-on-dark: rgba(247, 246, 242, 0.12);
-
-    /* ---------- Semantic ---------- */
-    --success: #1f8a5f;
-    --success-soft: #e7f5ec;
-    --success-ink: #155f43;
-
-    --warning: #b86d12;
-    --warning-soft: #fbeed9;
-    --warning-ink: #7d470a;
-
-    --danger: #b53a48;
-    --danger-soft: #fbe6e9;
-    --danger-ink: #7d222c;
-
-    --info: #2d6cb3;
-    --info-soft: #e2edf9;
-    --info-ink: #1f4d83;
-
-    /* ---------- Typography ---------- */
-    --font-sans: "Inter", "Söhne", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-display: "Fraunces", "Source Serif 4", Georgia, "Times New Roman", serif;
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-        Consolas, "Liberation Mono", "Courier New", monospace;
-
-    --text-xs: 0.75rem;
-    --text-sm: 0.8125rem;
-    --text-base: 0.9375rem;
-    --text-md: 1rem;
-    --text-lg: 1.0625rem;
-    --text-xl: 1.1875rem;
-    --text-2xl: 1.375rem;
-    --text-3xl: 1.75rem;
-    --text-4xl: 2.125rem;
-    --text-5xl: 2.75rem;
-    --text-6xl: 3.5rem;
-
-    --weight-regular: 400;
-    --weight-medium: 500;
-    --weight-semibold: 600;
-    --weight-bold: 700;
-
-    --leading-tight: 1.15;
-    --leading-snug: 1.3;
-    --leading-normal: 1.5;
-    --leading-relaxed: 1.65;
-
-    --tracking-tight: -0.018em;
-    --tracking-display: -0.025em;
-    --tracking-eyebrow: 0.14em;
-
-    /* ---------- Spacing (8pt + half) ---------- */
-    --space-0-5: 0.125rem;
-    --space-1: 0.25rem;
-    --space-1-5: 0.375rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.25rem;
-    --space-6: 1.5rem;
-    --space-7: 1.75rem;
-    --space-8: 2rem;
-    --space-10: 2.5rem;
-    --space-12: 3rem;
-    --space-14: 3.5rem;
-    --space-16: 4rem;
-    --space-20: 5rem;
-    --space-24: 6rem;
-
-    /* ---------- Radius ---------- */
-    --radius-xs: 0.25rem;
-    --radius-sm: 0.375rem;
-    --radius-md: 0.625rem;
-    --radius-lg: 0.875rem;
-    --radius-xl: 1.125rem;
-    --radius-2xl: 1.5rem;
-    --radius-pill: 999px;
-
-    /* ---------- Shadows (subtle, used sparingly) ---------- */
-    --shadow-xs: 0 1px 2px rgba(13, 27, 46, 0.04);
-    --shadow-sm: 0 1px 2px rgba(13, 27, 46, 0.05), 0 1px 1px rgba(13, 27, 46, 0.03);
-    --shadow-md: 0 6px 18px rgba(13, 27, 46, 0.06), 0 2px 6px rgba(13, 27, 46, 0.04);
-    --shadow-lg: 0 18px 38px rgba(13, 27, 46, 0.10), 0 6px 14px rgba(13, 27, 46, 0.05);
-    --shadow-xl: 0 28px 60px rgba(13, 27, 46, 0.16), 0 10px 20px rgba(13, 27, 46, 0.06);
-    --shadow-inset: inset 0 0 0 1px rgba(13, 27, 46, 0.04);
-    --shadow-focus: 0 0 0 3px rgba(31, 77, 255, 0.28);
-    --shadow-focus-soft: 0 0 0 3px rgba(31, 77, 255, 0.14);
-
-    /* ---------- Motion ---------- */
-    --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
-    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-    --dur-fast: 120ms;
-    --dur-normal: 200ms;
-    --dur-slow: 320ms;
-
-    /* ---------- Layout ---------- */
-    --header-height: 72px;
-    --content-max: 1320px;
-    --content-narrow: 920px;
-    --content-form: 880px;
-    --content-checkout: 1120px;
-    --content-ticket: 760px;
-    --content-qr: 720px;
-    --content-auth: 480px;
-
-    /* ---------- Z ---------- */
-    --z-navbar: 60;
-    --z-dropdown: 70;
-    --z-overlay: 90;
-    --z-modal: 100;
-    --z-toast: 110;
-
-    /* ---------- Aliases (kept for compatibility) ---------- */
-    --color-primary-50: var(--brand-primary-50);
-    --color-primary-100: var(--brand-primary-100);
-    --color-primary-200: #b9c5ff;
-    --color-primary-300: #8fa3ff;
-    --color-primary-400: #5577ff;
-    --color-primary-500: var(--brand-primary);
-    --color-primary-600: var(--brand-primary-600);
-    --color-primary-700: var(--brand-primary-700);
-    --color-primary-800: #10278a;
-    --color-primary-900: #0a1a5e;
-
-    --color-success-50: var(--success-soft);
-    --color-success-100: #c5e8d4;
-    --color-success-500: var(--success);
-    --color-success-600: var(--success-ink);
-    --color-success-700: #0e4a32;
-
-    --color-warning-50: var(--warning-soft);
-    --color-warning-100: #f4ddb2;
-    --color-warning-300: #f0c878;
-    --color-warning-500: var(--warning);
-    --color-warning-600: var(--warning-ink);
-    --color-warning-700: #5d3508;
-
-    --color-danger-50: var(--danger-soft);
-    --color-danger-100: #f1c4ca;
-    --color-danger-500: var(--danger);
-    --color-danger-600: var(--danger-ink);
-    --color-danger-700: #56151d;
-
-    --color-info-50: var(--info-soft);
-    --color-info-100: #c1d4ee;
-    --color-info-500: var(--info);
-    --color-info-600: var(--info-ink);
+    --color-info-50: #ecfeff;
+    --color-info-100: #cffafe;
+    --color-info-500: #06b6d4;
+    --color-info-600: #0891b2;
 
     --color-white: #ffffff;
     --color-neutral-0: #ffffff;
-    --color-neutral-50: #f3f1ea;
-    --color-neutral-100: #e9e5d9;
-    --color-neutral-200: #ddd8c7;
-    --color-neutral-300: #c9c3b3;
-    --color-neutral-400: #a39e8e;
-    --color-neutral-500: #7a7666;
-    --color-neutral-600: #5d5a4e;
-    --color-neutral-700: #3d3b34;
-    --color-neutral-800: #23221d;
-    --color-neutral-900: var(--brand-ink);
+    --color-neutral-50: #f8fafc;
+    --color-neutral-100: #f1f5f9;
+    --color-neutral-200: #e2e8f0;
+    --color-neutral-300: #cbd5e1;
+    --color-neutral-400: #94a3b8;
+    --color-neutral-500: #64748b;
+    --color-neutral-600: #475569;
+    --color-neutral-700: #334155;
+    --color-neutral-800: #1e293b;
+    --color-neutral-900: #0f172a;
 
-    --border-color: var(--border-default);
-    --border-color-strong: var(--border-strong);
-    --surface-page: var(--surface-canvas);
-    --text-primary: var(--text-strong);
-    --text-secondary: var(--text-body);
-    --text-muted: var(--text-muted);
+    --font-family-base: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular,
+        Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-    --radius-full: var(--radius-pill);
-    --shadow-focus: 0 0 0 3px rgba(31, 77, 255, 0.22);
-    --transition-fast: var(--dur-fast) var(--ease-out);
-    --transition-normal: var(--dur-normal) var(--ease-out);
-    --transition-slow: var(--dur-slow) var(--ease-out);
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.8125rem;
+    --font-size-base: 0.9375rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.0625rem;
+    --font-size-xl: 1.1875rem;
+    --font-size-2xl: 1.375rem;
+    --font-size-3xl: 1.625rem;
+    --font-size-4xl: 2rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.65;
+
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-7: 1.75rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+    --radius-full: 9999px;
+
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.10);
+    --shadow-xl: 0 20px 50px rgba(15, 23, 42, 0.12);
+    --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.25);
+
+    --transition-fast: 120ms ease;
+    --transition-normal: 200ms ease;
+    --transition-slow: 320ms ease;
+
+    --header-height: 68px;
+    --content-max-width: 1320px;
+    --content-narrow-width: 960px;
+    --content-form-width: 720px;
+
+    --border-color: var(--color-neutral-200);
+    --border-color-strong: var(--color-neutral-300);
+    --surface-page: var(--color-neutral-50);
+    --surface-card: var(--color-white);
+    --text-primary: var(--color-neutral-900);
+    --text-secondary: var(--color-neutral-600);
+    --text-muted: var(--color-neutral-500);
+
+    --z-navbar: 1020;
+    --z-dropdown: 1030;
+    --z-modal: 1050;
+    --z-toast: 1080;
 }

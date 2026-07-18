@@ -1,45 +1,27 @@
 ﻿@{
-    ViewData["Title"] = "Welcome";
+    ViewData["Title"] = "Home";
     Layout = "_Layout";
 }
 
-<section class="page-hero" style="grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);">
-    <div class="page-hero__body">
-        <span class="page-hero__eyebrow"><span class="accent-line"></span> Event Management System</span>
-        <h1 class="page-hero__title">
-            Run events.<br />
-            Sell tickets.<br />
-            <em>Keep your cool.</em>
-        </h1>
-        <p class="page-hero__lead">
-            EMS is a calm, modern toolkit for hosts and attendees — built around great content, clear pricing, and zero drama at check-in.
+<section class="auth-shell">
+    <div class="auth-card" style="text-align: center;">
+        <div class="auth-card__brand" style="justify-content: center;">
+            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
+            <span class="text-strong">Event Management System</span>
+        </div>
+        <h1 class="auth-card__title">Welcome to EMS</h1>
+        <p class="auth-card__subtitle">
+            Discover, host and manage events with a modern toolkit.
         </p>
-        <div class="row" style="margin-top: var(--space-5);">
-            <a class="btn btn--primary btn--lg" href="@Url.Action("List", "Event")">
+        <div class="row" style="justify-content: center; gap: var(--spacing-3);">
+            <a class="btn btn--primary" href="@Url.Action("List", "Event")">
+                <i class="bi bi-calendar-event" aria-hidden="true"></i>
                 <span>Browse events</span>
-                <i class="bi bi-arrow-right" aria-hidden="true"></i>
             </a>
-            @if (!User.Identity?.IsAuthenticated == true)
-            {
-                <a class="btn btn--outline-secondary btn--lg" href="@Url.Action("Login", "Account")">
-                    <span>Sign in</span>
-                </a>
-            }
+            <a class="btn btn--outline-secondary" href="@Url.Action("Login", "Account")">
+                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                <span>Sign in</span>
+            </a>
         </div>
     </div>
-    <aside class="page-hero__visual" aria-hidden="true">
-        <div class="page-hero__visual-inner">
-            <span class="page-hero__visual-tag">EMS · Welcome</span>
-            <div class="page-hero__visual-stats">
-                <div>
-                    <div class="page-hero__visual-stat-label">For attendees</div>
-                    <div class="page-hero__visual-stat-value">Discover<span class="page-hero__visual-stat-suffix">& book</span></div>
-                </div>
-                <div>
-                    <div class="page-hero__visual-stat-label">For hosts</div>
-                    <div class="page-hero__visual-stat-value">Manage<span class="page-hero__visual-stat-suffix">& grow</span></div>
-                </div>
-            </div>
-        </div>
-    </aside>
 </section>

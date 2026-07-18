@@ -1,7 +1,3 @@
-/* =========================================================================
-   EMS Base — typography rhythm & reset
-   ========================================================================= */
-
 *,
 *::before,
 *::after {
@@ -11,99 +7,71 @@
 html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: var(--font-sans);
-    font-size: var(--text-base);
-    line-height: var(--leading-normal);
-    color: var(--text-strong);
-    background-color: var(--surface-canvas);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--text-primary);
+    background-color: var(--surface-page);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
-    font-weight: var(--weight-semibold);
-    line-height: var(--leading-snug);
-    color: var(--text-strong);
-    letter-spacing: var(--tracking-tight);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--text-primary);
 }
 
-h1 { font-size: var(--text-4xl); }
-h2 { font-size: var(--text-2xl); }
-h3 { font-size: var(--text-xl); }
-h4 { font-size: var(--text-lg); }
-h5 { font-size: var(--text-md); }
-h6 { font-size: var(--text-base); }
-
-.display {
-    font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    letter-spacing: var(--tracking-display);
-    line-height: var(--leading-tight);
-    font-size: var(--text-6xl);
-}
-
-.display-2 {
-    font-family: var(--font-display);
-    font-weight: var(--weight-regular);
-    letter-spacing: var(--tracking-display);
-    line-height: var(--leading-tight);
-    font-size: var(--text-5xl);
-}
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-md); }
 
 p {
-    margin: 0 0 var(--space-3) 0;
-    color: var(--text-body);
+    margin: 0 0 var(--spacing-3) 0;
+    color: var(--text-secondary);
 }
 
-p:last-child { margin-bottom: 0; }
-
 a {
-    color: var(--brand-ink);
+    color: var(--color-primary-600);
     text-decoration: none;
-    transition: color var(--dur-fast) var(--ease-out);
+    transition: color var(--transition-fast);
 }
 
 a:hover {
-    color: var(--brand-primary);
+    color: var(--color-primary-700);
 }
 
 a:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-focus);
-    border-radius: var(--radius-xs);
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
 }
 
 small,
-.text-xs {
-    font-size: var(--text-xs);
+.text-small {
+    font-size: var(--font-size-sm);
     color: var(--text-muted);
 }
 
 code,
 .mono {
-    font-family: var(--font-mono);
-    font-size: 0.875em;
-    color: var(--text-body);
-}
-
-.numeric {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
+    font-family: var(--font-family-mono);
+    font-size: 0.85em;
 }
 
 hr {
     border: 0;
-    border-top: 1px solid var(--border-subtle);
-    margin: var(--space-7) 0;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-6) 0;
 }
 
 img {
@@ -112,41 +80,34 @@ img {
     display: block;
 }
 
-::selection {
-    background: var(--brand-ink);
-    color: var(--text-on-dark);
+.text-muted {
+    color: var(--text-muted) !important;
 }
 
-.eyebrow {
-    display: inline-block;
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--brand-ink);
-    font-weight: var(--weight-semibold);
+.text-secondary {
+    color: var(--text-secondary) !important;
 }
 
-.eyebrow--accent {
-    color: var(--brand-accent-600);
+.text-strong {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
 }
 
-.eyebrow--muted {
-    color: var(--text-muted);
+.nowrap {
+    white-space: nowrap;
 }
 
-.muted {
-    color: var(--text-muted);
+.text-end {
+    text-align: right;
 }
 
-.body-text {
-    color: var(--text-body);
-    line-height: var(--leading-relaxed);
-    max-width: 68ch;
+.text-start {
+    text-align: left;
 }
 
-.text-end { text-align: right; }
-.text-start { text-align: left; }
-.text-center { text-align: center; }
+.text-center {
+    text-align: center;
+}
 
 .sr-only {
     position: absolute;
@@ -160,20 +121,6 @@ img {
     border: 0;
 }
 
-.divider {
-    height: 1px;
-    background: var(--border-subtle);
-    margin: var(--space-5) 0;
-    border: 0;
-}
-
-.divider-strong {
-    height: 1px;
-    background: var(--border-default);
-    margin: var(--space-6) 0;
-    border: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -183,13 +130,4 @@ img {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
     }
-}
-
-/* Bootstrap container overrides for warm canvas */
-.container,
-.container-fluid,
-.container-md,
-.container-lg {
-    padding-left: var(--space-6);
-    padding-right: var(--space-6);
 }

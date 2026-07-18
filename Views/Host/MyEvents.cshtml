@@ -3,53 +3,51 @@
     ViewData["Title"] = "My events";
     Layout = "_Layout";
 
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My events",
+        Subtitle = "Manage events you host, view ticket sales, and create vouchers.",
+        Eyebrow = "EMS • Host"
+    };
+
     var totalTickets = Model.Events.Sum(e => e.TicketSold);
     var totalRevenue = Model.Events.Sum(e => e.Revenue);
     var published = Model.Events.Count(e => string.Equals(e.Status, "Published", StringComparison.OrdinalIgnoreCase));
     var draft = Model.Events.Count(e => string.Equals(e.Status, "Draft", StringComparison.OrdinalIgnoreCase));
 }
 
-<header class="page-header">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Host control room</span>
-        <h1 class="page-header__title">Your events, at a glance.</h1>
-        <p class="page-header__subtitle">
-            Manage your events, track ticket sales and revenue, and create vouchers to promote them.
-        </p>
-    </div>
-    <div class="page-header__actions">
-        <a class="btn btn--primary btn--lg" asp-action="CreateEvent">
-            <i class="bi bi-plus-lg" aria-hidden="true"></i>
-            <span>Create event</span>
-        </a>
-    </div>
-</header>
+@await Html.PartialAsync("_PageHeader", header)
 
-<section class="host-overview" aria-label="Overview">
-    <div class="host-overview__revenue">
-        <span class="host-overview__eyebrow">Lifetime revenue</span>
-        <span class="host-overview__revenue-value numeric">@totalRevenue.ToString("N0")<span class="host-overview__currency">đ</span></span>
-        <span class="host-overview__hint">Across @Model.Events.Count event@(Model.Events.Count == 1 ? "" : "s")</span>
+<section class="host-summary-grid">
+    <div class="summary-card">
+        <span class="summary-card__label">Total events</span>
+        <span class="summary-card__value">@Model.Events.Count</span>
+        <span class="summary-card__hint">All time</span>
     </div>
-
-    <div class="host-overview__metrics">
-        <div class="host-overview__metric">
-            <span class="host-overview__metric-label">Tickets sold</span>
-            <span class="host-overview__metric-value numeric">@totalTickets</span>
-        </div>
-        <div class="host-overview__metric">
-            <span class="host-overview__metric-label">Published</span>
-            <span class="host-overview__metric-value numeric" style="color: var(--success);">@published</span>
-        </div>
-        <div class="host-overview__metric">
-            <span class="host-overview__metric-label">Draft</span>
-            <span class="host-overview__metric-value numeric" style="color: var(--warning);">@draft</span>
-        </div>
+    <div class="summary-card summary-card--success">
+        <span class="summary-card__label">Published</span>
+        <span class="summary-card__value">@published</span>
+        <span class="summary-card__hint">Visible to customers</span>
+    </div>
+    <div class="summary-card summary-card--amber">
+        <span class="summary-card__label">Draft</span>
+        <span class="summary-card__value">@draft</span>
+        <span class="summary-card__hint">Work in progress</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Tickets sold</span>
+        <span class="summary-card__value">@totalTickets</span>
+        <span class="summary-card__hint">Across all events</span>
+    </div>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Revenue</span>
+        <span class="summary-card__value">@totalRevenue.ToString("N0") đ</span>
+        <span class="summary-card__hint">Gross ticket sales</span>
     </div>
 </section>
 
 <form method="get" class="host-toolbar" data-host-filter>
-    <div class="form-field" style="margin: 0; min-width: 200px;">
+    <div class="form-field">
         <label class="form-label">Status</label>
         <select name="status" class="form-select" data-host-status>
             @foreach (var s in Model.Statuses)
@@ -58,7 +56,7 @@
             }
         </select>
     </div>
-    <div class="form-field" style="margin: 0; flex: 1; min-width: 240px;">
+    <div class="form-field">
         <label class="form-label">Search</label>
         <input type="search" name="search" value="@Model.Search" class="form-control" placeholder="Search by title" />
     </div>
@@ -68,10 +66,18 @@
     </button>
 </form>
 
+<div class="row row--between" style="margin-bottom: var(--spacing-4);">
+    <span class="text-muted">Showing @Model.Events.Count event@(Model.Events.Count == 1 ? "" : "s")</span>
+    <a class="btn btn--success" asp-action="CreateEvent">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i>
+        <span>Create new event</span>
+    </a>
+</div>
+
 @if (Model.Events.Any())
 {
     <div class="data-table-wrap">
-        <table class="data-table data-table--compact">
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>Event</th>
@@ -81,20 +87,19 @@
                     <th>Status</th>
                     <th class="numeric">Tickets sold</th>
                     <th class="numeric">Revenue</th>
-                    <th class="actions">&nbsp;</th>
+                    <th class="actions">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var e in Model.Events)
                 {
-                    var isDraft = string.Equals(e.Status, "Draft", StringComparison.OrdinalIgnoreCase);
-                    <tr class="@(isDraft ? "row-draft" : null)">
+                    <tr>
                         <td>
                             <div class="table-title">@e.Title</div>
                             <small class="text-muted">#@e.EventId</small>
                         </td>
-                        <td class="table-sub">@e.Category</td>
-                        <td class="table-sub">@e.Location</td>
+                        <td>@e.Category</td>
+                        <td>@e.Location</td>
                         <td class="text-secondary nowrap">@e.StartTime.ToString("dd MMM yyyy HH:mm")</td>
                         <td><partial name="_StatusBadge" model="e.Status" /></td>
                         <td class="numeric">@e.TicketSold</td>
@@ -102,19 +107,19 @@
                         <td class="actions">
                             <div class="action-dropdown" data-action-dropdown aria-expanded="false">
                                 <button type="button"
-                                        class="icon-btn"
+                                        class="btn btn--secondary btn--sm"
                                         data-action-dropdown-trigger
                                         aria-haspopup="true"
-                                        aria-expanded="false"
-                                        aria-label="Open actions menu for @e.Title">
-                                    <i class="bi bi-three-dots-vertical" aria-hidden="true"></i>
+                                        aria-expanded="false">
+                                    <i class="bi bi-three-dots" aria-hidden="true"></i>
+                                    <span>Actions</span>
                                 </button>
                                 <ul class="action-dropdown__menu" role="menu">
                                     <li>
                                         <a class="action-dropdown__item" role="menuitem"
                                            href="@Url.Action("Edit", "Event", new { id = e.EventId })">
                                             <i class="bi bi-pencil" aria-hidden="true"></i>
-                                            <span>Edit event</span>
+                                            <span>Edit</span>
                                         </a>
                                     </li>
                                     <li>
@@ -140,6 +145,11 @@
                                     </li>
                                 </ul>
                             </div>
+                            <a class="btn btn--outline-primary btn--sm"
+                               href="@Url.Action("Edit", "Event", new { id = e.EventId })">
+                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                                <span>Edit</span>
+                            </a>
                         </td>
                     </tr>
                 }

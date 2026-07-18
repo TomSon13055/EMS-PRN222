@@ -4,111 +4,77 @@
     Layout = "_Layout";
 }
 
-<div class="auth-shell">
-    <aside class="auth-shell__visual" aria-hidden="true">
-        <a class="auth-shell__brand" href="@Url.Action("List", "Event")">
-            <span class="brand-mark brand-mark--sm">E</span>
-            <span>EMS</span>
-        </a>
-
-        <div class="auth-shell__hero">
-            <span class="auth-shell__eyebrow">Welcome back</span>
-            <h1 class="auth-shell__title">
-                Tickets, hosts<br />
-                &amp; <em>good nights</em><br />
-                in one place.
-            </h1>
-            <p class="auth-shell__lead">
-                Sign in to discover events near you, save the ones you love,
-                and manage everything from a single, calm dashboard.
-            </p>
+<section class="auth-shell">
+    <div class="auth-card">
+        <div class="auth-card__brand">
+            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
+            <span class="text-strong">Event Management System</span>
         </div>
+        <h1 class="auth-card__title">Welcome back</h1>
+        <p class="auth-card__subtitle">Sign in to manage your events, tickets and wallet.</p>
 
-        <div class="auth-shell__stats">
-            <div>
-                <div class="auth-shell__stat-label">Live events</div>
-                <div class="auth-shell__stat-value">120+</div>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="auth-error" role="alert">
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                <span>Please check your email and password and try again.</span>
             </div>
-            <div>
-                <div class="auth-shell__stat-label">Hosts</div>
-                <div class="auth-shell__stat-value">35</div>
+        }
+
+        <form asp-action="Login" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="form-field">
+                <label asp-for="Email" class="form-label">
+                    <span>Email</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <div class="form-control-shell">
+                    <span class="form-control-shell__icon" aria-hidden="true">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+                    <input asp-for="Email" class="form-control"
+                           autocomplete="email" inputmode="email"
+                           placeholder="you@example.com" />
+                </div>
+                <span asp-validation-for="Email" class="field-validation-error"></span>
             </div>
+
+            <div class="form-field">
+                <label asp-for="Password" class="form-label">
+                    <span>Password</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <div class="form-control-shell">
+                    <span class="form-control-shell__icon" aria-hidden="true">
+                        <i class="bi bi-shield-lock"></i>
+                    </span>
+                    <input asp-for="Password" class="form-control"
+                           autocomplete="current-password"
+                           placeholder="Enter your password" />
+                    <button type="button"
+                            class="form-control-shell__action js-password-toggle"
+                            data-password-toggle="#Password"
+                            aria-pressed="false"
+                            aria-label="Show password">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block js-login-submit">
+                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                <span>Sign in</span>
+            </button>
+        </form>
+
+        <div class="auth-card__footer">
+            Don't have an account?
+            <a asp-action="Register">Create one</a>
         </div>
-    </aside>
-
-    <section class="auth-shell__form">
-        <div class="auth-shell__form-inner">
-            <header class="auth-shell__heading">
-                <span class="auth-shell__heading-eyebrow">Sign in</span>
-                <h2 class="auth-shell__heading-title">Welcome back</h2>
-                <p class="auth-shell__heading-subtitle">
-                    Enter your credentials to continue managing events, tickets, and your wallet.
-                </p>
-            </header>
-
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="auth-error" role="alert">
-                    <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-                    <span>Please check your email and password and try again.</span>
-                </div>
-            }
-
-            <form asp-action="Login" method="post" novalidate>
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-
-                <div class="form-field">
-                    <label asp-for="Email" class="form-label">
-                        <span>Email</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <div class="form-control-shell">
-                        <span class="form-control-shell__icon" aria-hidden="true">
-                            <i class="bi bi-envelope"></i>
-                        </span>
-                        <input asp-for="Email" class="form-control"
-                               autocomplete="email" inputmode="email"
-                               placeholder="you@example.com" />
-                    </div>
-                    <span asp-validation-for="Email" class="field-validation-error"></span>
-                </div>
-
-                <div class="form-field">
-                    <label asp-for="Password" class="form-label">
-                        <span>Password</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <div class="form-control-shell">
-                        <span class="form-control-shell__icon" aria-hidden="true">
-                            <i class="bi bi-shield-lock"></i>
-                        </span>
-                        <input asp-for="Password" class="form-control"
-                               autocomplete="current-password"
-                               placeholder="Enter your password" />
-                        <button type="button"
-                                class="form-control-shell__action js-password-toggle"
-                                data-password-toggle="#Password"
-                                aria-pressed="false"
-                                aria-label="Show password">
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <span asp-validation-for="Password" class="field-validation-error"></span>
-                </div>
-
-                <button type="submit" class="btn btn--primary btn--block btn--lg js-login-submit">
-                    <span>Sign in</span>
-                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                </button>
-            </form>
-
-            <div class="auth-shell__footer">
-                Don't have an account?
-                <a asp-action="Register">Create one</a>
-            </div>
-        </div>
-    </section>
-</div>
+    </div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

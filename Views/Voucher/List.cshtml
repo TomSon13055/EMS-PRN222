@@ -1,87 +1,78 @@
 @model List<EventManagement.ViewModels.VoucherListItemViewModel>
 @{
-    ViewData["Title"] = "Vouchers";
+    ViewData["Title"] = "My vouchers";
     Layout = "_Layout";
-    var total = Model.Count;
-    var active = Model.Count(v => v.IsActive && v.ValidFrom <= DateTime.Now && v.ValidTo >= DateTime.Now && v.UsedCount < v.UsageLimit);
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Vouchers",
+        Subtitle = "Create vouchers to reward your customers and boost ticket sales.",
+        Eyebrow = "EMS • Host",
+        ActionLabel = "Create voucher",
+        ActionUrl = Url.Action("Create", "Voucher"),
+        ActionIcon = "bi-plus-circle"
+    };
 }
 
-<header class="page-header">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Promotions</span>
-        <h1 class="page-header__title">Vouchers.</h1>
-        <p class="page-header__subtitle">Reward your customers and boost ticket sales with voucher codes.</p>
-    </div>
-    <div class="page-header__actions">
-        <a class="btn btn--primary btn--lg" asp-action="Create">
-            <i class="bi bi-plus-lg" aria-hidden="true"></i>
-            <span>Create voucher</span>
-        </a>
-    </div>
-</header>
-
-<section class="voucher-summary">
-    <div class="voucher-summary__total">
-        <span class="eyebrow eyebrow--muted">Total vouchers</span>
-        <span class="voucher-summary__total-value numeric">@total</span>
-        <span class="muted" style="font-size: var(--text-sm);">Across all your events</span>
-    </div>
-    <div class="voucher-summary__active">
-        <span class="eyebrow eyebrow--muted">Active right now</span>
-        <span class="voucher-summary__active-value numeric">@active</span>
-        <span class="muted" style="font-size: var(--text-sm);">Ready for customers to use</span>
-    </div>
-</section>
+@await Html.PartialAsync("_PageHeader", header)
 
 @if (Model.Any())
 {
-    <div class="voucher-list">
-        @foreach (var v in Model)
-        {
-            var pct = (decimal)v.UsageLimit > 0 ? Math.Min(100, Math.Round(((decimal)v.UsedCount / v.UsageLimit) * 100, 0)) : 0;
-            <article class="voucher-row">
-                <div class="voucher-row__left">
-                    <div class="voucher-row__discount">
-                        <span class="voucher-row__discount-value numeric">@v.DiscountPercentage.ToString("0.##")</span>
-                        <span class="voucher-row__discount-symbol">%</span>
-                        <span class="voucher-row__discount-label">off</span>
-                    </div>
-                </div>
-
-                <div class="voucher-row__middle">
-                    <div class="voucher-row__code-row">
-                        <code class="voucher-row__code">@v.VoucherCode</code>
-                        <button type="button" class="icon-btn"
-                                data-copy-button="#voucher-code-@v.VoucherId"
-                                aria-label="Copy code @v.VoucherCode" title="Copy code">
-                            <i class="bi bi-clipboard" aria-hidden="true"></i>
-                        </button>
-                        <span id="voucher-code-@v.VoucherId" class="sr-only">@v.VoucherCode</span>
-                    </div>
-                    <div class="voucher-row__meta">
-                        <span><i class="bi bi-calendar3" aria-hidden="true"></i> @v.ValidFrom.ToString("dd MMM yyyy") – @v.ValidTo.ToString("dd MMM yyyy")</span>
-                    </div>
-                    <div class="voucher-row__usage">
-                        <div class="voucher-row__usage-track" aria-label="@v.UsedCount of @v.UsageLimit used">
-                            <span class="voucher-row__usage-fill" style="width: @(pct)%"></span>
-                        </div>
-                        <span class="voucher-row__usage-label">@v.UsedCount / @v.UsageLimit used</span>
-                    </div>
-                </div>
-
-                <div class="voucher-row__right">
-                    <partial name="_VoucherStatusBadge" model="new EventManagement.ViewModels.VoucherStatusViewModel
-                    {
-                        Now = DateTime.Now,
-                        ValidFrom = v.ValidFrom,
-                        ValidTo = v.ValidTo,
-                        IsActive = v.IsActive,
-                        UsedCount = v.UsedCount,
-                        UsageLimit = v.UsageLimit
-                    }" />
-                </div>
-            </article>
-        }
+    <div class="data-table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th class="numeric">Discount</th>
+                    <th>Valid from</th>
+                    <th>Valid to</th>
+                    <th class="numeric">Usage</th>
+                    <th>Status</th>
+                    <th class="actions">Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="voucher-code-cell">
+                                <i class="bi bi-tag-fill" aria-hidden="true"></i>
+                                <span>@v.VoucherCode</span>
+                            </span>
+                        </td>
+                        <td class="numeric">
+                            <span class="voucher-discount">@v.DiscountPercentage.ToString("0.##")%</span>
+                        </td>
+                        <td class="text-secondary nowrap">@v.ValidFrom.ToString("dd MMM yyyy HH:mm")</td>
+                        <td class="text-secondary nowrap">@v.ValidTo.ToString("dd MMM yyyy HH:mm")</td>
+                        <td class="numeric">
+                            <div class="text-strong">@v.UsedCount / @v.UsageLimit</div>
+                            <small class="text-muted">used</small>
+                        </td>
+                        <td>
+                            <partial name="_VoucherStatusBadge" model="new EventManagement.ViewModels.VoucherStatusViewModel
+                            {
+                                Now = DateTime.Now,
+                                ValidFrom = v.ValidFrom,
+                                ValidTo = v.ValidTo,
+                                IsActive = v.IsActive,
+                                UsedCount = v.UsedCount,
+                                UsageLimit = v.UsageLimit
+                            }" />
+                        </td>
+                        <td class="actions">
+                            <button type="button" class="icon-btn"
+                                    data-copy-button="#voucher-code-@v.VoucherId"
+                                    aria-label="Copy code @v.VoucherCode">
+                                <i class="bi bi-clipboard" aria-hidden="true"></i>
+                            </button>
+                            <span id="voucher-code-@v.VoucherId" class="sr-only">@v.VoucherCode</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 }
 else

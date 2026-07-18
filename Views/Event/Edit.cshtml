@@ -1,41 +1,30 @@
 @model EventManagement.ViewModels.EditEventViewModel
 @{
-    ViewData["Title"] = $"Edit · {Model.Title}";
+    ViewData["Title"] = "Edit event";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Edit event",
+        Subtitle = "Update the details of your event. Changes are visible to customers immediately after saving.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
+            new() { Text = Model.Title }
+        }
+    };
 }
 
-<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
-    <a href="@Url.Action("MyEvents", "Host")">My events</a>
-    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    <span class="breadcrumb__current">Edit event</span>
-</nav>
-
-<header class="page-header page-header--compact" style="border-bottom: 0;">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Editing</span>
-        <h1 class="page-header__title">@Model.Title</h1>
-        <p class="page-header__subtitle">Update the details of your event. Changes will be visible to customers immediately after saving.</p>
-    </div>
-    <div class="page-header__actions">
-        <a class="btn btn--ghost" href="@Url.Action("MyEvents", "Host")">
-            <i class="bi bi-arrow-left" aria-hidden="true"></i>
-            <span>Back</span>
-        </a>
-        <a class="btn btn--secondary" href="@Url.Action("Details", "Event", new { id = Model.EventId })">
-            <i class="bi bi-eye" aria-hidden="true"></i>
-            <span>Preview public page</span>
-        </a>
-    </div>
-</header>
+@await Html.PartialAsync("_PageHeader", header)
 
 <form asp-action="Edit" method="post" novalidate>
     <input type="hidden" asp-for="EventId" />
     <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
     <section class="form-section">
-        <span class="form-section__step">01 · Event identity</span>
-        <h2 class="form-section__title">The basics</h2>
-        <p class="form-section__subtitle">A clear title and description help customers decide faster.</p>
+        <h2 class="form-section__title">Basic information</h2>
+        <p class="form-section__subtitle">Make sure the title and description are up to date.</p>
 
         <div class="form-field">
             <label asp-for="Title" class="form-label">
@@ -51,7 +40,7 @@
                 <span>Description</span>
                 <span class="form-label__required" aria-hidden="true">*</span>
             </label>
-            <textarea asp-for="Description" class="form-control form-control--textarea" rows="6"></textarea>
+            <textarea asp-for="Description" class="form-control form-control--textarea" rows="5"></textarea>
             <span asp-validation-for="Description" class="field-validation-error"></span>
         </div>
 
@@ -74,9 +63,8 @@
     </section>
 
     <section class="form-section">
-        <span class="form-section__step">02 · Schedule</span>
-        <h2 class="form-section__title">When &amp; where</h2>
-        <p class="form-section__subtitle">Pick the venue and the start/end times for the event.</p>
+        <h2 class="form-section__title">Date and location</h2>
+        <p class="form-section__subtitle">When and where will it happen?</p>
 
         <div class="form-field">
             <label asp-for="EventLocationId" class="form-label">
@@ -96,7 +84,7 @@
         </div>
 
         <div class="form-grid-2">
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="StartTime" class="form-label">
                     <span>Start time</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -105,7 +93,7 @@
                        value="@(Model.StartTime == default ? string.Empty : Model.StartTime.ToString("yyyy-MM-ddTHH:mm"))" />
                 <span asp-validation-for="StartTime" class="field-validation-error"></span>
             </div>
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="EndTime" class="form-label">
                     <span>End time</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -118,16 +106,11 @@
     </section>
 
     <section class="form-section">
-        <span class="form-section__step">03 · Visual</span>
-        <h2 class="form-section__title">Cover image</h2>
-        <p class="form-section__subtitle">A great cover image is the difference between scrolling past and grabbing a ticket.</p>
-
-        <div class="event-form-image">
-            <div class="form-field" style="margin: 0;">
-                <label asp-for="ImageUrl" class="form-label">Image URL</label>
-                <input asp-for="ImageUrl" class="form-control" data-image-preview-input="#imagePreview" />
-                <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
-            </div>
+        <h2 class="form-section__title">Media</h2>
+        <p class="form-section__subtitle">Replace the cover image if needed.</p>
+        <div class="form-field">
+            <label asp-for="ImageUrl" class="form-label">Image URL</label>
+            <input asp-for="ImageUrl" class="form-control" data-image-preview-input="#imagePreview" />
             <div class="image-preview" id="imagePreview">
                 @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
@@ -136,16 +119,16 @@
                 }
                 else
                 {
-                    <span class="image-preview__caption">Paste an image URL above to preview it here.</span>
+                    <span class="image-preview__caption">No image URL provided yet.</span>
                 }
             </div>
+            <span asp-validation-for="ImageUrl" class="field-validation-error"></span>
         </div>
     </section>
 
     <section class="form-section">
-        <span class="form-section__step">04 · Publishing</span>
-        <h2 class="form-section__title">Visibility</h2>
-        <div class="form-field" style="max-width: 320px;">
+        <h2 class="form-section__title">Publishing</h2>
+        <div class="form-field">
             <label asp-for="Status" class="form-label">Status</label>
             <select asp-for="Status" class="form-select">
                 @if (Model.Statuses != null)
@@ -156,7 +139,6 @@
                     }
                 }
             </select>
-            <span class="field-hint">Draft keeps the event hidden from customers.</span>
             <span asp-validation-for="Status" class="field-validation-error"></span>
         </div>
     </section>
@@ -164,25 +146,20 @@
     @if (Model.TicketTypes != null && Model.TicketTypes.Any())
     {
         <section class="form-section">
-            <span class="form-section__step">05 · Tickets</span>
             <h2 class="form-section__title">Existing ticket types</h2>
-            <p class="form-section__subtitle">These tickets are already on sale. Manage their details from the ticket types page.</p>
+            <p class="form-section__subtitle">These tickets are already on sale and cannot be deleted from here.</p>
             <div class="ticket-type-list">
                 @foreach (var t in Model.TicketTypes)
                 {
-                    <article class="ticket-type-row">
-                        <div>
-                            <h4 class="ticket-type-row__name">@t.TypeName</h4>
-                            <div class="ticket-type-row__meta">
-                                <span><strong>@t.Quantity</strong> tickets</span>
-                                <span class="muted">@t.SaleStart.ToString("dd MMM") – @t.SaleEnd.ToString("dd MMM")</span>
-                                <partial name="_StatusBadge" model="t.Status" />
-                            </div>
-                        </div>
-                        <div></div>
-                        <div class="ticket-type-row__price">
-                            @if (t.Price <= 0) { <span style="color: var(--success);">Free</span> }
-                            else { @t.Price.ToString("N0")<span style="font-size: 0.55em; margin-left: 2px;">đ</span> }
+                    <article class="ticket-type-card">
+                        <header>
+                            <h3 class="ticket-type-card__name">@t.TypeName</h3>
+                            <span class="status-badge @(t.Status == "Active" ? "status-badge--success" : "status-badge--neutral")">@t.Status</span>
+                        </header>
+                        <div class="ticket-type-card__price">@t.Price.ToString("N0") đ</div>
+                        <div class="ticket-type-card__meta">
+                            <span><strong>@t.Quantity</strong> tickets</span>
+                            <span class="text-muted">@t.SaleStart.ToString("dd MMM") - @t.SaleEnd.ToString("dd MMM")</span>
                         </div>
                     </article>
                 }
@@ -192,13 +169,14 @@
     else
     {
         <section class="form-section">
-            <span class="form-section__step">05 · Tickets</span>
             <h2 class="form-section__title">Ticket types</h2>
+            <p class="form-section__subtitle">You can add ticket types after saving the event.</p>
             @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
             {
                 Title = "No ticket types yet",
                 Description = "Save the event first, then add ticket types so customers can purchase tickets.",
                 Icon = "bi-ticket-perforated",
+                IconVariant = "neutral",
                 ActionLabel = "Add ticket type",
                 ActionUrl = Url.Action("Create", "TicketType", new { eventId = Model.EventId }),
                 ActionIcon = "bi-plus-circle"
@@ -208,6 +186,7 @@
 
     <div class="form-actions">
         <a class="btn btn--outline-secondary" asp-action="List" asp-controller="Event">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
             <span>Cancel</span>
         </a>
         <button type="submit" class="btn btn--primary btn--lg">
@@ -219,5 +198,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script type="module" src="~/js/pages/event-form.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

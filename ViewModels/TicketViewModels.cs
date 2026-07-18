@@ -28,7 +28,6 @@ public class BuyTicketViewModel
     public string? VoucherMessage { get; set; }
     public bool VoucherApplied { get; set; }
     public int VoucherDiscountPercent { get; set; }
-    public decimal? WalletBalance { get; set; }
     public List<SelectListItem> TicketTypes { get; set; } = new();
 }
 

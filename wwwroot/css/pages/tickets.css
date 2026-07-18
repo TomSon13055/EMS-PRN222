@@ -1,321 +1,119 @@
-/* =========================================================================
-   EMS Ticket QR — designed like a real ticket with perforation
-   ========================================================================= */
-
-.ticket-art {
+.tickets-summary-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
-    background: var(--surface-card);
-    border-radius: var(--radius-2xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-subtle);
-    margin-bottom: var(--space-7);
-    max-width: var(--content-qr);
-    margin-left: auto;
-    margin-right: auto;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-5);
+}
+
+.tickets-toolbar {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr;
+    gap: var(--spacing-4);
+    align-items: end;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
 }
 
 @media (max-width: 720px) {
-    .ticket-art {
+    .tickets-toolbar {
         grid-template-columns: 1fr;
     }
 }
 
-/* ---------- Stub (left side, brand ink) ---------- */
-.ticket-art__stub {
-    background: var(--brand-ink);
-    color: var(--text-on-dark);
-    padding: var(--space-7) var(--space-7);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-7);
-    position: relative;
-    isolation: isolate;
+.ticket-card {
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    box-shadow: var(--shadow-md);
+    max-width: 760px;
+    margin: 0 auto;
 }
 
-.ticket-art__stub::before {
-    content: "";
-    position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    background: radial-gradient(circle at center, rgba(242, 154, 110, 0.18) 0, transparent 60%);
-    z-index: -1;
-}
-
-.ticket-art__stub-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
-
-.ticket-art__brand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-weight: var(--weight-semibold);
-    color: var(--text-on-dark);
-}
-
-.ticket-art__brand .brand-mark {
-    background: rgba(255, 255, 255, 0.14);
-    color: var(--text-on-dark);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.ticket-art__stub-label {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--text-on-dark-muted);
-    padding: 0.25rem 0.625rem;
-    border: 1px solid var(--border-on-dark);
-    border-radius: var(--radius-pill);
-}
-
-.ticket-art__stub-event {
+.ticket-card__qr {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
+    color: var(--color-white);
+    padding: var(--spacing-6);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--spacing-3);
 }
 
-.ticket-art__event-title {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: var(--weight-regular);
-    letter-spacing: var(--tracking-tight);
-    color: var(--text-on-dark);
-    line-height: 1.05;
+.ticket-card__qr svg,
+.ticket-card__qr img {
+    width: 140px;
+    height: 140px;
+    background-color: var(--color-white);
+    padding: var(--spacing-2);
+    border-radius: var(--radius-md);
+}
+
+.ticket-card__body {
+    padding: var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.ticket-card__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
     margin: 0;
 }
 
-.ticket-art__stub-meta {
+.ticket-card__meta {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-5);
-    padding: var(--space-5) 0;
-    border-top: 1px solid var(--border-on-dark);
-    border-bottom: 1px solid var(--border-on-dark);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3);
 }
 
-.ticket-art__stub-meta > div {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    min-width: 0;
-}
-
-.ticket-art__stub-meta-label {
-    font-size: 0.6875rem;
+.ticket-card__meta dt {
+    font-size: var(--font-size-xs);
     text-transform: uppercase;
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--text-on-dark-muted);
-    font-weight: var(--weight-semibold);
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 0;
 }
 
-.ticket-art__stub-meta-value {
-    font-size: var(--text-md);
-    font-weight: var(--weight-semibold);
-    color: var(--text-on-dark);
-    font-variant-numeric: tabular-nums;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.ticket-card__meta dd {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
 }
 
-.ticket-art__stub-meta-value.mono {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-}
-
-.ticket-art__stub-meta-sub {
-    font-size: var(--text-xs);
-    color: var(--text-on-dark-muted);
-}
-
-.ticket-art__stub-foot {
+.ticket-card__actions {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
-
-.ticket-art__stub-foot .serial {
-    background: rgba(247, 246, 242, 0.12);
-    color: var(--text-on-dark);
-    border: 1px solid var(--border-on-dark);
-}
-
-/* ---------- Perforation divider ---------- */
-.ticket-art__perforation {
-    position: relative;
-    background: var(--surface-card);
-}
-
-.ticket-art__perforation::before,
-.ticket-art__perforation::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 16px;
-    background:
-        radial-gradient(circle at 8px 8px, var(--surface-canvas) 4px, transparent 4.5px);
-    background-size: 16px 16px;
-    z-index: 1;
-}
-
-.ticket-art__perforation::before {
-    top: -8px;
-}
-
-.ticket-art__perforation::after {
-    bottom: -8px;
-    transform: scaleY(-1);
-}
-
-.ticket-art__perforation::after-content {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-left: 1px dashed var(--border-strong);
-    border-right: 1px dashed var(--border-strong);
+    gap: var(--spacing-3);
+    margin-top: auto;
 }
 
 @media (max-width: 720px) {
-    .ticket-art__perforation {
-        height: 24px;
+    .ticket-card {
+        grid-template-columns: 1fr;
     }
-    .ticket-art__perforation::before,
-    .ticket-art__perforation::after {
-        left: -8px;
-        right: -8px;
-        width: auto;
-        height: 16px;
-    }
-    .ticket-art__perforation::before {
-        background:
-            radial-gradient(circle at 8px 8px, var(--surface-canvas) 4px, transparent 4.5px);
-        background-size: 16px 16px;
-        top: 0;
-    }
-    .ticket-art__perforation::after {
-        background:
-            radial-gradient(circle at 8px 8px, var(--surface-canvas) 4px, transparent 4.5px);
-        background-size: 16px 16px;
-        top: auto;
-        bottom: 0;
-        transform: none;
-    }
-}
-
-/* ---------- QR side ---------- */
-.ticket-art__qr {
-    background: var(--surface-card);
-    color: var(--text-strong);
-    padding: var(--space-7);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: var(--space-3);
-}
-
-.ticket-art__qr-eyebrow {
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--brand-accent-600);
-    font-weight: var(--weight-semibold);
-}
-
-.ticket-art__qr-frame {
-    width: 168px;
-    height: 168px;
-    border-radius: var(--radius-lg);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-1);
-}
-
-.ticket-art__qr-placeholder {
-    font-size: 4.5rem;
-    color: var(--brand-ink);
-    opacity: 0.6;
-}
-
-.ticket-art__qr-placeholder-label {
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-eyebrow);
-    color: var(--text-muted);
-    font-weight: var(--weight-semibold);
-}
-
-.ticket-art__qr-payload {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    color: var(--text-muted);
-    background: var(--surface-canvas);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
-    max-width: 200px;
-    word-break: break-all;
-}
-
-.ticket-art__qr-hint {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-    line-height: 1.4;
-    max-width: 22ch;
-}
-
-.ticket-actions {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
-}
-
-.ticket-note {
-    margin-top: var(--space-6);
-    text-align: center;
-    max-width: 60ch;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: var(--text-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
 }
 
 @media print {
     .app-header,
     .app-footer,
-    .ticket-actions,
-    .ticket-note,
-    .breadcrumb,
-    .nav-link-app {
+    .ticket-card__actions {
         display: none !important;
     }
-    .app-shell, .app-main {
-        padding: 0 !important;
-        background: #fff !important;
-    }
-    .ticket-art {
+    .ticket-card {
         box-shadow: none;
-        margin: 0 auto;
-        page-break-inside: avoid;
+        border: 1px solid #000;
+    }
+    body {
+        background-color: #fff;
     }
 }

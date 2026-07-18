@@ -2,156 +2,124 @@
 @{
     ViewData["Title"] = "Create voucher";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Create voucher",
+        Subtitle = "Issue a discount code that customers can apply when buying tickets.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "Vouchers", Url = Url.Action("List", "Voucher") },
+            new() { Text = "Create voucher" }
+        }
+    };
 }
 
-<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
-    <a href="@Url.Action("List", "Voucher")">Vouchers</a>
-    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    <span class="breadcrumb__current">Create voucher</span>
-</nav>
+@await Html.PartialAsync("_PageHeader", header)
 
-<header class="page-header page-header--compact" style="border-bottom: 0;">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">New voucher</span>
-        <h1 class="page-header__title">Create a voucher.</h1>
-        <p class="page-header__subtitle">Issue a discount code that customers can apply at checkout. Preview updates as you type.</p>
-    </div>
-</header>
+<form asp-action="Create" method="post" novalidate style="max-width: var(--content-form-width);">
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
-<div class="voucher-create-grid">
-    <form asp-action="Create" method="post" novalidate>
-        <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+    <section class="form-section">
+        <h2 class="form-section__title">Voucher code</h2>
+        <p class="form-section__subtitle">A short, memorable code that customers will enter at checkout.</p>
 
-        <section class="form-section">
-            <span class="form-section__step">01 · Code</span>
-            <h2 class="form-section__title">Voucher code</h2>
-            <p class="form-section__subtitle">A short, memorable code that customers will enter at checkout.</p>
+        <div class="form-field">
+            <label asp-for="VoucherCode" class="form-label">
+                <span>Voucher code</span>
+                <span class="form-label__required" aria-hidden="true">*</span>
+            </label>
+            <div class="row" style="gap: var(--spacing-2);">
+                <input asp-for="VoucherCode" class="form-control"
+                       placeholder="e.g. EMS-SPRING" style="flex: 1;" />
+                <button type="button" class="btn btn--outline-secondary"
+                        data-generate-code-target="#VoucherCode">
+                    <i class="bi bi-magic" aria-hidden="true"></i>
+                    <span>Generate</span>
+                </button>
+            </div>
+            <span class="field-hint">Codes are case-insensitive and must be unique.</span>
+            <span asp-validation-for="VoucherCode" class="field-validation-error"></span>
+        </div>
+    </section>
 
+    <section class="form-section">
+        <h2 class="form-section__title">Discount</h2>
+        <p class="form-section__subtitle">Set the percentage discount and how many times it can be used.</p>
+
+        <div class="form-grid-2">
             <div class="form-field">
-                <label asp-for="VoucherCode" class="form-label">
-                    <span>Voucher code</span>
+                <label asp-for="DiscountPercentage" class="form-label">
+                    <span>Discount percentage</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
                 </label>
-                <div class="row" style="gap: var(--space-2);">
-                    <input asp-for="VoucherCode" class="form-control mono"
-                           placeholder="EMS-SPRING"
-                           data-voucher-code-input
-                           style="flex: 1; text-transform: uppercase;" />
-                    <button type="button" class="btn btn--outline-secondary"
-                            data-generate-code-target="#VoucherCode"
-                            data-generate-code-input="#VoucherCode">
-                        <i class="bi bi-magic" aria-hidden="true"></i>
-                        <span>Generate</span>
-                    </button>
-                </div>
-                <span class="field-hint">Codes are case-insensitive and must be unique.</span>
-                <span asp-validation-for="VoucherCode" class="field-validation-error"></span>
+                <input asp-for="DiscountPercentage" class="form-control" type="number"
+                       step="0.01" min="0.01" max="100" placeholder="10" />
+                <span class="field-hint">Between 0 and 100.</span>
+                <span asp-validation-for="DiscountPercentage" class="field-validation-error"></span>
             </div>
-        </section>
-
-        <section class="form-section">
-            <span class="form-section__step">02 · Discount</span>
-            <h2 class="form-section__title">Value &amp; usage</h2>
-            <p class="form-section__subtitle">Set the percentage and how many times it can be redeemed.</p>
-
-            <div class="form-grid-2">
-                <div class="form-field" style="margin: 0;">
-                    <label asp-for="DiscountPercentage" class="form-label">
-                        <span>Discount percentage</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="DiscountPercentage" class="form-control numeric" type="number"
-                           step="0.01" min="0.01" max="100" placeholder="10"
-                           data-voucher-discount-input />
-                    <span class="field-hint">Between 0 and 100.</span>
-                    <span asp-validation-for="DiscountPercentage" class="field-validation-error"></span>
-                </div>
-                <div class="form-field" style="margin: 0;">
-                    <label asp-for="UsageLimit" class="form-label">
-                        <span>Usage limit</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="UsageLimit" class="form-control numeric" type="number" min="1" placeholder="100" />
-                    <span class="field-hint">Total redemptions allowed.</span>
-                    <span asp-validation-for="UsageLimit" class="field-validation-error"></span>
-                </div>
-            </div>
-        </section>
-
-        <section class="form-section">
-            <span class="form-section__step">03 · Validity</span>
-            <h2 class="form-section__title">Active window</h2>
-            <p class="form-section__subtitle">When customers can apply this voucher.</p>
-
-            <div class="form-grid-2">
-                <div class="form-field" style="margin: 0;">
-                    <label asp-for="ValidFrom" class="form-label">
-                        <span>Valid from</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="ValidFrom" type="datetime-local" class="form-control"
-                           value="@(Model.ValidFrom == default ? string.Empty : Model.ValidFrom.ToString("yyyy-MM-ddTHH:mm"))" />
-                    <span asp-validation-for="ValidFrom" class="field-validation-error"></span>
-                </div>
-                <div class="form-field" style="margin: 0;">
-                    <label asp-for="ValidTo" class="form-label">
-                        <span>Valid to</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="ValidTo" type="datetime-local" class="form-control"
-                           value="@(Model.ValidTo == default ? string.Empty : Model.ValidTo.ToString("yyyy-MM-ddTHH:mm"))" />
-                    <span asp-validation-for="ValidTo" class="field-validation-error"></span>
-                </div>
-            </div>
-        </section>
-
-        <section class="form-section">
-            <span class="form-section__step">04 · Status</span>
-            <h2 class="form-section__title">Activation</h2>
-            <div class="form-check">
-                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
-                <label asp-for="IsActive" class="form-check-label">
-                    Activate voucher immediately
+            <div class="form-field">
+                <label asp-for="UsageLimit" class="form-label">
+                    <span>Usage limit</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
                 </label>
-            </div>
-            <span class="field-hint">Inactive vouchers can be activated later.</span>
-        </section>
-
-        <div class="form-actions">
-            <a class="btn btn--outline-secondary" asp-action="List">
-                <span>Cancel</span>
-            </a>
-            <button type="submit" class="btn btn--primary btn--lg">
-                <i class="bi bi-check2-circle" aria-hidden="true"></i>
-                <span>Create voucher</span>
-            </button>
-        </div>
-    </form>
-
-    <aside class="voucher-preview" aria-label="Voucher preview">
-        <span class="eyebrow eyebrow--muted">Preview</span>
-        <h3 class="voucher-preview__title">How it will look</h3>
-
-        <div class="voucher-preview__card">
-            <div class="voucher-preview__discount">
-                <span class="voucher-preview__discount-value numeric" data-preview-discount>@(Model.DiscountPercentage > 0 ? Model.DiscountPercentage.ToString("0.##") : "10")</span>
-                <span class="voucher-preview__discount-symbol">%</span>
-                <span class="voucher-preview__discount-label">off</span>
-            </div>
-            <div class="voucher-preview__body">
-                <code class="voucher-preview__code" data-preview-code>@(string.IsNullOrWhiteSpace(Model.VoucherCode) ? "EMS-SPRING" : Model.VoucherCode)</code>
-                <span class="voucher-preview__meta">Limited to <strong data-preview-limit>@(Model.UsageLimit > 0 ? Model.UsageLimit.ToString() : "100")</strong> uses</span>
-                <span class="status-badge status-badge--accent">Active preview</span>
+                <input asp-for="UsageLimit" class="form-control" type="number" min="1" placeholder="100" />
+                <span class="field-hint">How many times this voucher can be redeemed.</span>
+                <span asp-validation-for="UsageLimit" class="field-validation-error"></span>
             </div>
         </div>
-        <p class="voucher-preview__note muted">
-            <i class="bi bi-info-circle" aria-hidden="true"></i>
-            Preview only — final appearance depends on the value at the time of saving.
-        </p>
-    </aside>
-</div>
+    </section>
+
+    <section class="form-section">
+        <h2 class="form-section__title">Validity</h2>
+        <p class="form-section__subtitle">When the voucher is active.</p>
+
+        <div class="form-grid-2">
+            <div class="form-field">
+                <label asp-for="ValidFrom" class="form-label">
+                    <span>Valid from</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="ValidFrom" type="datetime-local" class="form-control"
+                       value="@(Model.ValidFrom == default ? string.Empty : Model.ValidFrom.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="ValidFrom" class="field-validation-error"></span>
+            </div>
+            <div class="form-field">
+                <label asp-for="ValidTo" class="form-label">
+                    <span>Valid to</span>
+                    <span class="form-label__required" aria-hidden="true">*</span>
+                </label>
+                <input asp-for="ValidTo" type="datetime-local" class="form-control"
+                       value="@(Model.ValidTo == default ? string.Empty : Model.ValidTo.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="ValidTo" class="field-validation-error"></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="form-section">
+        <div class="form-check">
+            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+            <label asp-for="IsActive" class="form-check-label">
+                Activate voucher immediately
+            </label>
+        </div>
+        <span class="field-hint">Inactive vouchers can be activated later by editing them.</span>
+    </section>
+
+    <div class="form-actions">
+        <a class="btn btn--outline-secondary" asp-action="List">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            <span>Cancel</span>
+        </a>
+        <button type="submit" class="btn btn--primary btn--lg">
+            <i class="bi bi-check2-circle" aria-hidden="true"></i>
+            <span>Create voucher</span>
+        </button>
+    </div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script type="module" src="~/js/pages/voucher-form.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>
 }

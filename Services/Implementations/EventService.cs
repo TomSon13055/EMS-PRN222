@@ -47,7 +47,6 @@ public class EventService : IEventService
         var vm = new EventListPageViewModel
         {
             Filter = filter,
-            TotalCount = list.Count,
             Categories = (await _events.GetCategoriesAsync())
                 .Select((c, i) => new SelectListItem { Value = c.EventCategoryId.ToString(), Text = c.CategoryName }).ToList(),
             Locations = (await _events.GetLocationsAsync())

@@ -2,38 +2,37 @@
 @{
     ViewData["Title"] = "My tickets";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "My tickets",
+        Subtitle = "All your purchased tickets. Show the QR code at the door for check-in.",
+        Eyebrow = "EMS • Customer"
+    };
 }
 
-<header class="page-header page-header--compact">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Your digital wallet</span>
-        <h1 class="page-header__title">My tickets.</h1>
-        <p class="page-header__subtitle">
-            All your purchased tickets in one place. Show the QR code at the door for check-in.
-        </p>
-    </div>
-</header>
+@await Html.PartialAsync("_PageHeader", header)
 
-<section class="metric-strip" aria-label="Ticket overview">
-    <div class="metric-strip__item">
-        <span class="metric-strip__label">Total</span>
-        <span class="metric-strip__value">@Model.TotalTickets</span>
-        <span class="muted" style="font-size: var(--text-xs);">All tickets owned</span>
+<section class="tickets-summary-grid">
+    <div class="summary-card">
+        <span class="summary-card__label">Total</span>
+        <span class="summary-card__value" id="span_totalTickets">@Model.TotalTickets</span>
+        <span class="summary-card__hint">Tickets owned</span>
     </div>
-    <div class="metric-strip__item metric-strip__item--accent">
-        <span class="metric-strip__label">Assigned</span>
-        <span class="metric-strip__value">@Model.AssignedTickets</span>
-        <span class="muted" style="font-size: var(--text-xs);">Ready to use</span>
+    <div class="summary-card summary-card--primary">
+        <span class="summary-card__label">Assigned</span>
+        <span class="summary-card__value" id="span_assignedTickets">@Model.AssignedTickets</span>
+        <span class="summary-card__hint">Ready to use</span>
     </div>
-    <div class="metric-strip__item">
-        <span class="metric-strip__label">Used</span>
-        <span class="metric-strip__value">@Model.UsedTickets</span>
-        <span class="muted" style="font-size: var(--text-xs);">Checked in</span>
+    <div class="summary-card summary-card--success">
+        <span class="summary-card__label">Used</span>
+        <span class="summary-card__value" id="span_usedTickets">@Model.UsedTickets</span>
+        <span class="summary-card__hint">Checked in</span>
     </div>
-    <div class="metric-strip__item">
-        <span class="metric-strip__label">Refunded</span>
-        <span class="metric-strip__value">@Model.RefundedTickets</span>
-        <span class="muted" style="font-size: var(--text-xs);">Returned</span>
+    <div class="summary-card summary-card--amber">
+        <span class="summary-card__label">Refunded</span>
+        <span class="summary-card__value" id="span_refundedTickets">@Model.RefundedTickets</span>
+        <span class="summary-card__hint">Returned</span>
     </div>
 </section>
 
@@ -47,7 +46,7 @@
             }
         </select>
     </div>
-    <div class="form-field" style="margin: 0; flex: 1; min-width: 240px;">
+    <div class="form-field" style="margin: 0;">
         <label class="form-label">Search</label>
         <input type="search" name="search" value="@Model.Search"
                class="form-control" placeholder="Search by event or serial number" />
@@ -61,10 +60,10 @@
 @if (Model.Tickets.Any())
 {
     <div class="data-table-wrap">
-        <table class="data-table data-table--compact">
+        <table class="data-table">
             <thead>
                 <tr>
-                    <th style="width: 60px;">&nbsp;</th>
+                    <th>Ticket</th>
                     <th>Event</th>
                     <th>Ticket type</th>
                     <th class="numeric">Price</th>
@@ -78,15 +77,11 @@
                 {
                     <tr>
                         <td>
-                            <div class="row-event__media" aria-hidden="true">
-                                <i class="bi bi-ticket-perforated"></i>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="table-title">@t.EventTitle</div>
+                            <div class="table-title">#@t.TicketId</div>
                             <code class="serial" title="@t.SerialNumber">@t.SerialNumber</code>
                         </td>
-                        <td class="table-sub">@t.TicketTypeName</td>
+                        <td class="table-title">@t.EventTitle</td>
+                        <td>@t.TicketTypeName</td>
                         <td class="numeric">@t.Price.ToString("N0") đ</td>
                         <td><partial name="_StatusBadge" model="t.Status" /></td>
                         <td class="text-secondary nowrap">@t.IssuedAt.ToString("dd MMM yyyy HH:mm")</td>

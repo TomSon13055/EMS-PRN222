@@ -1,76 +1,77 @@
 @model EventManagement.ViewModels.TicketQrViewModel
 @{
-    ViewData["Title"] = $"Ticket · {Model.EventTitle}";
+    ViewData["Title"] = "Ticket QR";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Your ticket",
+        Subtitle = "Show this QR code at the check-in counter to be admitted to the event.",
+        Eyebrow = "EMS • Check-in",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My tickets", Url = Url.Action("MyTickets", "Ticket") },
+            new() { Text = Model.EventTitle }
+        }
+    };
 }
 
-<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
-    <a href="@Url.Action("MyTickets", "Ticket")">My tickets</a>
-    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    <span class="breadcrumb__current">Ticket #@Model.TicketId</span>
-</nav>
+@await Html.PartialAsync("_PageHeader", header)
 
-<div class="ticket-art">
-    <div class="ticket-art__stub">
-        <div class="ticket-art__stub-top">
-            <div class="ticket-art__brand">
-                <span class="brand-mark brand-mark--sm">E</span>
-                <span>EMS</span>
-            </div>
-            <span class="ticket-art__stub-label">Admit one</span>
+<section class="ticket-card" aria-label="Ticket">
+    <div class="ticket-card__qr">
+        <i class="bi bi-qr-code-scan" style="font-size: 1.25rem;" aria-hidden="true"></i>
+        <div aria-hidden="true" style="background: #fff; padding: 12px; border-radius: 12px;">
+            <i class="bi bi-grid-3x3-gap-fill" style="font-size: 4rem; color: var(--color-primary-700);"></i>
         </div>
-        <div class="ticket-art__stub-event">
-            <span class="eyebrow" style="color: var(--brand-accent);">Your ticket</span>
-            <h1 class="ticket-art__event-title">@Model.EventTitle</h1>
-        </div>
-        <div class="ticket-art__stub-meta">
+        <span style="font-size: var(--font-size-sm); opacity: 0.85;">Check-in QR</span>
+        <code style="font-size: 11px; word-break: break-all; padding: 4px 8px; background: rgba(255,255,255,0.12); border-radius: 4px;">
+            @Model.QrCodeText
+        </code>
+    </div>
+    <div class="ticket-card__body">
+        <header class="stack" style="gap: var(--spacing-1);">
+            <span class="text-muted" style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">
+                Ticket #@Model.TicketId
+            </span>
+            <h2 class="ticket-card__title">@Model.EventTitle</h2>
+            <div><partial name="_StatusBadge" model="Model.Status" /></div>
+        </header>
+
+        <dl class="ticket-card__meta">
             <div>
-                <span class="ticket-art__stub-meta-label">When</span>
-                <span class="ticket-art__stub-meta-value">@Model.EventTime.ToString("ddd, dd MMM")</span>
-                <span class="ticket-art__stub-meta-sub">@Model.EventTime.ToString("HH:mm")</span>
+                <dt>Serial number</dt>
+                <dd><code class="serial">@Model.SerialNumber</code></dd>
             </div>
             <div>
-                <span class="ticket-art__stub-meta-label">Where</span>
-                <span class="ticket-art__stub-meta-value">@Model.Location</span>
+                <dt>Event time</dt>
+                <dd>@Model.EventTime.ToString("dddd, dd MMM yyyy HH:mm")</dd>
             </div>
             <div>
-                <span class="ticket-art__stub-meta-label">Ticket</span>
-                <span class="ticket-art__stub-meta-value mono">#@Model.TicketId</span>
+                <dt>Location</dt>
+                <dd>@Model.Location</dd>
             </div>
-        </div>
-        <div class="ticket-art__stub-foot">
-            <code class="serial">@Model.SerialNumber</code>
-            <partial name="_StatusBadge" model="Model.Status" />
+            <div>
+                <dt>Ticket ID</dt>
+                <dd>@Model.TicketId</dd>
+            </div>
+        </dl>
+
+        <div class="ticket-card__actions">
+            <a class="btn btn--outline-secondary" asp-action="MyTickets">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                <span>Back to my tickets</span>
+            </a>
+            <button type="button" class="btn btn--primary" data-print-button>
+                <i class="bi bi-printer" aria-hidden="true"></i>
+                <span>Print</span>
+            </button>
         </div>
     </div>
+</section>
 
-    <div class="ticket-art__perforation" aria-hidden="true"></div>
-
-    <div class="ticket-art__qr">
-        <span class="ticket-art__qr-eyebrow">Scan at the door</span>
-        <div class="ticket-art__qr-frame">
-            <i class="bi bi-grid-3x3-gap-fill ticket-art__qr-placeholder" aria-hidden="true"></i>
-            <span class="ticket-art__qr-placeholder-label">QR placeholder</span>
-        </div>
-        <code class="ticket-art__qr-payload" title="@Model.QrCodeText">@Model.QrCodeText</code>
-        <span class="ticket-art__qr-hint">Show this code at the check-in counter.</span>
-    </div>
-</div>
-
-<div class="ticket-actions">
-    <a class="btn btn--outline-secondary" asp-action="MyTickets">
-        <i class="bi bi-arrow-left" aria-hidden="true"></i>
-        <span>Back to my tickets</span>
-    </a>
-    <button type="button" class="btn btn--primary" data-print-button>
-        <i class="bi bi-printer" aria-hidden="true"></i>
-        <span>Print ticket</span>
-    </button>
-</div>
-
-<p class="ticket-note muted">
-    <i class="bi bi-info-circle" aria-hidden="true"></i>
-    The QR code is currently shown as a placeholder. A real QR will be generated when a QR library is integrated with the backend.
+<p class="text-muted text-center" style="margin-top: var(--spacing-6); max-width: 60ch; margin-left: auto; margin-right: auto;">
+    Note: The QR code is currently rendered as a placeholder. A real QR will be generated when a QR library is integrated with the backend.
 </p>
 
 @section Scripts {

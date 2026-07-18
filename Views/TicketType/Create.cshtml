@@ -2,44 +2,39 @@
 @{
     ViewData["Title"] = "Create ticket type";
     Layout = "_Layout";
+
+    var header = new EventManagement.ViewModels.PageHeaderViewModel
+    {
+        Title = "Create ticket type",
+        Subtitle = !string.IsNullOrEmpty(Model.EventTitle)
+            ? $"Add a new ticket type for {Model.EventTitle}."
+            : "Add a new ticket type for this event.",
+        Eyebrow = "EMS • Host",
+        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
+        {
+            new() { Text = "My events", Url = Url.Action("MyEvents", "Host") },
+            new() { Text = "Create ticket type" }
+        }
+    };
 }
 
-<nav aria-label="Breadcrumb" class="breadcrumb" style="margin-bottom: var(--space-6);">
-    <a href="@Url.Action("MyEvents", "Host")">My events</a>
-    <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    @if (!string.IsNullOrEmpty(Model.EventTitle))
-    {
-        <a href="@Url.Action("Edit", "Event", new { id = Model.EventId })">@Model.EventTitle</a>
-        <i class="bi bi-chevron-right breadcrumb__separator" aria-hidden="true"></i>
-    }
-    <span class="breadcrumb__current">New ticket type</span>
-</nav>
+@await Html.PartialAsync("_PageHeader", header)
 
-<header class="page-header page-header--compact" style="border-bottom: 0;">
-    <div class="page-header__titles">
-        <span class="page-header__eyebrow">Tickets</span>
-        <h1 class="page-header__title">
-            @if (!string.IsNullOrEmpty(Model.EventTitle))
-            {
-                <text>Add a ticket type for @Model.EventTitle.</text>
-            }
-            else
-            {
-                <text>Add a new ticket type.</text>
-            }
-        </h1>
-        <p class="page-header__subtitle">Define the name, price and quantity. You can edit these later if needed.</p>
-    </div>
-</header>
+@if (!string.IsNullOrEmpty(Model.EventTitle))
+{
+    <section class="checkout-event-summary" style="margin-bottom: var(--spacing-5);">
+        <h2 class="checkout-event-summary__title">@Model.EventTitle</h2>
+        <p class="text-muted" style="margin: 0;">Event ID #@Model.EventId</p>
+    </section>
+}
 
 <form asp-action="Create" method="post" novalidate style="max-width: var(--content-form-width);">
     <input type="hidden" asp-for="EventId" />
     <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
     <section class="form-section">
-        <span class="form-section__step">01 · Ticket details</span>
-        <h2 class="form-section__title">The basics</h2>
-        <p class="form-section__subtitle">Name the type and decide the price and quantity.</p>
+        <h2 class="form-section__title">Ticket details</h2>
+        <p class="form-section__subtitle">Define the type, price and quantity.</p>
 
         <div class="form-field">
             <label asp-for="TypeName" class="form-label">
@@ -52,23 +47,23 @@
         </div>
 
         <div class="form-grid-2">
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="Price" class="form-label">
                     <span>Price</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
                 </label>
-                <input asp-for="Price" class="form-control numeric" type="number" step="0.01" min="0.01"
+                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01"
                        placeholder="0.00" />
-                <span class="field-hint">Price in VND. Free if set to 0 (not allowed here).</span>
+                <span class="field-hint">Price is in VND.</span>
                 <span asp-validation-for="Price" class="field-validation-error"></span>
             </div>
 
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="Quantity" class="form-label">
                     <span>Quantity</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
                 </label>
-                <input asp-for="Quantity" class="form-control numeric" type="number" min="1" />
+                <input asp-for="Quantity" class="form-control" type="number" min="1" />
                 <span class="field-hint">Total tickets available.</span>
                 <span asp-validation-for="Quantity" class="field-validation-error"></span>
             </div>
@@ -76,12 +71,11 @@
     </section>
 
     <section class="form-section">
-        <span class="form-section__step">02 · Sale window</span>
-        <h2 class="form-section__title">When customers can buy</h2>
-        <p class="form-section__subtitle">Set a start and end date for the sale window.</p>
+        <h2 class="form-section__title">Sale window</h2>
+        <p class="form-section__subtitle">When customers can buy tickets.</p>
 
         <div class="form-grid-2">
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="SaleStart" class="form-label">
                     <span>Sale start</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -90,7 +84,7 @@
                        value="@(Model.SaleStart == default ? string.Empty : Model.SaleStart.ToString("yyyy-MM-ddTHH:mm"))" />
                 <span asp-validation-for="SaleStart" class="field-validation-error"></span>
             </div>
-            <div class="form-field" style="margin: 0;">
+            <div class="form-field">
                 <label asp-for="SaleEnd" class="form-label">
                     <span>Sale end</span>
                     <span class="form-label__required" aria-hidden="true">*</span>
@@ -104,21 +98,20 @@
     </section>
 
     <section class="form-section">
-        <span class="form-section__step">03 · Status</span>
-        <h2 class="form-section__title">Visibility</h2>
-        <div class="form-field" style="max-width: 320px;">
+        <h2 class="form-section__title">Status</h2>
+        <div class="form-field">
             <label asp-for="Status" class="form-label">Status</label>
             <select asp-for="Status" class="form-select">
                 <option value="Active" selected="@(Model.Status == "Active")">Active</option>
                 <option value="Inactive" selected="@(Model.Status == "Inactive")">Inactive</option>
             </select>
-            <span class="field-hint">Inactive tickets are hidden from the purchase flow.</span>
             <span asp-validation-for="Status" class="field-validation-error"></span>
         </div>
     </section>
 
     <div class="form-actions">
         <a class="btn btn--outline-secondary" asp-action="MyEvents" asp-controller="Host">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
             <span>Cancel</span>
         </a>
         <button type="submit" class="btn btn--primary btn--lg">

@@ -23,9 +23,19 @@
         "Admin" => "role-pill role-pill--admin",
         _ => "role-pill"
     };
+
+    // Pages whose first section is a dark hero should put the navbar in
+    // dark-variant mode so text stays readable.
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var darkPages = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Index" };
+    bool? isHostRoute = currentController == "Home" && string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase);
+    bool? isEventList = currentController == "Event" && string.Equals(currentAction, "List", StringComparison.OrdinalIgnoreCase);
+    bool? isEventDetails = currentController == "Event" && string.Equals(currentAction, "Details", StringComparison.OrdinalIgnoreCase);
+    var overDark = isHostRoute == true || isEventList == true || isEventDetails == true;
 }
 
-<header class="app-header">
+<header class="app-header@(overDark ? " app-header--over-dark" : null)">
     <div class="app-header__inner">
         <a class="app-navbar__brand" href="@Url.Action("List", "Event")" aria-label="EMS home">
             <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
@@ -123,7 +133,7 @@
                     @if (Context.IsInRole("Customer"))
                     {
                         <li>
-                            <a class="nav-link-app nav-link-app--wallet js-nav-wallet @(IsActive("Wallet", "Index") ? "is-active" : null)"
+                            <a class="wallet-pill @(IsActive("Wallet", "Index") ? "is-active" : null)"
                                href="@Url.Action("Index", "Wallet")">
                                 <i class="bi bi-wallet2" aria-hidden="true"></i>
                                 <span>Wallet</span>
@@ -184,6 +194,14 @@
                                 <span>Logout</span>
                             </a>
                         </div>
+                    </li>
+
+                    <li class="nav-notification">
+                        <a class="nav-link-app nav-link-app--icon js-nav-notifications @(IsActive("Notification", "List") ? "is-active" : null)"
+                           href="@Url.Action("List", "Notification")">
+                            <i class="bi bi-bell" aria-hidden="true"></i>
+                            <span class="nav-notification__dot"></span>
+                        </a>
                     </li>
                 }
                 else

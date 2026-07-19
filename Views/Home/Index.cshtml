@@ -3,25 +3,255 @@
     Layout = "_Layout";
 }
 
-<section class="auth-shell">
-    <div class="auth-card" style="text-align: center;">
-        <div class="auth-card__brand" style="justify-content: center;">
-            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
-            <span class="text-strong">Event Management System</span>
-        </div>
-        <h1 class="auth-card__title">Welcome to EMS</h1>
-        <p class="auth-card__subtitle">
-            Discover, host and manage events with a modern toolkit.
-        </p>
-        <div class="row" style="justify-content: center; gap: var(--spacing-3);">
-            <a class="btn btn--primary" href="@Url.Action("List", "Event")">
-                <i class="bi bi-calendar-event" aria-hidden="true"></i>
-                <span>Browse events</span>
-            </a>
-            <a class="btn btn--outline-secondary" href="@Url.Action("Login", "Account")">
+<section class="vgt-hero">
+    <!-- 5 Floating Orbs - Figma Design -->
+    <div class="vgt-orb-5 vgt-orb-5--indigo"></div>
+    <div class="vgt-orb-5 vgt-orb-5--pink"></div>
+    <div class="vgt-orb-5 vgt-orb-5--cyan"></div>
+    <div class="vgt-orb-5 vgt-orb-5--amber"></div>
+    <div class="vgt-orb-5 vgt-orb-5--rose"></div>
+
+    <span class="vgt-hero__eyebrow">
+        <i class="bi bi-stars" aria-hidden="true"></i>
+        <span>THE NEW WAY TO HOST AND ATTEND EVENTS</span>
+    </span>
+
+    <h1 class="vgt-hero__title">
+        Moments that <br />
+        <span class="vgt-text-gradient--bright">move you.</span>
+    </h1>
+
+    <p class="vgt-hero__subtitle">
+        Discover, book, and host extraordinary events — all in one beautifully crafted platform.
+    </p>
+
+    <div class="vgt-hero__actions">
+        <a class="btn btn--vgt-primary btn--lg" href="@Url.Action("List", "Event")">
+            <i class="bi bi-calendar-event" aria-hidden="true"></i>
+            <span>Explore events</span>
+        </a>
+        @if (!Context.Request.HttpContext.User?.Identity?.IsAuthenticated == true)
+        {
+            <a class="btn btn--vgt-secondary btn--lg" href="@Url.Action("Login", "Account")">
                 <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                 <span>Sign in</span>
             </a>
+        }
+        else
+        {
+            <a class="btn btn--vgt-secondary btn--lg" href="@Url.Action("MyTickets", "Ticket")">
+                <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+                <span>My tickets</span>
+            </a>
+        }
+    </div>
+
+    <div class="vgt-hero__stats">
+        <div>
+            <div class="vgt-hero__stat-value">12,847+</div>
+            <div class="vgt-hero__stat-label">Active members</div>
         </div>
+        <div>
+            <div class="vgt-hero__stat-value">856</div>
+            <div class="vgt-hero__stat-label">Events hosted this month</div>
+        </div>
+        <div>
+            <div class="vgt-hero__stat-value">98.7%</div>
+            <div class="vgt-hero__stat-label">Customer satisfaction</div>
+        </div>
+        <div>
+            <div class="vgt-hero__stat-value">24/7</div>
+            <div class="vgt-hero__stat-label">Global support</div>
+        </div>
+    </div>
+
+    <!-- Floating Ticket Decorations - Right Side -->
+    <div class="vgt-float-tickets">
+        <div class="vgt-float-ticket" style="--ticket-gradient: linear-gradient(135deg, #6366f1, #8b5cf6); --rotate: -8deg; top: 20%; right: 8%;">
+            <span class="vgt-float-ticket__icon">▦</span>
+            <span>QR Ticket</span>
+        </div>
+        <div class="vgt-float-ticket" style="--ticket-gradient: linear-gradient(135deg, #ec4899, #f43f5e); --rotate: 5deg; top: 38%; right: 5%;">
+            <span class="vgt-float-ticket__icon">🎫</span>
+            <span>Event Pass</span>
+        </div>
+        <div class="vgt-float-ticket" style="--ticket-gradient: linear-gradient(135deg, #06b6d4, #6366f1); --rotate: -4deg; top: 56%; right: 10%;">
+            <span class="vgt-float-ticket__icon">💳</span>
+            <span>Wallet</span>
+        </div>
+        <div class="vgt-float-ticket" style="--ticket-gradient: linear-gradient(135deg, #f59e0b, #ec4899); --rotate: 7deg; top: 72%; right: 6%;">
+            <span class="vgt-float-ticket__icon">🎁</span>
+            <span>Voucher</span>
+        </div>
+    </div>
+</section>
+
+<section style="margin-top: var(--spacing-16);">
+    <div class="vgt-section-heading">
+        <span class="vgt-section-heading__eyebrow">Why EMS</span>
+        <h2 class="vgt-section-heading__title">Everything you need to run unforgettable events.</h2>
+        <p class="vgt-section-heading__subtitle">
+            From intimate workshops to sold-out festivals — we provide the tools
+            so you can focus on what matters: creating moments.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacing-5);">
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--iris" aria-hidden="true">
+                <i class="bi bi-search"></i>
+            </span>
+            <h3 class="vgt-feature__title">Discover in seconds</h3>
+            <p class="vgt-feature__desc">
+                Powerful filters by category, location and status help you find the perfect event without the noise.
+            </p>
+        </article>
+
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--pink" aria-hidden="true">
+                <i class="bi bi-lightning-charge-fill"></i>
+            </span>
+            <h3 class="vgt-feature__title">Lightning-fast checkout</h3>
+            <p class="vgt-feature__desc">
+                Buy tickets in under a minute with our wallet system and instant QR confirmation — no friction.
+            </p>
+        </article>
+
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--amber" aria-hidden="true">
+                <i class="bi bi-bar-chart-line-fill"></i>
+            </span>
+            <h3 class="vgt-feature__title">Host dashboard</h3>
+            <p class="vgt-feature__desc">
+                Track ticket sales, attendance and revenue at a glance with real-time metrics and insights.
+            </p>
+        </article>
+
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--emerald" aria-hidden="true">
+                <i class="bi bi-shield-check"></i>
+            </span>
+            <h3 class="vgt-feature__title">Secure &amp; reliable</h3>
+            <p class="vgt-feature__desc">
+                Bank-grade security, encrypted payments and instant refunds through your in-app wallet.
+            </p>
+        </article>
+
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--cyan" aria-hidden="true">
+                <i class="bi bi-qr-code-scan"></i>
+            </span>
+            <h3 class="vgt-feature__title">QR check-in</h3>
+            <p class="vgt-feature__desc">
+                One-tap entry with secure QR codes generated automatically for every ticket you purchase.
+            </p>
+        </article>
+
+        <article class="vgt-feature">
+            <span class="vgt-feature__icon vgt-feature__icon--fire" aria-hidden="true">
+                <i class="bi bi-gift-fill"></i>
+            </span>
+            <h3 class="vgt-feature__title">Vouchers &amp; rewards</h3>
+            <p class="vgt-feature__desc">
+                Hosts can launch promo campaigns while attendees unlock exclusive rewards with every booking.
+            </p>
+        </article>
+    </div>
+</section>
+
+<section style="margin-top: var(--spacing-16);">
+    <div class="vgt-section-heading">
+        <span class="vgt-section-heading__eyebrow">How it works</span>
+        <h2 class="vgt-section-heading__title">Three simple steps to your next event.</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-6);">
+        <div class="vgt-how-step">
+            <div class="vgt-how-step__number">1</div>
+            <div class="vgt-how-step__icon">
+                <i class="bi bi-compass"></i>
+            </div>
+            <h3 class="vgt-how-step__title">Discover</h3>
+            <p class="vgt-how-step__desc">
+                Browse thousands of events or use AI-powered search to find exactly what moves you.
+            </p>
+        </div>
+
+        <div class="vgt-how-step">
+            <div class="vgt-how-step__number">2</div>
+            <div class="vgt-how-step__icon">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+            <h3 class="vgt-how-step__title">Checkout</h3>
+            <p class="vgt-how-step__desc">
+                Secure your spot in under 30 seconds with our lightning-fast wallet system.
+            </p>
+        </div>
+
+        <div class="vgt-how-step">
+            <div class="vgt-how-step__number">3</div>
+            <div class="vgt-how-step__icon">
+                <i class="bi bi-emoji-smile"></i>
+            </div>
+            <h3 class="vgt-how-step__title">Enjoy</h3>
+            <p class="vgt-how-step__desc">
+                Get instant QR access, manage your tickets, and create unforgettable memories.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section style="margin-top: var(--spacing-16);">
+    <div class="vgt-section-heading">
+        <span class="vgt-section-heading__eyebrow">Browse by category</span>
+        <h2 class="vgt-section-heading__title">Find your next adventure.</h2>
+        <p class="vgt-section-heading__subtitle">
+            Curated categories to match every interest and pace.
+        </p>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-3);">
+        <a class="vgt-chip vgt-chip--iris" href="@Url.Action("List", "Event")">
+            <i class="bi bi-music-note-beamed"></i> Music
+        </a>
+        <a class="vgt-chip vgt-chip--pink" href="@Url.Action("List", "Event")">
+            <i class="bi bi-brush"></i> Art &amp; Culture
+        </a>
+        <a class="vgt-chip vgt-chip--amber" href="@Url.Action("List", "Event")">
+            <i class="bi bi-cup-hot"></i> Food &amp; Drink
+        </a>
+        <a class="vgt-chip vgt-chip--cyan" href="@Url.Action("List", "Event")">
+            <i class="bi bi-laptop"></i> Tech
+        </a>
+        <a class="vgt-chip vgt-chip--emerald" href="@Url.Action("List", "Event")">
+            <i class="bi bi-tree"></i> Outdoor
+        </a>
+        <a class="vgt-chip vgt-chip--fire" href="@Url.Action("List", "Event")">
+            <i class="bi bi-trophy"></i> Sports
+        </a>
+        <a class="vgt-chip" href="@Url.Action("List", "Event")">
+            <i class="bi bi-grid"></i> View all
+        </a>
+    </div>
+</section>
+
+<section class="vgt-cta" style="margin-top: var(--spacing-16);">
+    <div class="vgt-orb vgt-orb--pink"></div>
+    <h2 class="vgt-cta__title">
+        Ready to host your <span class="vgt-text-gradient--bright">next event</span>?
+    </h2>
+    <p class="vgt-cta__desc">
+        Join thousands of organizers who trust EMS to power their events.
+        Create your first event in minutes — no setup fees, no hidden costs.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-3);">
+        <a class="btn btn--vgt-primary btn--lg" href="@Url.Action("CreateEvent", "Host")">
+            <i class="bi bi-plus-square" aria-hidden="true"></i>
+            <span>Create event</span>
+        </a>
+        <a class="btn btn--vgt-secondary btn--lg" href="@Url.Action("MyEvents", "Host")">
+            <i class="bi bi-collection" aria-hidden="true"></i>
+            <span>My events</span>
+        </a>
     </div>
 </section>

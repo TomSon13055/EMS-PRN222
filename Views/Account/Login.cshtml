@@ -4,77 +4,113 @@
     Layout = "_Layout";
 }
 
-<section class="auth-shell">
-    <div class="auth-card">
-        <div class="auth-card__brand">
-            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
-            <span class="text-strong">Event Management System</span>
-        </div>
-        <h1 class="auth-card__title">Welcome back</h1>
-        <p class="auth-card__subtitle">Sign in to manage your events, tickets and wallet.</p>
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="auth-error" role="alert">
-                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-                <span>Please check your email and password and try again.</span>
+<div class="vgt-split">
+    <!-- Left Side - Form -->
+    <div class="vgt-split__left">
+        <div class="vgt-split__content">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <span class="app-navbar__brand-mark" style="width: 56px; height: 56px; font-size: 24px; margin: 0 auto;">E</span>
             </div>
-        }
+            <h1 class="auth-card__title" style="text-align: center;">
+                Welcome <span class="vgt-text-gradient">back</span>
+            </h1>
+            <p class="auth-card__subtitle" style="text-align: center;">
+                Sign in to your EMS account to continue.
+            </p>
 
-        <form asp-action="Login" method="post" novalidate>
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="auth-error" role="alert">
+                    <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                    <span>Please check your email and password and try again.</span>
+                </div>
+            }
 
-            <div class="form-field">
-                <label asp-for="Email" class="form-label">
-                    <span>Email</span>
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <div class="form-control-shell">
-                    <span class="form-control-shell__icon" aria-hidden="true">
-                        <i class="bi bi-envelope"></i>
-                    </span>
-                    <input asp-for="Email" class="form-control"
+            <form asp-action="Login" method="post" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div class="form-field">
+                    <label asp-for="Email" class="form-label">
+                        <span>Email</span>
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input asp-for="Email" class="vgt-input" 
                            autocomplete="email" inputmode="email"
                            placeholder="you@example.com" />
+                    <span asp-validation-for="Email" class="field-validation-error"></span>
                 </div>
-                <span asp-validation-for="Email" class="field-validation-error"></span>
-            </div>
 
-            <div class="form-field">
-                <label asp-for="Password" class="form-label">
-                    <span>Password</span>
-                    <span class="form-label__required" aria-hidden="true">*</span>
-                </label>
-                <div class="form-control-shell">
-                    <span class="form-control-shell__icon" aria-hidden="true">
-                        <i class="bi bi-shield-lock"></i>
-                    </span>
-                    <input asp-for="Password" class="form-control"
+                <div class="form-field">
+                    <label asp-for="Password" class="form-label">
+                        <span>Password</span>
+                        <span class="form-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <input asp-for="Password" class="vgt-input" 
+                           type="password"
                            autocomplete="current-password"
                            placeholder="Enter your password" />
-                    <button type="button"
-                            class="form-control-shell__action js-password-toggle"
-                            data-password-toggle="#Password"
-                            aria-pressed="false"
-                            aria-label="Show password">
-                        <i class="bi bi-eye" aria-hidden="true"></i>
-                    </button>
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
                 </div>
-                <span asp-validation-for="Password" class="field-validation-error"></span>
+
+                <div style="text-align: right; margin-bottom: 24px;">
+                    <a href="#" class="vgt-text-gradient" style="font-size: 13px; font-weight: 600; text-decoration: none;">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--block js-login-submit" style="width: 100%; height: 48px; font-size: 16px;">
+                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    <span>Sign in</span>
+                </button>
+            </form>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin: 24px 0;">
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                <span style="color: #9ca3af; font-size: 13px;">or continue with</span>
+                <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
             </div>
 
-            <button type="submit" class="btn btn--primary btn--block js-login-submit">
-                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
-                <span>Sign in</span>
-            </button>
-        </form>
+            <div style="display: flex; gap: 12px; margin-bottom: 32px;">
+                <button class="vgt-social-btn" style="flex: 1;">
+                    <span style="font-size: 18px;">G</span>
+                    <span style="font-size: 13px; color: #374151;">Google</span>
+                </button>
+                <button class="vgt-social-btn" style="flex: 1;">
+                    <span style="font-size: 18px;">f</span>
+                    <span style="font-size: 13px; color: #374151;">Facebook</span>
+                </button>
+                <button class="vgt-social-btn" style="flex: 1;">
+                    <span style="font-size: 18px;">&#127822;</span>
+                    <span style="font-size: 13px; color: #374151;">Apple</span>
+                </button>
+            </div>
 
-        <div class="auth-card__footer">
-            Don't have an account?
-            <a asp-action="Register">Create one</a>
+            <p class="auth-card__footer" style="text-align: center;">
+                Don't have an account?
+                <a asp-action="Register" style="color: var(--color-indigo); font-weight: 700; text-decoration: none;">
+                    Sign up
+                </a>
+            </p>
         </div>
     </div>
-</section>
+
+    <!-- Right Side - Decoration -->
+    <div class="vgt-split__right vgt-dark-mesh vgt-grain">
+        <div class="vgt-orb-5 vgt-orb-5--indigo"></div>
+        <div class="vgt-orb-5 vgt-orb-5--pink"></div>
+        <div class="vgt-orb-5 vgt-orb-5--cyan"></div>
+        
+        <div style="position: relative; z-index: 1; text-align: center; padding: 48px;">
+            <div style="font-size: 72px; margin-bottom: 24px;">&#10022;</div>
+            <h3 style="font-size: 36px; font-weight: 900; color: white; letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.2;">
+                Events that<br />inspire.
+            </h3>
+            <p style="color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7;">
+                Join thousands of attendees<br />discovering extraordinary moments.
+            </p>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -30,3 +30,6 @@
 @import url("pages/notifications.css");
 @import url("pages/host-events.css");
 @import url("pages/vouchers.css");
+
+/* Vibrant gradient theme — premium redesign */
+@import url("theme-vibrant.css");

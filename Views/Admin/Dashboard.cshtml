@@ -1,45 +1,179 @@
 @model EventManagement.ViewModels.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Admin dashboard";
+    ViewData["Title"] = "Admin Dashboard";
     Layout = "_Layout";
-
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "Admin dashboard",
-        Subtitle = "Overview of users, events and ticket sales across the platform.",
-        Eyebrow = "EMS • Admin"
-    };
 }
 
-@await Html.PartialAsync("_PageHeader", header)
-
-<section class="grid grid--summary">
-    <div class="summary-card">
-        <span class="summary-card__label">Total users</span>
-        <span class="summary-card__value" id="span_totalUsers">@Model.TotalUsers</span>
-    </div>
-    <div class="summary-card summary-card--info" style="background: linear-gradient(135deg, var(--color-info-500), var(--color-info-600));">
-        <span class="summary-card__label">Customers</span>
-        <span class="summary-card__value" id="span_totalCustomers">@Model.TotalCustomers</span>
-    </div>
-    <div class="summary-card summary-card--amber">
-        <span class="summary-card__label">Hosts</span>
-        <span class="summary-card__value" id="span_totalHosts">@Model.TotalHosts</span>
-    </div>
-    <div class="summary-card">
-        <span class="summary-card__label">Total events</span>
-        <span class="summary-card__value" id="span_totalEvents">@Model.TotalEvents</span>
-    </div>
-    <div class="summary-card summary-card--success">
-        <span class="summary-card__label">Published events</span>
-        <span class="summary-card__value" id="span_totalPublishedEvents">@Model.TotalPublishedEvents</span>
-    </div>
-    <div class="summary-card summary-card--primary">
-        <span class="summary-card__label">Tickets sold</span>
-        <span class="summary-card__value" id="span_totalTicketsSold">@Model.TotalTicketsSold</span>
-    </div>
-    <div class="summary-card summary-card--primary" style="grid-column: span 2;">
-        <span class="summary-card__label">Total revenue</span>
-        <span class="summary-card__value" id="span_totalRevenue">@Model.TotalRevenue.ToString("N0") đ</span>
+<!-- Mini Hero -->
+<section class="vgt-mini-hero vgt-dark-mesh vgt-grain" style="margin: 0 calc(-1 * var(--spacing-6)); margin-top: calc(-1 * var(--spacing-6));">
+    <div class="vgt-orb-5 vgt-orb-5--indigo"></div>
+    <div class="vgt-orb-5 vgt-orb-5--pink"></div>
+    <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 48px; font-weight: 900; color: white; letter-spacing: -0.02em;">
+            Admin Dashboard
+        </h1>
+        <span style="font-size: 32px;">&#128737;</span>
     </div>
 </section>
+
+<div style="padding: 32px var(--spacing-6);">
+    <!-- Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;">
+        <div class="vgt-stats-card">
+            <div class="vgt-stats-card__icon" style="background: var(--vgt-gradient-royal);">
+                <i class="bi bi-people" style="color: white;"></i>
+            </div>
+            <div class="vgt-stats-card__label">Total Users</div>
+            <div class="vgt-stats-card__value">@Model.TotalUsers.ToString("N0")</div>
+        </div>
+        <div class="vgt-stats-card">
+            <div class="vgt-stats-card__icon" style="background: var(--vgt-gradient-forest);">
+                <i class="bi bi-calendar-event" style="color: white;"></i>
+            </div>
+            <div class="vgt-stats-card__label">Total Events</div>
+            <div class="vgt-stats-card__value">@Model.TotalEvents.ToString("N0")</div>
+        </div>
+        <div class="vgt-stats-card">
+            <div class="vgt-stats-card__icon" style="background: var(--vgt-gradient-sunset);">
+                <i class="bi bi-currency-dollar" style="color: white;"></i>
+            </div>
+            <div class="vgt-stats-card__label">Revenue (Jul)</div>
+            <div class="vgt-stats-card__value">@Model.TotalRevenue.ToString("N0") đ</div>
+        </div>
+        <div class="vgt-stats-card">
+            <div class="vgt-stats-card__icon" style="background: var(--vgt-gradient-rose);">
+                <i class="bi bi-ticket-perforated" style="color: white;"></i>
+            </div>
+            <div class="vgt-stats-card__label">Tickets Sold</div>
+            <div class="vgt-stats-card__value">@Model.TotalTicketsSold.ToString("N0")</div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+        <!-- Line Chart Placeholder -->
+        <div class="section-card">
+            <div class="section-card__header">
+                <div>
+                    <h2 class="section-card__title">Events over time</h2>
+                    <p class="section-card__subtitle">Monthly event creation trend</p>
+                </div>
+            </div>
+            <div class="section-card__body">
+                <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; padding: 20px 0; border-bottom: 1px dashed var(--border-color);">
+                    @{
+                        var months = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul" };
+                        var heights = new[] { 40, 65, 55, 90, 110, 130, 145 };
+                        for (int i = 0; i < months.Length; i++)
+                        {
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                <div style="width: 40px; background: var(--vgt-gradient-primary); border-radius: 6px 6px 0 0; height: @heights[i]px;"></div>
+                                <span style="font-size: 11px; color: var(--text-muted);">@months[i]</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Chart Placeholder -->
+        <div class="section-card">
+            <div class="section-card__header">
+                <div>
+                    <h2 class="section-card__title">Revenue by Category</h2>
+                    <p class="section-card__subtitle">Top performing categories</p>
+                </div>
+            </div>
+            <div class="section-card__body">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    @{
+                        var categories = new[] { ("Tech", 45, "var(--vgt-gradient-royal)"), ("Music", 32, "var(--vgt-gradient-rose)"), ("Food", 28, "var(--vgt-gradient-sunset)"), ("Art", 20, "var(--vgt-gradient-aurora)"), ("Sports", 15, "var(--vgt-gradient-forest)") };
+                        foreach (var (cat, val, grad) in categories)
+                        {
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="width: 60px; font-size: 13px; font-weight: 600; color: var(--text-secondary);">@cat</span>
+                                <div style="flex: 1; height: 24px; background: #f3f4f6; border-radius: 6px; overflow: hidden;">
+                                    <div style="height: 100%; width: @val%; background: @grad; border-radius: 6px;"></div>
+                                </div>
+                                <span style="width: 40px; font-size: 13px; font-weight: 700; text-align: right;">@val M</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Recent Activity -->
+        <div class="section-card">
+            <div class="section-card__header">
+                <div>
+                    <h2 class="section-card__title">Recent Activity</h2>
+                    <p class="section-card__subtitle">Latest actions on the platform</p>
+                </div>
+            </div>
+            <div class="section-card__body" style="padding: 0;">
+                <div style="display: flex; flex-direction: column;">
+                    @{
+                        var activities = new[] {
+                            ("New event published", "Saigon Tech Summit 2026", "2 min ago", "bi-calendar-plus"),
+                            ("User registered", "Nguyen Van A joined", "5 min ago", "bi-person-plus"),
+                            ("Ticket sold", "24 Premium tickets — Jazz Night", "12 min ago", "bi-ticket-perforated"),
+                            ("Voucher created", "SUMMER50 — 10% off", "1 hr ago", "bi-gift"),
+                            ("Refund processed", "90.000 đ — Yoga class", "2 hr ago", "bi-arrow-counterclockwise")
+                        };
+                        foreach (var (action, detail, time, icon) in activities)
+                        {
+                            <div style="display: flex; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--border-color);">
+                                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(99,102,241,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="bi @icon" style="font-size: 16px; color: var(--color-indigo);"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 14px; color: var(--text-primary);">@action</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);">@detail</div>
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">@time</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Hosts Leaderboard -->
+        <div class="section-card">
+            <div class="section-card__header">
+                <div>
+                    <h2 class="section-card__title">Top Hosts Leaderboard</h2>
+                    <p class="section-card__subtitle">Best performing event creators</p>
+                </div>
+            </div>
+            <div class="section-card__body" style="padding: 0;">
+                @{
+                    var hosts = new[] {
+                        ("Saigon Tech Association", 24, "298M đ", 1),
+                        ("Jazz & Soul Vietnam", 18, "147M đ", 2),
+                        ("Food Culture Co.", 15, "89M đ", 3),
+                        ("VN Art Foundation", 12, "67M đ", 4),
+                        ("Outdoor Vietnam", 9, "34M đ", 5)
+                    };
+                    foreach (var (name, events, revenue, rank) in hosts)
+                    {
+                        <div class="vgt-leaderboard-item" style="padding: 14px 24px;">
+                            <div class="vgt-leaderboard-item__rank @(rank <= 3 ? $"vgt-leaderboard-item__rank--{rank}" : "vgt-leaderboard-item__rank--other")">
+                                @rank
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="vgt-leaderboard-item__name">@name</div>
+                                <div class="vgt-leaderboard-item__meta">@events events</div>
+                            </div>
+                            <div class="vgt-leaderboard-item__value">@revenue</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

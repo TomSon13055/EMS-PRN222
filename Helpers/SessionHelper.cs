@@ -1,4 +1,4 @@
-namespace EventManagement.Helpers;
+ namespace EventManagement.Helpers;
 
 public static class SessionHelper
 {

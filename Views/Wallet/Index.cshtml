@@ -1,28 +1,78 @@
 @model EventManagement.ViewModels.WalletPageViewModel
 @{
-    ViewData["Title"] = "My wallet";
+    ViewData["Title"] = "My Wallet";
     Layout = "_Layout";
-
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "My wallet",
-        Subtitle = "Top up your wallet to buy tickets instantly without leaving the app.",
-        Eyebrow = "EMS • Customer"
-    };
 
     var topUps = new[] { 100000, 200000, 500000, 1000000, 2000000 };
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<!-- Mini Hero -->
+<section class="vgt-mini-hero vgt-dark-mesh vgt-grain" style="margin: 0 calc(-1 * var(--spacing-6)); margin-top: calc(-1 * var(--spacing-6));">
+    <div class="vgt-orb-5 vgt-orb-5--indigo"></div>
+    <div class="vgt-orb-5 vgt-orb-5--pink"></div>
+    <div style="position: relative; z-index: 1;">
+        <h1 style="font-size: 48px; font-weight: 900; color: white; letter-spacing: -0.02em;">
+            My <span class="vgt-text-gradient--bright">Wallet</span>
+        </h1>
+    </div>
+</section>
 
-<section class="grid grid--summary" style="grid-template-columns: minmax(280px, 1fr) minmax(320px, 2fr);">
-    <article class="summary-card summary-card--amber" style="padding: var(--spacing-6);">
-        <span class="summary-card__label">Available balance</span>
-        <span class="summary-card__value" style="font-size: var(--font-size-4xl);">@Model.Balance.ToString("N0") đ</span>
-        <span class="summary-card__hint">Use this balance to buy tickets.</span>
-    </article>
+<div style="padding: 40px var(--spacing-6);">
+    <!-- Balance Card -->
+    <div class="vgt-balance-card" style="margin-bottom: 32px;">
+        <div style="position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div class="vgt-balance-card__label">Available balance</div>
+                <div class="vgt-balance-card__amount">
+                    @Model.Balance.ToString("N0") <small>đ</small>
+                </div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 14px;">
+                    Updated @DateTime.Now.ToString("MMM dd, yyyy · HH:mm")
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn--primary" style="background: rgba(255,255,255,0.9); color: var(--color-indigo); animation: none; border-radius: 12px;">
+                    <i class="bi bi-arrow-up-circle" aria-hidden="true"></i>
+                    Top up
+                </button>
+                <button class="btn btn--vgt-secondary" style="border-radius: 12px;">
+                    <i class="bi bi-arrow-down-circle" aria-hidden="true"></i>
+                    Withdraw
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <article class="section-card">
+    <!-- Quick Actions -->
+    <div class="vgt-quick-actions" style="margin-bottom: 40px;">
+        <a href="#" class="vgt-quick-action">
+            <div class="vgt-quick-action__icon" style="background: var(--vgt-gradient-royal); margin: 0 auto 12px;">
+                <i class="bi bi-arrow-up-circle" style="color: white;"></i>
+            </div>
+            <div class="vgt-quick-action__label">Top up</div>
+        </a>
+        <a href="#" class="vgt-quick-action">
+            <div class="vgt-quick-action__icon" style="background: var(--vgt-gradient-rose); margin: 0 auto 12px;">
+                <i class="bi bi-arrow-down-circle" style="color: white;"></i>
+            </div>
+            <div class="vgt-quick-action__label">Withdraw</div>
+        </a>
+        <a href="#" class="vgt-quick-action">
+            <div class="vgt-quick-action__icon" style="background: var(--vgt-gradient-sunset); margin: 0 auto 12px;">
+                <i class="bi bi-list-ul" style="color: white;"></i>
+            </div>
+            <div class="vgt-quick-action__label">History</div>
+        </a>
+        <a href="#" class="vgt-quick-action">
+            <div class="vgt-quick-action__icon" style="background: var(--vgt-gradient-ocean); margin: 0 auto 12px;">
+                <i class="bi bi-arrow-left-right" style="color: white;"></i>
+            </div>
+            <div class="vgt-quick-action__label">Transfer</div>
+        </a>
+    </div>
+
+    <!-- Top Up Form -->
+    <div class="section-card" style="margin-bottom: 40px;">
         <div class="section-card__header">
             <div>
                 <h2 class="section-card__title">Top up wallet</h2>
@@ -33,35 +83,37 @@
             <form asp-action="TopUp" method="post">
                 <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
 
-                <div class="form-field">
-                    <label class="form-label" for="topupAmount">Amount (VND)</label>
-                    <input id="topupAmount"
-                           name="amount"
-                           type="number"
-                           min="10000"
-                           step="10000"
-                           class="form-control"
-                           placeholder="100,000"
-                           required />
-                    <span class="field-hint">Minimum top-up: 10,000 đ.</span>
-                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end;">
+                    <div class="form-field">
+                        <label class="form-label" for="topupAmount">Amount (VND)</label>
+                        <input id="topupAmount"
+                               name="amount"
+                               type="number"
+                               min="10000"
+                               step="10000"
+                               class="vgt-input"
+                               placeholder="100,000"
+                               required />
+                        <span class="field-hint">Minimum top-up: 10,000 đ.</span>
+                    </div>
 
-                <div class="form-field">
-                    <span class="form-label">Quick amounts</span>
-                    <div class="row" style="gap: var(--spacing-2);">
-                        @foreach (var amt in topUps)
-                        {
-                            <button type="button"
-                                    class="btn btn--outline-secondary btn--sm"
-                                    data-quick-amount="@amt"
-                                    data-quick-amount-target="#topupAmount">
-                                @amt.ToString("N0") đ
-                            </button>
-                        }
+                    <div class="form-field">
+                        <span class="form-label">Quick amounts</span>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            @foreach (var amt in topUps)
+                            {
+                                <button type="button"
+                                        class="vgt-pill vgt-pill--iris"
+                                        data-quick-amount="@amt"
+                                        data-quick-amount-target="#topupAmount">
+                                    @amt.ToString("N0") đ
+                                </button>
+                            }
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-actions">
+                <div class="form-actions" style="margin-top: 24px;">
                     <button type="submit" class="btn btn--primary">
                         <i class="bi bi-wallet" aria-hidden="true"></i>
                         <span>Top up</span>
@@ -69,61 +121,67 @@
                 </div>
             </form>
         </div>
-    </article>
-</section>
+    </div>
 
-<section class="section-card" style="margin-top: var(--spacing-6);">
-    <div class="section-card__header">
-        <div>
-            <h2 class="section-card__title">Transaction history</h2>
-            <p class="section-card__subtitle">All your top-ups and ticket purchases.</p>
+    <!-- Transaction History -->
+    <div class="section-card">
+        <div class="section-card__header">
+            <div>
+                <h2 class="section-card__title">Transaction History</h2>
+                <p class="section-card__subtitle">All your top-ups and ticket purchases.</p>
+            </div>
+            <div class="vgt-tabs">
+                <button class="vgt-tabs__btn vgt-tabs__btn--active">All</button>
+                <button class="vgt-tabs__btn">Top up</button>
+                <button class="vgt-tabs__btn">Payment</button>
+                <button class="vgt-tabs__btn">Refund</button>
+            </div>
+        </div>
+        <div class="section-card__body" style="padding: 0;">
+            @if (Model.Transactions.Any())
+            {
+                foreach (var t in Model.Transactions)
+                {
+                    var isTopUp = t.TransactionType == "TopUp";
+                    var isRefund = t.TransactionType == "Refund";
+                    <div class="vgt-transaction">
+                        <div class="vgt-transaction__icon @(isTopUp || isRefund ? "vgt-transaction__icon--income" : "vgt-transaction__icon--expense")">
+                            @if (isTopUp)
+                            {
+                                <i class="bi bi-arrow-up-circle" style="color: var(--color-emerald);"></i>
+                            }
+                            else if (isRefund)
+                            {
+                                <i class="bi bi-arrow-counterclockwise" style="color: var(--color-emerald);"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-ticket-perforated" style="color: var(--color-rose);"></i>
+                            }
+                        </div>
+                        <div class="vgt-transaction__desc">
+                            <div class="vgt-transaction__title">@t.Description</div>
+                            <div class="vgt-transaction__date">@t.CreatedAt.ToString("MMM dd, yyyy · HH:mm")</div>
+                        </div>
+                        <div class="vgt-transaction__amount @(isTopUp || isRefund ? "vgt-transaction__amount--income" : "vgt-transaction__amount--expense")">
+                            @(isTopUp || isRefund ? "+" : "-")@t.Amount.ToString("N0") đ
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
+                {
+                    Title = "No transactions yet",
+                    Description = "Your top-ups and ticket purchases will appear here.",
+                    Icon = "bi-receipt",
+                    IconVariant = "neutral"
+                })
+            }
         </div>
     </div>
-    <div class="section-card__body" style="padding: 0;">
-        @if (Model.Transactions.Any())
-        {
-            <div class="data-table-wrap" style="border: 0; border-radius: 0;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th class="numeric">Amount</th>
-                            <th>Description</th>
-                            <th class="numeric">Balance after</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var t in Model.Transactions)
-                        {
-                            var isTopUp = t.TransactionType == "TopUp";
-                            var sign = isTopUp ? "+" : "-";
-                            <tr>
-                                <td class="text-secondary nowrap">@t.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
-                                <td><partial name="_StatusBadge" model="t.TransactionType" /></td>
-                                <td class="numeric @(isTopUp ? "text-success" : "text-danger")">
-                                    @sign@t.Amount.ToString("N0") đ
-                                </td>
-                                <td>@t.Description</td>
-                                <td class="numeric">@t.BalanceAfter.ToString("N0") đ</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            @await Html.PartialAsync("_EmptyState", new EventManagement.ViewModels.EmptyStateViewModel
-            {
-                Title = "No transactions yet",
-                Description = "Your top-ups and ticket purchases will appear here.",
-                Icon = "bi-receipt",
-                IconVariant = "neutral"
-            })
-        }
-    </div>
-</section>
+</div>
 
 @section Scripts {
     <script type="module" src="~/js/pages/buy-ticket.js" asp-append-version="true"></script>

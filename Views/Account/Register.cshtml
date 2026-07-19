@@ -4,126 +4,176 @@
     Layout = "_Layout";
 }
 
-<section class="auth-shell">
-    <div class="auth-card auth-card--wide">
-        <div class="auth-card__brand">
-            <span class="auth-card__brand-mark" aria-hidden="true">E</span>
-            <span class="text-strong">Event Management System</span>
-        </div>
-        <h1 class="auth-card__title">Create your account</h1>
-        <p class="auth-card__subtitle">Join EMS to discover events, buy tickets or host your own.</p>
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="auth-error" role="alert">
-                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-                <span>Please correct the highlighted fields and try again.</span>
+<div class="vgt-split">
+    <!-- Left Side - Form -->
+    <div class="vgt-split__left" style="padding: 60px 0;">
+        <div class="vgt-split__content vgt-split__content--wide">
+            <div style="text-align: center; margin-bottom: 28px;">
+                <span class="app-navbar__brand-mark" style="width: 56px; height: 56px; font-size: 24px; margin: 0 auto;">E</span>
             </div>
-        }
+            <h1 class="auth-card__title" style="text-align: center;">
+                Create your <span class="vgt-text-gradient">account</span>
+            </h1>
+            <p class="auth-card__subtitle" style="text-align: center; margin-bottom: 32px;">
+                Join EMS for free today.
+            </p>
 
-        <form asp-action="Register" method="post" novalidate>
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="auth-error" role="alert">
+                    <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                    <span>Please correct the highlighted fields and try again.</span>
+                </div>
+            }
 
-            <div class="form-grid-2">
-                <div class="form-field">
-                    <label asp-for="FullName" class="form-label">
-                        <span>Full name</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="FullName" class="form-control"
-                           autocomplete="name" placeholder="Jane Doe" />
-                    <span asp-validation-for="FullName" class="field-validation-error"></span>
+            <form asp-action="Register" method="post" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div class="form-field">
+                        <label asp-for="FullName" class="form-label">
+                            <span>Full name</span>
+                            <span class="form-label__required" aria-hidden="true">*</span>
+                        </label>
+                        <input asp-for="FullName" class="vgt-input" 
+                               autocomplete="name" placeholder="Nguyen Van A" />
+                        <span asp-validation-for="FullName" class="field-validation-error"></span>
+                    </div>
+
+                    <div class="form-field">
+                        <label asp-for="Email" class="form-label">
+                            <span>Email</span>
+                            <span class="form-label__required" aria-hidden="true">*</span>
+                        </label>
+                        <input asp-for="Email" class="vgt-input" 
+                               autocomplete="email" inputmode="email"
+                               placeholder="you@example.com" />
+                        <span asp-validation-for="Email" class="field-validation-error"></span>
+                    </div>
                 </div>
 
-                <div class="form-field">
-                    <label asp-for="Email" class="form-label">
-                        <span>Email</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <input asp-for="Email" class="form-control"
-                           autocomplete="email" inputmode="email"
-                           placeholder="you@example.com" />
-                    <span asp-validation-for="Email" class="field-validation-error"></span>
-                </div>
-            </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div class="form-field">
+                        <label asp-for="Password" class="form-label">
+                            <span>Password</span>
+                            <span class="form-label__required" aria-hidden="true">*</span>
+                        </label>
+                        <input asp-for="Password" class="vgt-input" type="password"
+                               autocomplete="new-password" placeholder="Min 6 characters" />
+                        <span asp-validation-for="Password" class="field-validation-error"></span>
+                    </div>
 
-            <div class="form-grid-2">
-                <div class="form-field">
+                    <div class="form-field">
+                        <label asp-for="ConfirmPassword" class="form-label">
+                            <span>Confirm password</span>
+                            <span class="form-label__required" aria-hidden="true">*</span>
+                        </label>
+                        <input asp-for="ConfirmPassword" class="vgt-input" type="password"
+                               autocomplete="new-password" placeholder="Re-enter password" />
+                        <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 20px;">
                     <label asp-for="Phone" class="form-label">Phone</label>
-                    <input asp-for="Phone" class="form-control"
-                           autocomplete="tel" placeholder="Optional" />
+                    <input asp-for="Phone" class="vgt-input" type="tel"
+                           autocomplete="tel" placeholder="+84 ..." />
                     <span asp-validation-for="Phone" class="field-validation-error"></span>
                 </div>
 
-                <div class="form-field">
-                    <label asp-for="Role" class="form-label">
+                <div class="form-field" style="margin-bottom: 20px;">
+                    <label class="form-label">
                         <span>I want to</span>
                         <span class="form-label__required" aria-hidden="true">*</span>
                     </label>
-                    <select asp-for="Role" class="form-select">
-                        <option value="Customer">Buy tickets and discover events</option>
-                        <option value="Host">Host and manage my own events</option>
-                    </select>
-                    <span class="field-hint">Customer for buying tickets. Host for publishing events.</span>
-                    <span asp-validation-for="Role" class="field-validation-error"></span>
-                </div>
-            </div>
-
-            <div class="form-grid-2">
-                <div class="form-field">
-                    <label asp-for="Password" class="form-label">
-                        <span>Password</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
-                    </label>
-                    <div class="form-control-shell">
-                        <input asp-for="Password" class="form-control"
-                               autocomplete="new-password" placeholder="At least 6 characters" />
-                        <button type="button"
-                                class="form-control-shell__action js-password-toggle"
-                                data-password-toggle="#Password"
-                                aria-pressed="false"
-                                aria-label="Show password">
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                        </button>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="vgt-role-card vgt-role-card--selected" data-role="Customer">
+                            <input type="radio" asp-for="Role" value="Customer" checked style="display: none;" />
+                            <div style="font-size: 20px; margin-bottom: 6px;">&#127912;</div>
+                            <div style="font-weight: 700; font-size: 15px; color: #1e1b4b; text-transform: capitalize;">Attend events</div>
+                            <div style="font-size: 12px; color: #9ca3af; margin-top: 2px;">Discover & book events</div>
+                        </div>
+                        <div class="vgt-role-card" data-role="Host">
+                            <input type="radio" asp-for="Role" value="Host" style="display: none;" />
+                            <div style="font-size: 20px; margin-bottom: 6px;">&#127917;</div>
+                            <div style="font-weight: 700; font-size: 15px; color: #1e1b4b; text-transform: capitalize;">Host events</div>
+                            <div style="font-size: 12px; color: #9ca3af; margin-top: 2px;">Create & manage events</div>
+                        </div>
                     </div>
-                    <span class="field-hint">Minimum 6 characters.</span>
-                    <span asp-validation-for="Password" class="field-validation-error"></span>
                 </div>
 
-                <div class="form-field">
-                    <label asp-for="ConfirmPassword" class="form-label">
-                        <span>Confirm password</span>
-                        <span class="form-label__required" aria-hidden="true">*</span>
+                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px;">
+                    <input type="checkbox" id="terms" required style="margin-top: 3px; accent-color: var(--color-indigo);" />
+                    <label for="terms" style="font-size: 13px; color: #6b7280;">
+                        I agree to the <a href="#" style="color: var(--color-indigo); font-weight: 600; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: var(--color-indigo); font-weight: 600; text-decoration: none;">Privacy Policy</a>
                     </label>
-                    <div class="form-control-shell">
-                        <input asp-for="ConfirmPassword" class="form-control"
-                               autocomplete="new-password" placeholder="Re-enter your password" />
-                        <button type="button"
-                                class="form-control-shell__action js-password-toggle"
-                                data-password-toggle="#ConfirmPassword"
-                                aria-pressed="false"
-                                aria-label="Show password">
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
                 </div>
-            </div>
 
-            <button type="submit" class="btn btn--primary btn--block js-register-submit">
-                <i class="bi bi-person-plus" aria-hidden="true"></i>
-                <span>Create account</span>
-            </button>
-        </form>
+                <button type="submit" class="btn btn--primary btn--block js-register-submit" style="width: 100%; height: 48px; font-size: 15px; margin-bottom: 20px;">
+                    <i class="bi bi-person-plus" aria-hidden="true"></i>
+                    <span>Create account</span>
+                </button>
 
-        <div class="auth-card__footer">
-            Already have an account?
-            <a asp-action="Login">Back to sign in</a>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                    <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                    <span style="color: #9ca3af; font-size: 13px;">or</span>
+                    <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                    <button class="vgt-social-btn" style="flex: 1;">
+                        <span style="font-size: 18px;">G</span>
+                        <span style="font-size: 13px; color: #374151;">Google</span>
+                    </button>
+                    <button class="vgt-social-btn" style="flex: 1;">
+                        <span style="font-size: 18px;">f</span>
+                        <span style="font-size: 13px; color: #374151;">Facebook</span>
+                    </button>
+                    <button class="vgt-social-btn" style="flex: 1;">
+                        <span style="font-size: 18px;">&#127822;</span>
+                        <span style="font-size: 13px; color: #374151;">Apple</span>
+                    </button>
+                </div>
+
+                <p class="auth-card__footer" style="text-align: center;">
+                    Already have an account?
+                    <a asp-action="Login" style="color: var(--color-indigo); font-weight: 700; text-decoration: none;">
+                        Sign in
+                    </a>
+                </p>
+            </form>
         </div>
     </div>
-</section>
+
+    <!-- Right Side - Decoration -->
+    <div class="vgt-split__right vgt-dark-mesh vgt-grain">
+        <div class="vgt-orb-5 vgt-orb-5--indigo"></div>
+        <div class="vgt-orb-5 vgt-orb-5--pink"></div>
+        <div class="vgt-orb-5 vgt-orb-5--amber"></div>
+        
+        <div style="position: relative; z-index: 1; text-align: center; padding: 48px;">
+            <div style="font-size: 64px; margin-bottom: 20px;">&#127881;</div>
+            <h3 style="font-size: 32px; font-weight: 900; color: white; letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.2;">
+                Your journey<br />starts here.
+            </h3>
+            <p style="color: rgba(255,255,255,0.7); font-size: 15px;">
+                Create moments, collect memories.
+            </p>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script type="module" src="~/js/pages/account.js" asp-append-version="true"></script>
+    <script>
+        // Role card selection
+        document.querySelectorAll('.vgt-role-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.vgt-role-card').forEach(c => c.classList.remove('vgt-role-card--selected'));
+                this.classList.add('vgt-role-card--selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+    </script>
 }

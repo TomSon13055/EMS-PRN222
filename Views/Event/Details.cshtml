@@ -3,78 +3,100 @@
     ViewData["Title"] = Model.Title;
     Layout = "_Layout";
 
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = Model.Title,
-        Subtitle = Model.CategoryName,
-        Eyebrow = "Event details",
-        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
-        {
-            new() { Text = "Events", Url = Url.Action("List", "Event") },
-            new() { Text = Model.Title }
-        }
-    };
-
     var canBuy = ViewBag.CanBuy == true;
     var canWishlist = ViewBag.CanWishlist == true;
     var canEdit = ViewBag.CanEdit == true;
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom: var(--spacing-4);">
+    <a href="@Url.Action("Index", "Home")"><i class="bi bi-house"></i> Home</a>
+    <span class="breadcrumb__separator" aria-hidden="true">/</span>
+    <a href="@Url.Action("List", "Event")">Events</a>
+    <span class="breadcrumb__separator" aria-hidden="true">/</span>
+    <span class="breadcrumb__current">@Model.Title</span>
+</nav>
 
-<div class="event-detail-cover">
-    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
-    {
-        <img src="@Model.ImageUrl" alt="@Model.Title" />
-    }
-    else
-    {
-        <i class="bi bi-calendar-event" aria-hidden="true"></i>
-    }
-</div>
-
-<div class="event-detail-meta">
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Starts</span>
-        <span class="event-detail-meta-item__value">@Model.StartTime.ToString("dddd, dd MMM yyyy")</span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">
-            @Model.StartTime.ToString("HH:mm") &mdash; @Model.EndTime.ToString("HH:mm")
-        </span>
-    </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Location</span>
-        <span class="event-detail-meta-item__value">@Model.LocationName</span>
-        @if (!string.IsNullOrWhiteSpace(Model.Address))
+<section class="vgt-event-hero">
+    <div class="vgt-event-hero__bg @(string.IsNullOrWhiteSpace(Model.ImageUrl) ? "vgt-event-hero__bg--gradient" : null)">
+        @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
         {
-            <span class="text-secondary" style="font-size: var(--font-size-sm);">@Model.Address</span>
+            <img src="@Model.ImageUrl" alt="@Model.Title" />
         }
     </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Host</span>
-        <span class="event-detail-meta-item__value">@Model.HostName</span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">Event organizer</span>
+    <div class="vgt-event-hero__overlay"></div>
+
+    <div class="vgt-event-hero__content">
+        <div class="vgt-event-hero__chips">
+            @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+            {
+                <span class="vgt-event-hero__chip vgt-event-hero__chip--solid">
+                    <i class="bi bi-tag-fill"></i> @Model.CategoryName
+                </span>
+            }
+            <span class="vgt-event-hero__chip">
+                <partial name="_StatusBadge" model="Model.Status" />
+            </span>
+        </div>
+
+        <h1 class="vgt-event-hero__title">@Model.Title</h1>
+
+        <div class="vgt-event-hero__meta">
+            <span class="vgt-event-hero__meta-item">
+                <i class="bi bi-calendar3"></i>
+                <span>@Model.StartTime.ToString("dddd, dd MMM yyyy") &middot; @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")</span>
+            </span>
+            <span class="vgt-event-hero__meta-item">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>@Model.LocationName</span>
+            </span>
+            <span class="vgt-event-hero__meta-item">
+                <i class="bi bi-person-circle"></i>
+                <span>by @Model.HostName</span>
+            </span>
+        </div>
     </div>
-    <div class="event-detail-meta-item">
-        <span class="event-detail-meta-item__label">Status</span>
-        <span class="event-detail-meta-item__value">
-            <partial name="_StatusBadge" model="Model.Status" />
-        </span>
-        <span class="text-secondary" style="font-size: var(--font-size-sm);">
-            @Model.TicketTypeCount ticket type@(Model.TicketTypeCount == 1 ? "" : "s") • @Model.TotalAvailableTickets available
-        </span>
+</section>
+
+<div class="vgt-info-grid">
+    <div class="vgt-info-card">
+        <span class="vgt-info-card__icon vgt-info-card__icon--iris"><i class="bi bi-calendar-event"></i></span>
+        <span class="vgt-info-card__label">Starts</span>
+        <span class="vgt-info-card__value">@Model.StartTime.ToString("dddd, dd MMM")</span>
+        <span class="vgt-info-card__sub">@Model.StartTime.ToString("yyyy") &middot; @Model.StartTime.ToString("HH:mm") &mdash; @Model.EndTime.ToString("HH:mm")</span>
+    </div>
+    <div class="vgt-info-card">
+        <span class="vgt-info-card__icon vgt-info-card__icon--pink"><i class="bi bi-geo-alt-fill"></i></span>
+        <span class="vgt-info-card__label">Location</span>
+        <span class="vgt-info-card__value">@Model.LocationName</span>
+        @if (!string.IsNullOrWhiteSpace(Model.Address))
+        {
+            <span class="vgt-info-card__sub">@Model.Address</span>
+        }
+    </div>
+    <div class="vgt-info-card">
+        <span class="vgt-info-card__icon vgt-info-card__icon--amber"><i class="bi bi-person-badge"></i></span>
+        <span class="vgt-info-card__label">Host</span>
+        <span class="vgt-info-card__value">@Model.HostName</span>
+        <span class="vgt-info-card__sub">Event organizer</span>
+    </div>
+    <div class="vgt-info-card">
+        <span class="vgt-info-card__icon vgt-info-card__icon--emerald"><i class="bi bi-ticket-perforated"></i></span>
+        <span class="vgt-info-card__label">Availability</span>
+        <span class="vgt-info-card__value">@Model.TotalAvailableTickets <span style="font-size: 0.7em; font-weight: 500; color: var(--text-muted);">tickets</span></span>
+        <span class="vgt-info-card__sub">@Model.TicketTypeCount ticket type@(Model.TicketTypeCount == 1 ? "" : "s") available</span>
     </div>
 </div>
 
-<section class="section-card">
-    <div class="section-card__header">
-        <div>
-            <h2 class="section-card__title">About this event</h2>
-            <p class="section-card__subtitle">Everything you need to know before you go.</p>
+<section class="vgt-section">
+    <div class="vgt-section__header">
+        <div class="vgt-section__title-wrap">
+            <h2 class="vgt-section__title">About this event</h2>
+            <span class="vgt-section__subtitle">Everything you need to know before you go.</span>
         </div>
-        <div class="event-detail-actions">
+        <div class="vgt-section__actions">
             @if (canBuy)
             {
-                <a class="btn btn--primary" href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId })">
+                <a class="btn btn--vgt-primary" href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId })">
                     <i class="bi bi-cart3" aria-hidden="true"></i>
                     <span>Buy ticket</span>
                 </a>
@@ -83,7 +105,7 @@
             {
                 <form method="post" asp-controller="Wishlist" asp-action="Add" asp-route-eventId="@Model.EventId" class="d-inline">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn--outline-primary">
+                    <button type="submit" class="btn btn--vgt-outline">
                         <i class="bi bi-heart" aria-hidden="true"></i>
                         <span>Add to wishlist</span>
                     </button>
@@ -98,14 +120,14 @@
             }
             <a class="btn btn--ghost" href="@Url.Action("List", "Event")">
                 <i class="bi bi-arrow-left" aria-hidden="true"></i>
-                <span>Back to events</span>
+                <span>Back</span>
             </a>
         </div>
     </div>
-    <div class="section-card__body">
+    <div class="vgt-section__body">
         @if (!string.IsNullOrWhiteSpace(Model.Description))
         {
-            <p style="white-space: pre-line; color: var(--text-secondary); line-height: var(--line-height-relaxed);">@Model.Description</p>
+            <p style="white-space: pre-line; color: var(--text-secondary); line-height: var(--line-height-relaxed); font-size: var(--font-size-md);">@Model.Description</p>
         }
         else
         {
@@ -114,38 +136,74 @@
     </div>
 </section>
 
-<section class="section-card" style="margin-top: var(--spacing-6);">
-    <div class="section-card__header">
-        <div>
-            <h2 class="section-card__title">Ticket types</h2>
-            <p class="section-card__subtitle">Choose the experience that fits you best.</p>
+<section class="vgt-section" style="margin-top: var(--spacing-6);">
+    <div class="vgt-section__header">
+        <div class="vgt-section__title-wrap">
+            <h2 class="vgt-section__title">Choose your ticket</h2>
+            <span class="vgt-section__subtitle">Pick the experience that fits you best.</span>
         </div>
     </div>
-    <div class="section-card__body">
+    <div class="vgt-section__body">
         @if (Model.TicketTypes.Any())
         {
             <div class="ticket-type-list">
-                @foreach (var t in Model.TicketTypes)
+                @for (var idx = 0; idx < Model.TicketTypes.Count; idx++)
                 {
-                    <article class="ticket-type-card">
-                        <header>
-                            <h3 class="ticket-type-card__name">@t.TypeName</h3>
-                            <span class="status-badge @(t.Status == "Active" ? "status-badge--success" : "status-badge--neutral")">
-                                @t.Status
-                            </span>
+                    var t = Model.TicketTypes[idx];
+                    var variant = idx == 0 ? "vgt-ticket--recommended"
+                                  : idx == 1 ? "vgt-ticket--vip"
+                                  : "";
+                    var badgeText = idx == 0 ? "Popular"
+                                    : idx == 1 ? "Premium"
+                                    : null;
+                    var badgeClass = idx == 0 ? "vgt-ticket__badge--recommended"
+                                     : idx == 1 ? "vgt-ticket__badge--vip"
+                                     : "";
+
+                    var totalStock = t.Quantity > 0 ? t.Quantity : 1;
+                    var soldPercent = t.Quantity > 0 ? (int)Math.Round((double)(t.Quantity - t.Available) / totalStock * 100) : 0;
+                    var stockLabel = "In stock";
+                    var stockClass = "";
+                    if (t.Available <= 0) { stockLabel = "Sold out"; stockClass = "--critical"; }
+                    else if (t.Available < 10) { stockLabel = "Only a few left"; stockClass = "--low"; }
+
+                    <article class="vgt-ticket @variant">
+                        <header class="vgt-ticket__header">
+                            <h3 class="vgt-ticket__name">@t.TypeName</h3>
+                            @if (!string.IsNullOrEmpty(badgeText))
+                            {
+                                <span class="vgt-ticket__badge @badgeClass">@badgeText</span>
+                            }
                         </header>
-                        <div class="ticket-type-card__price">@t.Price.ToString("N0") &nbsp;đ</div>
-                        <div class="ticket-type-card__meta">
-                            <span><strong>@t.Available</strong> / @t.Quantity available</span>
-                            <span class="text-muted">Sale ends @t.SaleEnd.ToString("dd MMM HH:mm")</span>
+                        <div class="vgt-ticket__price">
+                            @t.Price.ToString("N0")<span class="vgt-ticket__price-currency">đ</span>
+                        </div>
+                        <div class="vgt-ticket__meta">
+                            <span>
+                                <strong>@t.Available</strong> / @t.Quantity available
+                            </span>
+                            <span>Sale ends @t.SaleEnd.ToString("dd MMM HH:mm")</span>
+                        </div>
+                        <div>
+                            <div class="vgt-ticket__stock-bar" aria-hidden="true">
+                                <div class="vgt-ticket__stock-fill @stockClass" style="width: @soldPercent%;"></div>
+                            </div>
+                            <span class="text-secondary" style="font-size: var(--font-size-xs); margin-top: 6px; display: inline-block;">@stockLabel</span>
                         </div>
                         @if (canBuy && t.Status == "Active" && t.Available > 0)
                         {
-                            <a class="btn btn--primary"
+                            <a class="btn btn--vgt-primary"
                                href="@Url.Action("Buy", "Ticket", new { eventId = Model.EventId, selectedTicketTypeId = t.TicketTypeId })">
                                 <span>Buy this ticket</span>
                                 <i class="bi bi-arrow-right" aria-hidden="true"></i>
                             </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn--secondary" disabled aria-disabled="true">
+                                <i class="bi bi-slash-circle"></i>
+                                <span>@(t.Available <= 0 ? "Sold out" : "Unavailable")</span>
+                            </button>
                         }
                     </article>
                 }

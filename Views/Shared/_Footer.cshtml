@@ -1,11 +1,61 @@
 <footer class="app-footer">
     <div class="app-footer__inner">
-        <div class="app-footer__brand">
-            <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
-            <span>Event Management System</span>
+        <div class="app-footer__brand-block">
+            <span class="app-footer__brand">
+                <span class="app-navbar__brand-mark" aria-hidden="true">E</span>
+                <span>Event Management System</span>
+            </span>
+            <p class="app-footer__brand-desc">
+                Discover, host and manage events with a beautifully crafted toolkit built for organizers and attendees.
+            </p>
+            <div class="app-footer__social" aria-label="Social links">
+                <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            </div>
         </div>
-        <div class="app-footer__copy">
-            &copy; @DateTime.Now.Year EMS. All rights reserved.
+
+        <div>
+            <h4 class="app-footer__col-title">Explore</h4>
+            <ul class="app-footer__list">
+                <li><a href="@Url.Action("List", "Event")"><i class="bi bi-arrow-right-short"></i> Browse events</a></li>
+                <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-arrow-right-short"></i> Home</a></li>
+                <li><a href="@Url.Action("Privacy", "Home")"><i class="bi bi-arrow-right-short"></i> Privacy</a></li>
+            </ul>
         </div>
+
+        <div>
+            <h4 class="app-footer__col-title">Account</h4>
+            <ul class="app-footer__list">
+                <li><a href="@Url.Action("Login", "Account")"><i class="bi bi-arrow-right-short"></i> Sign in</a></li>
+                <li><a href="@Url.Action("Register", "Account")"><i class="bi bi-arrow-right-short"></i> Create account</a></li>
+                @if (Context.Request.HttpContext.User?.Identity?.IsAuthenticated == true)
+                {
+                    <li><a href="@Url.Action("MyTickets", "Ticket")"><i class="bi bi-arrow-right-short"></i> My tickets</a></li>
+                }
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="app-footer__col-title">Contact</h4>
+            <ul class="app-footer__list">
+                <li><a href="mailto:hello@ems.app"><i class="bi bi-envelope"></i> hello@ems.app</a></li>
+                <li><a href="#"><i class="bi bi-geo-alt"></i> Ho Chi Minh City, VN</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="app-footer__bottom">
+        <span class="app-footer__copy">
+            &copy; @DateTime.Now.Year EMS. Crafted with care.
+        </span>
+        <span>
+            <a href="@Url.Action("Privacy", "Home")">Privacy</a>
+            &nbsp;&middot;&nbsp;
+            <a href="#">Terms</a>
+            &nbsp;&middot;&nbsp;
+            <a href="#">Support</a>
+        </span>
     </div>
 </footer>

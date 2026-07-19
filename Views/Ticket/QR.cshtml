@@ -1,78 +1,116 @@
 @model EventManagement.ViewModels.TicketQrViewModel
 @{
-    ViewData["Title"] = "Ticket QR";
+    ViewData["Title"] = "Your Ticket";
     Layout = "_Layout";
-
-    var header = new EventManagement.ViewModels.PageHeaderViewModel
-    {
-        Title = "Your ticket",
-        Subtitle = "Show this QR code at the check-in counter to be admitted to the event.",
-        Eyebrow = "EMS • Check-in",
-        Breadcrumbs = new List<EventManagement.ViewModels.BreadcrumbItemViewModel>
-        {
-            new() { Text = "My tickets", Url = Url.Action("MyTickets", "Ticket") },
-            new() { Text = Model.EventTitle }
-        }
-    };
 }
 
-@await Html.PartialAsync("_PageHeader", header)
+<div class="vgt-dot-grid" style="background: white; min-height: 100vh; padding: 80px 0;">
+    @await Html.PartialAsync("_Navbar")
 
-<section class="ticket-card" aria-label="Ticket">
-    <div class="ticket-card__qr">
-        <i class="bi bi-qr-code-scan" style="font-size: 1.25rem;" aria-hidden="true"></i>
-        <div aria-hidden="true" style="background: #fff; padding: 12px; border-radius: 12px;">
-            <i class="bi bi-grid-3x3-gap-fill" style="font-size: 4rem; color: var(--color-primary-700);"></i>
+    <div style="max-width: 640px; margin: 0 auto; padding: 0 40px;">
+        <h1 style="font-size: 36px; font-weight: 900; color: #1e1b4b; letter-spacing: -0.02em; text-align: center; margin-bottom: 8px;">
+            Your Ticket &#10022;
+        </h1>
+        <p style="text-align: center; color: #9ca3af; margin-bottom: 40px;">
+            Present this QR code at the venue entrance.
+        </p>
+
+        <!-- QR Card -->
+        <div class="vgt-qr-card">
+            <div style="font-weight: 800; font-size: 22px; color: #1e1b4b; margin-bottom: 4px;">
+                @Model.EventTitle
+            </div>
+            <div style="color: #9ca3af; font-size: 14px; margin-bottom: 6px;">
+                &#128197; @Model.EventTime.ToString("MMMM dd, yyyy") &#183; @Model.EventTime.ToString("HH:mm")
+            </div>
+            <div style="color: #6b7280; font-size: 14px; margin-bottom: 32px;">
+                &#128205; @Model.Location
+            </div>
+
+            <!-- QR Code -->
+            <div class="vgt-qr-code">
+                <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; padding: 16px;">
+                    @{
+                        var qrDots = new[] { 0, 1, 7, 8, 14, 15, 16, 2, 6, 9, 13, 48, 54, 55, 56, 62, 63, 49, 3, 11, 21, 31, 41, 51, 23, 29, 35, 43, 47, 17, 25, 37 };
+                        for (int i = 0; i < 64; i++)
+                        {
+                            var isBlack = qrDots.Contains(i);
+                            <div style="width: 20px; height: 20px; border-radius: 2px; background: @(isBlack ? "#1e1b4b" : "transparent");"></div>
+                        }
+                    }
+                </div>
+                <div class="vgt-qr-logo">E</div>
+            </div>
+
+            <!-- Ticket Info -->
+            <div style="display: flex; gap: 24px; justify-content: center; margin-bottom: 24px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 2px; text-transform: uppercase;">Ticket Holder</div>
+                    <div style="font-weight: 700; color: #1e1b4b;">@Context.GetFullName()</div>
+                </div>
+                <div style="width: 1px; background: #e5e7eb;"></div>
+                <div style="text-align: center;">
+                    <div style="font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 2px; text-transform: uppercase;">Serial</div>
+                    <div style="font-weight: 700; color: #1e1b4b;">@Model.SerialNumber</div>
+                </div>
+                <div style="width: 1px; background: #e5e7eb;"></div>
+                <div style="text-align: center;">
+                    <div style="font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 2px; text-transform: uppercase;">Ticket ID</div>
+                    <div style="font-weight: 700; color: #1e1b4b; font-family: monospace; font-size: 13px;">@Model.TicketId</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 28px;">
+                <span class="vgt-badge vgt-badge--active">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; margin-right: 4px;"></span>
+                    Active
+                </span>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn--primary" style="border-radius: 12px;">
+                    <i class="bi bi-download" aria-hidden="true"></i>
+                    Download PDF
+                </button>
+                <button class="btn btn--vgt-secondary" style="background: rgba(99,102,241,0.08); color: var(--color-indigo); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px;">
+                    <i class="bi bi-share" aria-hidden="true"></i>
+                    Share
+                </button>
+            </div>
         </div>
-        <span style="font-size: var(--font-size-sm); opacity: 0.85;">Check-in QR</span>
-        <code style="font-size: 11px; word-break: break-all; padding: 4px 8px; background: rgba(255,255,255,0.12); border-radius: 4px;">
-            @Model.QrCodeText
-        </code>
-    </div>
-    <div class="ticket-card__body">
-        <header class="stack" style="gap: var(--spacing-1);">
-            <span class="text-muted" style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">
-                Ticket #@Model.TicketId
-            </span>
-            <h2 class="ticket-card__title">@Model.EventTitle</h2>
-            <div><partial name="_StatusBadge" model="Model.Status" /></div>
-        </header>
 
-        <dl class="ticket-card__meta">
-            <div>
-                <dt>Serial number</dt>
-                <dd><code class="serial">@Model.SerialNumber</code></dd>
+        <!-- Tips -->
+        <div class="section-card" style="margin-top: 24px;">
+            <div class="section-card__header">
+                <div style="font-weight: 700; font-size: 16px; color: #1e1b4b;">
+                    &#128161; How to use at venue
+                </div>
             </div>
-            <div>
-                <dt>Event time</dt>
-                <dd>@Model.EventTime.ToString("dddd, dd MMM yyyy HH:mm")</dd>
+            <div class="section-card__body">
+                <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                    <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--vgt-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;">1</div>
+                    <span style="font-size: 14px; color: #6b7280; line-height: 1.6;">
+                        Open this QR code on your phone before arriving at the venue.
+                    </span>
+                </div>
+                <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                    <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--vgt-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;">2</div>
+                    <span style="font-size: 14px; color: #6b7280; line-height: 1.6;">
+                        Present the QR at the check-in counter — staff will scan it instantly.
+                    </span>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--vgt-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;">3</div>
+                    <span style="font-size: 14px; color: #6b7280; line-height: 1.6;">
+                        Your QR code works offline — no internet needed at the venue.
+                    </span>
+                </div>
             </div>
-            <div>
-                <dt>Location</dt>
-                <dd>@Model.Location</dd>
-            </div>
-            <div>
-                <dt>Ticket ID</dt>
-                <dd>@Model.TicketId</dd>
-            </div>
-        </dl>
-
-        <div class="ticket-card__actions">
-            <a class="btn btn--outline-secondary" asp-action="MyTickets">
-                <i class="bi bi-arrow-left" aria-hidden="true"></i>
-                <span>Back to my tickets</span>
-            </a>
-            <button type="button" class="btn btn--primary" data-print-button>
-                <i class="bi bi-printer" aria-hidden="true"></i>
-                <span>Print</span>
-            </button>
         </div>
     </div>
-</section>
+</div>
 
-<p class="text-muted text-center" style="margin-top: var(--spacing-6); max-width: 60ch; margin-left: auto; margin-right: auto;">
-    Note: The QR code is currently rendered as a placeholder. A real QR will be generated when a QR library is integrated with the backend.
-</p>
+@await Html.PartialAsync("_Footer")
 
 @section Scripts {
     <script type="module" src="~/js/pages/ticket-qr.js" asp-append-version="true"></script>
